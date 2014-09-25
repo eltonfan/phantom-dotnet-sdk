@@ -1,0 +1,5 @@
+*.suo
+*.user
+src/Phantom/Mavplus.Phantom/obj/
+src/Phantom/Mavplus.Phantom.Win/obj/
+src/Phantom/bin/
