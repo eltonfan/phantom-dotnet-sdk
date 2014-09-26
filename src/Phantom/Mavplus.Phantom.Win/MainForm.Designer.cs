@@ -52,6 +52,11 @@
             this.btnScenario1 = new System.Windows.Forms.Button();
             this.btnScenario0 = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtUserName = new System.Windows.Forms.TextBox();
+            this.txtPassword = new System.Windows.Forms.TextBox();
+            this.btnCreateToken = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtToken
@@ -313,11 +318,58 @@
             this.btnConnect.Text = "Connect";
             this.btnConnect.UseVisualStyleBackColor = true;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(565, 82);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 12);
+            this.label2.TabIndex = 60;
+            this.label2.Text = "Username";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(565, 115);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 12);
+            this.label3.TabIndex = 61;
+            this.label3.Text = "Password";
+            // 
+            // txtUserName
+            // 
+            this.txtUserName.Location = new System.Drawing.Point(629, 79);
+            this.txtUserName.Name = "txtUserName";
+            this.txtUserName.Size = new System.Drawing.Size(198, 21);
+            this.txtUserName.TabIndex = 58;
+            // 
+            // txtPassword
+            // 
+            this.txtPassword.Location = new System.Drawing.Point(629, 106);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '●';
+            this.txtPassword.Size = new System.Drawing.Size(198, 21);
+            this.txtPassword.TabIndex = 59;
+            // 
+            // btnCreateToken
+            // 
+            this.btnCreateToken.Location = new System.Drawing.Point(629, 133);
+            this.btnCreateToken.Name = "btnCreateToken";
+            this.btnCreateToken.Size = new System.Drawing.Size(75, 23);
+            this.btnCreateToken.TabIndex = 62;
+            this.btnCreateToken.Text = "获取令牌";
+            this.btnCreateToken.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(602, 341);
+            this.ClientSize = new System.Drawing.Size(850, 390);
+            this.Controls.Add(this.btnCreateToken);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.txtUserName);
+            this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.btnBulb11);
             this.Controls.Add(this.btnBulb10);
@@ -375,6 +427,11 @@
         private System.Windows.Forms.Button btnScenario1;
         private System.Windows.Forms.Button btnScenario0;
         private System.Windows.Forms.Button btnConnect;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtUserName;
+        private System.Windows.Forms.TextBox txtPassword;
+        private System.Windows.Forms.Button btnCreateToken;
     }
 }
 

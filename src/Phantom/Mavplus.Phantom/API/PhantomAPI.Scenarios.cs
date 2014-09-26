@@ -15,15 +15,15 @@ namespace Mavplus.Phantom.API
         }
         public void SetScenarioAllOn()
         {
-            this.SET<Scenario>("scenarios/all_on.json", null, new Argument("origin", 1));
+            this.POST<Scenario>("scenarios/all_on.json", null, new Argument("origin", 1));
         }
         public void SetScenarioAllOff()
         {
-            this.SET<Scenario>("scenarios/all_off.json", null, new Argument("origin", 1));
+            this.POST<Scenario>("scenarios/all_off.json", null, new Argument("origin", 1));
         }
         public void SetScenario(int scenarioId)
         {
-            this.SET<Scenario>("scenarios/{id}/apply.json",
+            this.POST<Scenario>("scenarios/{id}/apply.json",
                 new UrlSegment[] { new UrlSegment("id", scenarioId.ToString()) });
         }
     }

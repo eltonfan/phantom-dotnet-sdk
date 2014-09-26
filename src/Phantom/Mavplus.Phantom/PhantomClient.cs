@@ -258,6 +258,13 @@ namespace Mavplus.Phantom
                     this.BulbStateChanged(this, new BulbEventArgs(item));
             }
         }
+        public Token Login(string userName, string password)
+        {
+            Token token = api.CreateToken(userName, password);
+            this.token = token.AccessToken;
+
+            return token;
+        }
 
         public User UserInfo
         {

@@ -61,6 +61,22 @@ namespace Mavplus.Phantom.Win
             };
             foreach (Button btn in bulbButtons)
                 btn.Click += bulbButton_Click;
+
+            btnCreateToken.Click += btnCreateToken_Click;
+        }
+
+        void btnCreateToken_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Token token = client.Login(txtUserName.Text.Trim(), txtPassword.Text);
+
+                txtToken.Text = token.AccessToken;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(this, "获取令牌失败：" + ex.Message, "提示");
+            }
         }
         void client_BulbStateChanged(object sender, BulbEventArgs e)
         {

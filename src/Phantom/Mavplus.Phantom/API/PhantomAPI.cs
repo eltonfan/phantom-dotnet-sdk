@@ -67,21 +67,11 @@ namespace Mavplus.Phantom.API
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
 
             IRestResponse response = client.Execute(request);
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                //{"status":"500","error":"Internal Server Error"}
-                JObject obj = JsonConvert.DeserializeObject(response.Content) as JObject;
-                int status = obj.Value<int>("status");
-                string error = obj.Value<string>("error");
-
-                throw new PhantomException(error);
-            }
-
-            var content = response.Content; // raw content as string
-            return JsonConvert.DeserializeObject<T>(content);
+            CheckError(response);
+            return JsonConvert.DeserializeObject<T>(response.Content);
         }
 
-        protected void SET<T>(string url, UrlSegment[] urlSegments, params Argument[] arguments)
+        protected T POST<T>(string authorization, string url, UrlSegment[] urlSegments, params Argument[] arguments)
         {
             var request = new RestRequest(url, Method.POST);
             if (urlSegments != null)
@@ -89,8 +79,7 @@ namespace Mavplus.Phantom.API
                 foreach (UrlSegment item in urlSegments)
                     request.AddUrlSegment(item.Key, item.Value);
             }
-            if (this.token != null)
-                request.AddHeader("Authorization", "token " + this.token);
+            request.AddHeader("Authorization", authorization);
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             if (arguments != null)
             {
@@ -99,12 +88,64 @@ namespace Mavplus.Phantom.API
             }
 
             IRestResponse response = client.Execute(request);
-            JObject obj = Newtonsoft.Json.JsonConvert.DeserializeObject(response.Content) as JObject;
-            string error = obj.Value<string>("error");
-            bool success = obj.Value<bool>("success");
+            CheckError(response);
+            return JsonConvert.DeserializeObject<T>(response.Content);
+        }
+        static void CheckError(IRestResponse response)
+        {
+            switch (response.StatusCode)
+            {
+                case HttpStatusCode.OK:
+                case HttpStatusCode.Created:
+                    break;
+                case HttpStatusCode.Unauthorized:
+                default://其他错误
+                    string message = "";
+                    PhantomExceptionStatus status = PhantomExceptionStatus.Unknown;
+                    if(!TryParseErrorMessage(response.Content, out status, out message))
+                    {
+                        message = response.Content;
+                        status = PhantomExceptionStatus.Unknown;
+                    }
+                    throw new PhantomException(message, status);
+            }
+        }
 
-            if (error != null)
-                throw new Exception(error);
+        static bool TryParseErrorMessage(string content, out PhantomExceptionStatus status, out string message)
+        {
+            status = PhantomExceptionStatus.Unknown;
+            message = "";
+
+            JObject obj = JsonConvert.DeserializeObject(content) as JObject;
+            if(obj == null)
+                return false;
+
+            string error = obj.Value<string>("error");
+            if(string.IsNullOrEmpty(error))
+                return false;
+            //进一步解析错误信息
+            string[] parts = (error ?? "").Split(new char[] { ':' });
+            if (parts == null || parts.Length < 2 || !Enum.TryParse<PhantomExceptionStatus>(parts[0], out status))
+            {
+                message = error;
+                status = PhantomExceptionStatus.Unknown;
+
+                return true;
+            }
+            else
+            {
+                message = parts[1];
+                return true;
+            }
+        }
+
+
+        protected T POST<T>(string url, UrlSegment[] urlSegments, params Argument[] arguments)
+        {
+            if (string.IsNullOrEmpty(this.token))
+                throw new PhantomException("尚未换取令牌。");
+
+            return this.POST<T>("token " + this.token, url, urlSegments, arguments);
         }
 
         public PhantomConfiguration Configuration
