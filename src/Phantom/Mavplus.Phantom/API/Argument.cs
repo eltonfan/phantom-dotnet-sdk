@@ -9,7 +9,7 @@ namespace Mavplus.Phantom.API
     /// <summary>
     /// 请求参数。
     /// </summary>
-    public class Argument
+    internal class Argument
     {
         public string Key { get; private set; }
         public object Value { get; private set; }

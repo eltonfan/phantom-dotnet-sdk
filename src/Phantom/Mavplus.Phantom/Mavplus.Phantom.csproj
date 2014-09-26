@@ -60,6 +60,8 @@
     <Compile Include="Models\Scenario.cs" />
     <Compile Include="Models\Token.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="PhantomClient.cs" />
+    <Compile Include="PhantomClient.Events.cs" />
     <Compile Include="PhantomConfiguration.cs" />
     <Compile Include="PhantomException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

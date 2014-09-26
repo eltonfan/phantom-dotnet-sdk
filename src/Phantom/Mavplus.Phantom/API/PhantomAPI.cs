@@ -16,7 +16,7 @@ namespace Mavplus.Phantom.API
     /// 实现对幻腾API的各功能封装。
     /// </summary>
     /// <remarks> https://huantengsmart.com/doc/api_v1 </remarks>
-    public partial class PhantomAPI
+    internal partial class PhantomAPI
     {
         readonly RestClient client = null;
         readonly PhantomConfiguration config = null;

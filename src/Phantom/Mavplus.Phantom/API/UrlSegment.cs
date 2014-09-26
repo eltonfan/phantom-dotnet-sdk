@@ -9,7 +9,7 @@ namespace Mavplus.Phantom.API
     /// <summary>
     /// URL参数。
     /// </summary>
-    public class UrlSegment
+    internal class UrlSegment
     {
         public string Key { get; private set; }
         public string Value { get; private set; }

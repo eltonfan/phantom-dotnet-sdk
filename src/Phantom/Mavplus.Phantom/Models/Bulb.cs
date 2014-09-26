@@ -155,5 +155,26 @@ namespace Mavplus.Phantom.Models
             this.DateUpdated = value.DateUpdated;
             this.DeathQrCode = value.DeathQrCode;
         }
+
+        PhantomClient client = null;
+        internal void SetClient(PhantomClient client)
+        {
+            this.client = client;
+        }
+
+        public void TurnOn()
+        {
+            if (this.client == null)
+                return;
+
+            this.client.SetBulb(this, true);
+        }
+        public void TurnOff()
+        {
+            if (this.client == null)
+                return;
+
+            this.client.SetBulb(this, false);
+        }
     }
 }
