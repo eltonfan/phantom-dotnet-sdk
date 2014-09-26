@@ -251,6 +251,9 @@ namespace Mavplus.Phantom.Win
             settings.Save();
 
             client.Connect(settings.AccessToken);
+
+            pictureBoxUser.Image = client.UserImage;
+            txtDisplayName.Text = client.UserInfo.Name;
         }
 
         private void btnTest_Click(object sender, EventArgs e)

@@ -5,6 +5,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -28,6 +30,7 @@ namespace Mavplus.Phantom
         readonly Dictionary<int, Scenario> dicScenarios = new Dictionary<int, Scenario>();
 
         User currentUser = null;
+        Image image = null;
         string token = null;
 
         readonly System.Timers.Timer timerRefresh = null;
@@ -74,8 +77,29 @@ namespace Mavplus.Phantom
             this.token = accessToken;
             this.api.SetCredentials(token);
             this.currentUser = api.GetUser();
-            if (this.currentUser.name == null)
+            if (this.currentUser.Name == null)
                 throw new Exception();
+
+            try
+            {//尝试获取用户头像
+                string email = this.currentUser.Email;
+                string imageUrl = null;
+                using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+                {
+                    byte[] dataEmail = Encoding.UTF8.GetBytes(email.Trim().ToLower());
+                    string hashString = BitConverter.ToString(md5.ComputeHash(dataEmail)).Replace("-", "").ToLower();
+                    imageUrl = "https://gravatar.com/avatar/" + hashString + ".png";
+                }
+                using (WebClient client = new WebClient())
+                {
+                    byte[] imageData = client.DownloadData(imageUrl);
+                    this.image = Image.FromStream(new MemoryStream(imageData));
+                }
+            }
+            catch(Exception ex)
+            {
+                this.image = null;
+            }
 
             timerRefresh.Start();
             this.Connected = true;
@@ -269,6 +293,10 @@ namespace Mavplus.Phantom
         public User UserInfo
         {
             get { return this.currentUser; }
+        }
+        public Image UserImage
+        {
+            get { return this.image; }
         }
 
         public ICollection<Bulb> Bulbs

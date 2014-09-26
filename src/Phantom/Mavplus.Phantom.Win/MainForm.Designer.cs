@@ -57,6 +57,9 @@
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.btnCreateToken = new System.Windows.Forms.Button();
+            this.pictureBoxUser = new System.Windows.Forms.PictureBox();
+            this.txtDisplayName = new System.Windows.Forms.TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUser)).BeginInit();
             this.SuspendLayout();
             // 
             // txtToken
@@ -360,11 +363,30 @@
             this.btnCreateToken.Text = "获取令牌";
             this.btnCreateToken.UseVisualStyleBackColor = true;
             // 
+            // pictureBoxUser
+            // 
+            this.pictureBoxUser.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxUser.Location = new System.Drawing.Point(678, 166);
+            this.pictureBoxUser.Name = "pictureBoxUser";
+            this.pictureBoxUser.Size = new System.Drawing.Size(80, 80);
+            this.pictureBoxUser.TabIndex = 63;
+            this.pictureBoxUser.TabStop = false;
+            // 
+            // txtDisplayName
+            // 
+            this.txtDisplayName.Location = new System.Drawing.Point(678, 252);
+            this.txtDisplayName.Name = "txtDisplayName";
+            this.txtDisplayName.ReadOnly = true;
+            this.txtDisplayName.Size = new System.Drawing.Size(80, 21);
+            this.txtDisplayName.TabIndex = 64;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(850, 390);
+            this.Controls.Add(this.txtDisplayName);
+            this.Controls.Add(this.pictureBoxUser);
             this.Controls.Add(this.btnCreateToken);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
@@ -396,6 +418,7 @@
             this.Controls.Add(this.txtToken);
             this.Name = "MainForm";
             this.Text = "幻腾API测试";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUser)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -432,6 +455,8 @@
         private System.Windows.Forms.TextBox txtUserName;
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Button btnCreateToken;
+        private System.Windows.Forms.PictureBox pictureBoxUser;
+        private System.Windows.Forms.TextBox txtDisplayName;
     }
 }
 
