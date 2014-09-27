@@ -121,12 +121,16 @@ namespace Mavplus.Phantom
             else
                 api.SetScenario(scenario.Id);
         }
-        internal void SetBulb(Bulb bulb, bool isOn)
+        public void SetBulb(Bulb bulb, bool isOn)
         {
             if (isOn)
                 api.SetBulbSwitchOn(bulb.Id);
             else
                 api.SetBulbSwitchOff(bulb.Id);
+        }
+        public void SetBulb(Bulb bulb, float brightness, float hue)
+        {
+            api.SetBulbTune(bulb.Id, brightness, hue);
         }
 
         public void RefreshScenarios()

@@ -83,6 +83,26 @@ namespace Mavplus.Phantom.Win.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap more_10 {
+            get {
+                object obj = ResourceManager.GetObject("more_10", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap settings_48 {
+            get {
+                object obj = ResourceManager.GetObject("settings_48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap switch_48 {
             get {
                 object obj = ResourceManager.GetObject("switch_48", resourceCulture);

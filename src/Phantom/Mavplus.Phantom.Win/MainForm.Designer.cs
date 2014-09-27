@@ -31,34 +31,32 @@
             this.txtToken = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnTest = new System.Windows.Forms.Button();
-            this.btnBulb11 = new System.Windows.Forms.Button();
-            this.btnBulb10 = new System.Windows.Forms.Button();
-            this.btnBulb9 = new System.Windows.Forms.Button();
-            this.btnBulb8 = new System.Windows.Forms.Button();
             this.btnScenario7 = new System.Windows.Forms.Button();
             this.btnScenario6 = new System.Windows.Forms.Button();
             this.btnScenario5 = new System.Windows.Forms.Button();
             this.btnScenario4 = new System.Windows.Forms.Button();
-            this.btnBulb7 = new System.Windows.Forms.Button();
-            this.btnBulb6 = new System.Windows.Forms.Button();
-            this.btnBulb5 = new System.Windows.Forms.Button();
-            this.btnBulb4 = new System.Windows.Forms.Button();
-            this.btnBulb3 = new System.Windows.Forms.Button();
-            this.btnBulb2 = new System.Windows.Forms.Button();
-            this.btnBulb1 = new System.Windows.Forms.Button();
-            this.btnBulb0 = new System.Windows.Forms.Button();
             this.btnScenario3 = new System.Windows.Forms.Button();
             this.btnScenario2 = new System.Windows.Forms.Button();
             this.btnScenario1 = new System.Windows.Forms.Button();
-            this.btnScenario0 = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.btnCreateToken = new System.Windows.Forms.Button();
-            this.pictureBoxUser = new System.Windows.Forms.PictureBox();
             this.txtDisplayName = new System.Windows.Forms.TextBox();
+            this.pictureBoxUser = new System.Windows.Forms.PictureBox();
+            this.btnScenario0 = new System.Windows.Forms.Button();
+            this.bulbView10 = new Mavplus.Phantom.Win.Controls.BulbView();
+            this.bulbView9 = new Mavplus.Phantom.Win.Controls.BulbView();
+            this.bulbView8 = new Mavplus.Phantom.Win.Controls.BulbView();
+            this.bulbView7 = new Mavplus.Phantom.Win.Controls.BulbView();
+            this.bulbView6 = new Mavplus.Phantom.Win.Controls.BulbView();
+            this.bulbView5 = new Mavplus.Phantom.Win.Controls.BulbView();
+            this.bulbView4 = new Mavplus.Phantom.Win.Controls.BulbView();
+            this.bulbView3 = new Mavplus.Phantom.Win.Controls.BulbView();
+            this.bulbView2 = new Mavplus.Phantom.Win.Controls.BulbView();
+            this.bulbView1 = new Mavplus.Phantom.Win.Controls.BulbView();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUser)).BeginInit();
             this.SuspendLayout();
             // 
@@ -80,57 +78,13 @@
             // 
             // btnTest
             // 
-            this.btnTest.Location = new System.Drawing.Point(545, 7);
+            this.btnTest.Location = new System.Drawing.Point(692, 236);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(45, 34);
             this.btnTest.TabIndex = 2;
             this.btnTest.Text = "Test";
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
-            // 
-            // btnBulb11
-            // 
-            this.btnBulb11.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBulb11.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBulb11.Location = new System.Drawing.Point(444, 130);
-            this.btnBulb11.Name = "btnBulb11";
-            this.btnBulb11.Size = new System.Drawing.Size(80, 72);
-            this.btnBulb11.TabIndex = 56;
-            this.btnBulb11.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBulb11.UseVisualStyleBackColor = true;
-            // 
-            // btnBulb10
-            // 
-            this.btnBulb10.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBulb10.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBulb10.Location = new System.Drawing.Point(358, 130);
-            this.btnBulb10.Name = "btnBulb10";
-            this.btnBulb10.Size = new System.Drawing.Size(80, 72);
-            this.btnBulb10.TabIndex = 55;
-            this.btnBulb10.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBulb10.UseVisualStyleBackColor = true;
-            // 
-            // btnBulb9
-            // 
-            this.btnBulb9.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBulb9.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBulb9.Location = new System.Drawing.Point(272, 130);
-            this.btnBulb9.Name = "btnBulb9";
-            this.btnBulb9.Size = new System.Drawing.Size(80, 72);
-            this.btnBulb9.TabIndex = 54;
-            this.btnBulb9.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBulb9.UseVisualStyleBackColor = true;
-            // 
-            // btnBulb8
-            // 
-            this.btnBulb8.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBulb8.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBulb8.Location = new System.Drawing.Point(186, 130);
-            this.btnBulb8.Name = "btnBulb8";
-            this.btnBulb8.Size = new System.Drawing.Size(80, 72);
-            this.btnBulb8.TabIndex = 53;
-            this.btnBulb8.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBulb8.UseVisualStyleBackColor = true;
             // 
             // btnScenario7
             // 
@@ -176,96 +130,6 @@
             this.btnScenario4.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnScenario4.UseVisualStyleBackColor = true;
             // 
-            // btnBulb7
-            // 
-            this.btnBulb7.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBulb7.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBulb7.Location = new System.Drawing.Point(100, 130);
-            this.btnBulb7.Name = "btnBulb7";
-            this.btnBulb7.Size = new System.Drawing.Size(80, 72);
-            this.btnBulb7.TabIndex = 48;
-            this.btnBulb7.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBulb7.UseVisualStyleBackColor = true;
-            // 
-            // btnBulb6
-            // 
-            this.btnBulb6.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBulb6.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBulb6.Location = new System.Drawing.Point(14, 130);
-            this.btnBulb6.Name = "btnBulb6";
-            this.btnBulb6.Size = new System.Drawing.Size(80, 72);
-            this.btnBulb6.TabIndex = 47;
-            this.btnBulb6.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBulb6.UseVisualStyleBackColor = true;
-            // 
-            // btnBulb5
-            // 
-            this.btnBulb5.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBulb5.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBulb5.Location = new System.Drawing.Point(444, 52);
-            this.btnBulb5.Name = "btnBulb5";
-            this.btnBulb5.Size = new System.Drawing.Size(80, 72);
-            this.btnBulb5.TabIndex = 46;
-            this.btnBulb5.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBulb5.UseVisualStyleBackColor = true;
-            // 
-            // btnBulb4
-            // 
-            this.btnBulb4.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBulb4.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBulb4.Location = new System.Drawing.Point(358, 52);
-            this.btnBulb4.Name = "btnBulb4";
-            this.btnBulb4.Size = new System.Drawing.Size(80, 72);
-            this.btnBulb4.TabIndex = 45;
-            this.btnBulb4.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBulb4.UseVisualStyleBackColor = true;
-            // 
-            // btnBulb3
-            // 
-            this.btnBulb3.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBulb3.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBulb3.Location = new System.Drawing.Point(272, 52);
-            this.btnBulb3.Name = "btnBulb3";
-            this.btnBulb3.Size = new System.Drawing.Size(80, 72);
-            this.btnBulb3.TabIndex = 44;
-            this.btnBulb3.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBulb3.UseVisualStyleBackColor = true;
-            // 
-            // btnBulb2
-            // 
-            this.btnBulb2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBulb2.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBulb2.Location = new System.Drawing.Point(186, 52);
-            this.btnBulb2.Name = "btnBulb2";
-            this.btnBulb2.Size = new System.Drawing.Size(80, 72);
-            this.btnBulb2.TabIndex = 43;
-            this.btnBulb2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBulb2.UseVisualStyleBackColor = true;
-            // 
-            // btnBulb1
-            // 
-            this.btnBulb1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBulb1.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBulb1.Location = new System.Drawing.Point(100, 52);
-            this.btnBulb1.Name = "btnBulb1";
-            this.btnBulb1.Size = new System.Drawing.Size(80, 72);
-            this.btnBulb1.TabIndex = 42;
-            this.btnBulb1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBulb1.UseVisualStyleBackColor = true;
-            // 
-            // btnBulb0
-            // 
-            this.btnBulb0.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBulb0.Image = global::Mavplus.Phantom.Win.Properties.Resources.bulb_off_48;
-            this.btnBulb0.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnBulb0.Location = new System.Drawing.Point(14, 52);
-            this.btnBulb0.Name = "btnBulb0";
-            this.btnBulb0.Size = new System.Drawing.Size(80, 72);
-            this.btnBulb0.TabIndex = 41;
-            this.btnBulb0.Text = "灯泡(100%)";
-            this.btnBulb0.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnBulb0.UseVisualStyleBackColor = true;
-            // 
             // btnScenario3
             // 
             this.btnScenario3.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -299,6 +163,76 @@
             this.btnScenario1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnScenario1.UseVisualStyleBackColor = true;
             // 
+            // btnConnect
+            // 
+            this.btnConnect.Location = new System.Drawing.Point(411, 7);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(75, 23);
+            this.btnConnect.TabIndex = 57;
+            this.btnConnect.Text = "Connect";
+            this.btnConnect.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(503, 12);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 12);
+            this.label2.TabIndex = 60;
+            this.label2.Text = "Username";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(503, 45);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(53, 12);
+            this.label3.TabIndex = 61;
+            this.label3.Text = "Password";
+            // 
+            // txtUserName
+            // 
+            this.txtUserName.Location = new System.Drawing.Point(567, 9);
+            this.txtUserName.Name = "txtUserName";
+            this.txtUserName.Size = new System.Drawing.Size(158, 21);
+            this.txtUserName.TabIndex = 58;
+            // 
+            // txtPassword
+            // 
+            this.txtPassword.Location = new System.Drawing.Point(567, 36);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '●';
+            this.txtPassword.Size = new System.Drawing.Size(158, 21);
+            this.txtPassword.TabIndex = 59;
+            // 
+            // btnCreateToken
+            // 
+            this.btnCreateToken.Location = new System.Drawing.Point(567, 63);
+            this.btnCreateToken.Name = "btnCreateToken";
+            this.btnCreateToken.Size = new System.Drawing.Size(75, 23);
+            this.btnCreateToken.TabIndex = 62;
+            this.btnCreateToken.Text = "获取令牌";
+            this.btnCreateToken.UseVisualStyleBackColor = true;
+            // 
+            // txtDisplayName
+            // 
+            this.txtDisplayName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDisplayName.Location = new System.Drawing.Point(731, 95);
+            this.txtDisplayName.Name = "txtDisplayName";
+            this.txtDisplayName.ReadOnly = true;
+            this.txtDisplayName.Size = new System.Drawing.Size(80, 21);
+            this.txtDisplayName.TabIndex = 64;
+            // 
+            // pictureBoxUser
+            // 
+            this.pictureBoxUser.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxUser.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxUser.Location = new System.Drawing.Point(731, 9);
+            this.pictureBoxUser.Name = "pictureBoxUser";
+            this.pictureBoxUser.Size = new System.Drawing.Size(80, 80);
+            this.pictureBoxUser.TabIndex = 63;
+            this.pictureBoxUser.TabStop = false;
+            // 
             // btnScenario0
             // 
             this.btnScenario0.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -312,79 +246,131 @@
             this.btnScenario0.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnScenario0.UseVisualStyleBackColor = true;
             // 
-            // btnConnect
+            // bulbView10
             // 
-            this.btnConnect.Location = new System.Drawing.Point(411, 7);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(75, 23);
-            this.btnConnect.TabIndex = 57;
-            this.btnConnect.Text = "Connect";
-            this.btnConnect.UseVisualStyleBackColor = true;
+            this.bulbView10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.bulbView10.Bulb = null;
+            this.bulbView10.Location = new System.Drawing.Point(380, 129);
+            this.bulbView10.MaximumSize = new System.Drawing.Size(86, 72);
+            this.bulbView10.MinimumSize = new System.Drawing.Size(86, 72);
+            this.bulbView10.Name = "bulbView10";
+            this.bulbView10.Size = new System.Drawing.Size(86, 72);
+            this.bulbView10.TabIndex = 80;
             // 
-            // label2
+            // bulbView9
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(565, 82);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 12);
-            this.label2.TabIndex = 60;
-            this.label2.Text = "Username";
+            this.bulbView9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.bulbView9.Bulb = null;
+            this.bulbView9.Location = new System.Drawing.Point(288, 129);
+            this.bulbView9.MaximumSize = new System.Drawing.Size(86, 72);
+            this.bulbView9.MinimumSize = new System.Drawing.Size(86, 72);
+            this.bulbView9.Name = "bulbView9";
+            this.bulbView9.Size = new System.Drawing.Size(86, 72);
+            this.bulbView9.TabIndex = 79;
             // 
-            // label3
+            // bulbView8
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(565, 115);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(53, 12);
-            this.label3.TabIndex = 61;
-            this.label3.Text = "Password";
+            this.bulbView8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.bulbView8.Bulb = null;
+            this.bulbView8.Location = new System.Drawing.Point(196, 129);
+            this.bulbView8.MaximumSize = new System.Drawing.Size(86, 72);
+            this.bulbView8.MinimumSize = new System.Drawing.Size(86, 72);
+            this.bulbView8.Name = "bulbView8";
+            this.bulbView8.Size = new System.Drawing.Size(86, 72);
+            this.bulbView8.TabIndex = 78;
             // 
-            // txtUserName
+            // bulbView7
             // 
-            this.txtUserName.Location = new System.Drawing.Point(629, 79);
-            this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(198, 21);
-            this.txtUserName.TabIndex = 58;
+            this.bulbView7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.bulbView7.Bulb = null;
+            this.bulbView7.Location = new System.Drawing.Point(104, 129);
+            this.bulbView7.MaximumSize = new System.Drawing.Size(86, 72);
+            this.bulbView7.MinimumSize = new System.Drawing.Size(86, 72);
+            this.bulbView7.Name = "bulbView7";
+            this.bulbView7.Size = new System.Drawing.Size(86, 72);
+            this.bulbView7.TabIndex = 77;
             // 
-            // txtPassword
+            // bulbView6
             // 
-            this.txtPassword.Location = new System.Drawing.Point(629, 106);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.PasswordChar = '●';
-            this.txtPassword.Size = new System.Drawing.Size(198, 21);
-            this.txtPassword.TabIndex = 59;
+            this.bulbView6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.bulbView6.Bulb = null;
+            this.bulbView6.Location = new System.Drawing.Point(12, 129);
+            this.bulbView6.MaximumSize = new System.Drawing.Size(86, 72);
+            this.bulbView6.MinimumSize = new System.Drawing.Size(86, 72);
+            this.bulbView6.Name = "bulbView6";
+            this.bulbView6.Size = new System.Drawing.Size(86, 72);
+            this.bulbView6.TabIndex = 76;
             // 
-            // btnCreateToken
+            // bulbView5
             // 
-            this.btnCreateToken.Location = new System.Drawing.Point(629, 133);
-            this.btnCreateToken.Name = "btnCreateToken";
-            this.btnCreateToken.Size = new System.Drawing.Size(75, 23);
-            this.btnCreateToken.TabIndex = 62;
-            this.btnCreateToken.Text = "获取令牌";
-            this.btnCreateToken.UseVisualStyleBackColor = true;
+            this.bulbView5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.bulbView5.Bulb = null;
+            this.bulbView5.Location = new System.Drawing.Point(380, 51);
+            this.bulbView5.MaximumSize = new System.Drawing.Size(86, 72);
+            this.bulbView5.MinimumSize = new System.Drawing.Size(86, 72);
+            this.bulbView5.Name = "bulbView5";
+            this.bulbView5.Size = new System.Drawing.Size(86, 72);
+            this.bulbView5.TabIndex = 75;
             // 
-            // pictureBoxUser
+            // bulbView4
             // 
-            this.pictureBoxUser.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxUser.Location = new System.Drawing.Point(678, 166);
-            this.pictureBoxUser.Name = "pictureBoxUser";
-            this.pictureBoxUser.Size = new System.Drawing.Size(80, 80);
-            this.pictureBoxUser.TabIndex = 63;
-            this.pictureBoxUser.TabStop = false;
+            this.bulbView4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.bulbView4.Bulb = null;
+            this.bulbView4.Location = new System.Drawing.Point(288, 51);
+            this.bulbView4.MaximumSize = new System.Drawing.Size(86, 72);
+            this.bulbView4.MinimumSize = new System.Drawing.Size(86, 72);
+            this.bulbView4.Name = "bulbView4";
+            this.bulbView4.Size = new System.Drawing.Size(86, 72);
+            this.bulbView4.TabIndex = 74;
             // 
-            // txtDisplayName
+            // bulbView3
             // 
-            this.txtDisplayName.Location = new System.Drawing.Point(678, 252);
-            this.txtDisplayName.Name = "txtDisplayName";
-            this.txtDisplayName.ReadOnly = true;
-            this.txtDisplayName.Size = new System.Drawing.Size(80, 21);
-            this.txtDisplayName.TabIndex = 64;
+            this.bulbView3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.bulbView3.Bulb = null;
+            this.bulbView3.Location = new System.Drawing.Point(196, 51);
+            this.bulbView3.MaximumSize = new System.Drawing.Size(86, 72);
+            this.bulbView3.MinimumSize = new System.Drawing.Size(86, 72);
+            this.bulbView3.Name = "bulbView3";
+            this.bulbView3.Size = new System.Drawing.Size(86, 72);
+            this.bulbView3.TabIndex = 73;
+            // 
+            // bulbView2
+            // 
+            this.bulbView2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.bulbView2.Bulb = null;
+            this.bulbView2.Location = new System.Drawing.Point(104, 51);
+            this.bulbView2.MaximumSize = new System.Drawing.Size(86, 72);
+            this.bulbView2.MinimumSize = new System.Drawing.Size(86, 72);
+            this.bulbView2.Name = "bulbView2";
+            this.bulbView2.Size = new System.Drawing.Size(86, 72);
+            this.bulbView2.TabIndex = 72;
+            // 
+            // bulbView1
+            // 
+            this.bulbView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.bulbView1.Bulb = null;
+            this.bulbView1.Location = new System.Drawing.Point(12, 51);
+            this.bulbView1.MaximumSize = new System.Drawing.Size(86, 72);
+            this.bulbView1.MinimumSize = new System.Drawing.Size(86, 72);
+            this.bulbView1.Name = "bulbView1";
+            this.bulbView1.Size = new System.Drawing.Size(86, 72);
+            this.bulbView1.TabIndex = 71;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(850, 390);
+            this.ClientSize = new System.Drawing.Size(823, 339);
+            this.Controls.Add(this.bulbView10);
+            this.Controls.Add(this.bulbView9);
+            this.Controls.Add(this.bulbView8);
+            this.Controls.Add(this.bulbView7);
+            this.Controls.Add(this.bulbView6);
+            this.Controls.Add(this.bulbView5);
+            this.Controls.Add(this.bulbView4);
+            this.Controls.Add(this.bulbView3);
+            this.Controls.Add(this.bulbView2);
+            this.Controls.Add(this.bulbView1);
             this.Controls.Add(this.txtDisplayName);
             this.Controls.Add(this.pictureBoxUser);
             this.Controls.Add(this.btnCreateToken);
@@ -393,22 +379,10 @@
             this.Controls.Add(this.txtUserName);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.btnConnect);
-            this.Controls.Add(this.btnBulb11);
-            this.Controls.Add(this.btnBulb10);
-            this.Controls.Add(this.btnBulb9);
-            this.Controls.Add(this.btnBulb8);
             this.Controls.Add(this.btnScenario7);
             this.Controls.Add(this.btnScenario6);
             this.Controls.Add(this.btnScenario5);
             this.Controls.Add(this.btnScenario4);
-            this.Controls.Add(this.btnBulb7);
-            this.Controls.Add(this.btnBulb6);
-            this.Controls.Add(this.btnBulb5);
-            this.Controls.Add(this.btnBulb4);
-            this.Controls.Add(this.btnBulb3);
-            this.Controls.Add(this.btnBulb2);
-            this.Controls.Add(this.btnBulb1);
-            this.Controls.Add(this.btnBulb0);
             this.Controls.Add(this.btnScenario3);
             this.Controls.Add(this.btnScenario2);
             this.Controls.Add(this.btnScenario1);
@@ -429,22 +403,10 @@
         private System.Windows.Forms.TextBox txtToken;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnTest;
-        private System.Windows.Forms.Button btnBulb11;
-        private System.Windows.Forms.Button btnBulb10;
-        private System.Windows.Forms.Button btnBulb9;
-        private System.Windows.Forms.Button btnBulb8;
         private System.Windows.Forms.Button btnScenario7;
         private System.Windows.Forms.Button btnScenario6;
         private System.Windows.Forms.Button btnScenario5;
         private System.Windows.Forms.Button btnScenario4;
-        private System.Windows.Forms.Button btnBulb7;
-        private System.Windows.Forms.Button btnBulb6;
-        private System.Windows.Forms.Button btnBulb5;
-        private System.Windows.Forms.Button btnBulb4;
-        private System.Windows.Forms.Button btnBulb3;
-        private System.Windows.Forms.Button btnBulb2;
-        private System.Windows.Forms.Button btnBulb1;
-        private System.Windows.Forms.Button btnBulb0;
         private System.Windows.Forms.Button btnScenario3;
         private System.Windows.Forms.Button btnScenario2;
         private System.Windows.Forms.Button btnScenario1;
@@ -457,6 +419,16 @@
         private System.Windows.Forms.Button btnCreateToken;
         private System.Windows.Forms.PictureBox pictureBoxUser;
         private System.Windows.Forms.TextBox txtDisplayName;
+        private Controls.BulbView bulbView1;
+        private Controls.BulbView bulbView2;
+        private Controls.BulbView bulbView3;
+        private Controls.BulbView bulbView4;
+        private Controls.BulbView bulbView5;
+        private Controls.BulbView bulbView6;
+        private Controls.BulbView bulbView7;
+        private Controls.BulbView bulbView8;
+        private Controls.BulbView bulbView9;
+        private Controls.BulbView bulbView10;
     }
 }
 

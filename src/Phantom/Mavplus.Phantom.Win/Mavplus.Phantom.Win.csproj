@@ -44,6 +44,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulbDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BulbDetailsForm.Designer.cs">
+      <DependentUpon>BulbDetailsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BulbView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\BulbView.Designer.cs">
+      <DependentUpon>BulbView.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -52,6 +64,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="BulbDetailsForm.resx">
+      <DependentUpon>BulbDetailsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\BulbView.resx">
+      <DependentUpon>BulbView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -92,6 +110,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\bulb_off_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\settings_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\more_10.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

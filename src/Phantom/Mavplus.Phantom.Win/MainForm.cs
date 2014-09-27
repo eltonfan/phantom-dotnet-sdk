@@ -1,5 +1,6 @@
 ﻿using Mavplus.Phantom.API;
 using Mavplus.Phantom.Models;
+using Mavplus.Phantom.Win.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,7 +18,7 @@ namespace Mavplus.Phantom.Win
         Properties.Settings settings = Properties.Settings.Default;
         readonly PhantomClient client = null;
         readonly Button[] scenarioButtons = null;
-        readonly Button[] bulbButtons = null;
+        readonly BulbView[] bulbViews = null;
         public MainForm()
         {
             InitializeComponent();
@@ -30,7 +31,6 @@ namespace Mavplus.Phantom.Win
 
             client.NewBulb += client_NewBulb;
             client.BulbRemoved += client_BulbRemoved;
-            client.BulbStateChanged += client_BulbStateChanged;
 
             scenarioButtons = new Button[] {
                 btnScenario0,
@@ -45,26 +45,23 @@ namespace Mavplus.Phantom.Win
             foreach (Button btn in scenarioButtons)
                 btn.Click += scenarioButton_Click;
 
-            bulbButtons = new Button[] {
-                btnBulb0,
-                btnBulb1,
-                btnBulb2,
-                btnBulb3,
-                btnBulb4,
-                btnBulb5,
-                btnBulb6,
-                btnBulb7,
-                btnBulb8,
-                btnBulb9,
-                btnBulb10,
-                btnBulb11,
+            bulbViews = new BulbView[] {
+                bulbView1,
+                bulbView2,
+                bulbView3,
+                bulbView4,
+                bulbView5,
+                bulbView6,
+                bulbView7,
+                bulbView8,
+                bulbView9,
+                bulbView10,
             };
-            foreach (Button btn in bulbButtons)
-                btn.Click += bulbButton_Click;
+            foreach (BulbView item in bulbViews)
+                item.SetClient(this.client);
 
             btnCreateToken.Click += btnCreateToken_Click;
         }
-
         void btnCreateToken_Click(object sender, EventArgs e)
         {
             try
@@ -76,22 +73,6 @@ namespace Mavplus.Phantom.Win
             catch(Exception ex)
             {
                 MessageBox.Show(this, "获取令牌失败：" + ex.Message, "提示");
-            }
-        }
-        void client_BulbStateChanged(object sender, BulbEventArgs e)
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new EventHandler<BulbEventArgs>(client_BulbStateChanged), sender, e);
-                return;
-            }
-            foreach (Button btn in this.bulbButtons)
-            {
-                if (btn.Tag == e.Bulb)
-                {
-                    RefreshBulb(btn, e.Bulb);
-                    break;
-                }
             }
         }
 
@@ -163,46 +144,21 @@ namespace Mavplus.Phantom.Win
 
             client.SetScenario(item);
         }
-        void bulbButton_Click(object sender, EventArgs e)
-        {
-            Bulb item = (sender as Button).Tag as Bulb;
-            if (item == null)
-                return;
-
-            if (item.TurnedOn)
-                item.TurnOff();
-            else
-                item.TurnOn();
-        }
 
         void RefreshBulbs()
         {
-            foreach (Button btn in bulbButtons)
-            {
-                btn.Visible = false;
-                btn.Enabled = false;
-                btn.Tag = null;
-                btn.Text = "";
-            }
+            foreach (BulbView item in bulbViews)
+                item.Bulb = null;
 
             int index = 0;
             foreach (Bulb item in client.Bulbs)
             {
-                if (index >= bulbButtons.Length)
+                if (index >= bulbViews.Length)
                     break;
-                RefreshBulb(bulbButtons[index], item);
+                bulbViews[index].Bulb = item;
 
                 index++;
             }
-        }
-
-        void RefreshBulb(Button button, Bulb bulb)
-        {
-            button.Tag = bulb;
-            button.Enabled = (bulb.Connectivity == "在线");
-            button.Visible = true;
-            button.Text = string.Format("{0}({1:0}%)", bulb.Name, bulb.Brightness * 100);
-            button.Image = bulb.TurnedOn ? Properties.Resources.bulb_on_48 : Properties.Resources.bulb_off_48;
         }
 
         void RefreshScenarios()
