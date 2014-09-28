@@ -55,10 +55,10 @@ namespace Mavplus.Phantom.Win
                 bulbView7,
                 bulbView8,
                 bulbView9,
-                bulbView10,
             };
             foreach (BulbView item in bulbViews)
                 item.SetClient(this.client);
+            house1.SetClient(this.client);
 
             btnCreateToken.Click += btnCreateToken_Click;
         }
@@ -216,12 +216,12 @@ namespace Mavplus.Phantom.Win
             if (client.UserInfo == null)
             {
                 pictureBoxUser.Image = null;
-                txtDisplayName.Text = "";
+                labelDisplayName.Text = "";
             }
             else
             {
                 pictureBoxUser.Image = client.UserImage;
-                txtDisplayName.Text = client.UserInfo.Name;
+                labelDisplayName.Text = client.UserInfo.Name;
             }
         }
 

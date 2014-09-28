@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -30,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -56,6 +58,12 @@
     <Compile Include="Controls\BulbView.Designer.cs">
       <DependentUpon>BulbView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\House.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\House.Designer.cs">
+      <DependentUpon>House.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,6 +77,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\BulbView.resx">
       <DependentUpon>BulbView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\House.resx">
+      <DependentUpon>House.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -116,6 +127,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\more_10.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\house_window_bottom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\house_window_top.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\house_256.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
