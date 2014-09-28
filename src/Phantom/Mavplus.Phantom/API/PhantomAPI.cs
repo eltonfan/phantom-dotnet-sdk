@@ -93,6 +93,9 @@ namespace Mavplus.Phantom.API
         }
         static void CheckError(IRestResponse response)
         {
+            if (response.ErrorException != null)
+                throw response.ErrorException;
+
             switch (response.StatusCode)
             {
                 case HttpStatusCode.OK:

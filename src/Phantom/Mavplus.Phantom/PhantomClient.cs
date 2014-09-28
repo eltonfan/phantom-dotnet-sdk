@@ -133,31 +133,46 @@ namespace Mavplus.Phantom
             api.SetBulbTune(bulb.Id, brightness, hue);
         }
 
-        public void RefreshScenarios()
+        public void RefreshScenarios(bool hasDetails = false)
         {
             List<Scenario> listRemoved = new List<Scenario>();
             List<Scenario> listNew = new List<Scenario>();
             List<Scenario> listChanged = new List<Scenario>();
 
-            Scenario[] response = api.GetScenarios();
-            List<Scenario> list = new List<Scenario>();
-            list.Add(new Scenario
+            List<Scenario> listCurrent = new List<Scenario>();
+            listCurrent.Add(new Scenario
             {
                 Id = SCENARIO_ID_AllOff,
                 Name = "全关",
+                DateCreated = DateTime.MinValue,
+                DateUpdated = DateTime.MinValue,
+                ContentItems = new ScenarioContentItem[0],
             });
-            list.Add(new Scenario
+            listCurrent.Add(new Scenario
             {
                 Id = SCENARIO_ID_AllOn,
                 Name = "全开",
+                DateCreated = DateTime.MinValue,
+                DateUpdated = DateTime.MinValue,
+                ContentItems = new ScenarioContentItem[0],
             });
-            if (response != null)
-                list.AddRange(response);
+            if (hasDetails)
+            {
+                foreach (Scenario item in api.GetScenarios())
+                {
+                    Scenario details = api.GetScenario(item.Id);
+                    listCurrent.Add(details);
+                }
+            }
+            else
+            {
+                listCurrent.AddRange(api.GetScenarios());
+            }
 
             foreach(KeyValuePair<int, Scenario> pair in this.dicScenarios)
             {
                 bool removed = true;
-                foreach(Scenario item in list)
+                foreach(Scenario item in listCurrent)
                 {
                     if(item.Id == pair.Key)
                     {//仍然存在
@@ -171,7 +186,7 @@ namespace Mavplus.Phantom
             foreach (Scenario item in listRemoved)
                 this.dicScenarios.Remove(item.Id);
 
-            foreach(Scenario item in list)
+            foreach(Scenario item in listCurrent)
             {
                 if(dicScenarios.ContainsKey(item.Id))
                 {//本来就存在

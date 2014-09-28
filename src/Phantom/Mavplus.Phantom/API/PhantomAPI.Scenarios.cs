@@ -13,6 +13,10 @@ namespace Mavplus.Phantom.API
         {
             return GET<Scenario[]>("scenarios.json");
         }
+        public Scenario GetScenario(int scenarioId)
+        {
+            return GET<Scenario>("scenarios/{id}.json", new UrlSegment("id", scenarioId.ToString()));
+        }
         public void SetScenarioAllOn()
         {
             this.POST<Scenario>("scenarios/all_on.json", null, new Argument("origin", 1));

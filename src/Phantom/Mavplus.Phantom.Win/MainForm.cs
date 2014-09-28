@@ -205,11 +205,24 @@ namespace Mavplus.Phantom.Win
                 return;
             settings.AccessToken = txtToken.Text.Trim();
             settings.Save();
-
-            client.Connect(settings.AccessToken);
-
-            pictureBoxUser.Image = client.UserImage;
-            txtDisplayName.Text = client.UserInfo.Name;
+            try
+            {
+                client.Connect(settings.AccessToken);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(this, "连接失败，" + ex.Message, "提示");
+            }
+            if (client.UserInfo == null)
+            {
+                pictureBoxUser.Image = null;
+                txtDisplayName.Text = "";
+            }
+            else
+            {
+                pictureBoxUser.Image = client.UserImage;
+                txtDisplayName.Text = client.UserInfo.Name;
+            }
         }
 
         private void btnTest_Click(object sender, EventArgs e)

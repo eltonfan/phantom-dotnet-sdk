@@ -57,6 +57,7 @@
     <Compile Include="API\PhantomAPI.Tokens.cs" />
     <Compile Include="API\PhantomAPI.User.cs" />
     <Compile Include="API\UrlSegment.cs" />
+    <Compile Include="ConcreteTypeConverter.cs" />
     <Compile Include="Models\Bulb.cs" />
     <Compile Include="Models\Scenario.cs" />
     <Compile Include="Models\Token.cs" />
