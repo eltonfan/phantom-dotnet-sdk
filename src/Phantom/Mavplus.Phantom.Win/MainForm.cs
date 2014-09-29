@@ -59,21 +59,6 @@ namespace Mavplus.Phantom.Win
             foreach (BulbView item in bulbViews)
                 item.SetClient(this.client);
             house1.SetClient(this.client);
-
-            btnCreateToken.Click += btnCreateToken_Click;
-        }
-        void btnCreateToken_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Token token = client.Login(txtUserName.Text.Trim(), txtPassword.Text);
-
-                txtToken.Text = token.AccessToken;
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(this, "获取令牌失败：" + ex.Message, "提示");
-            }
         }
 
         void client_BulbRemoved(object sender, BulbEventArgs e)
@@ -199,20 +184,84 @@ namespace Mavplus.Phantom.Win
             btnConnect.Click += btnConnect_Click;
         }
 
-        void btnConnect_Click(object sender, EventArgs e)
+        protected override void OnShown(EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtToken.Text.Trim()))
-                return;
-            settings.AccessToken = txtToken.Text.Trim();
-            settings.Save();
+            if (!string.IsNullOrWhiteSpace(settings.AccessToken))
+            {//尝试自动登录
+                try
+                {
+                    client.Connect(settings.AccessToken);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "连接到服务器时发生错误：" + ex.Message, "提示");
+                }
+                RefreshUI();
+            }
+            base.OnShown(e);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
             try
             {
-                client.Connect(settings.AccessToken);
+                client.Disconnect();
             }
-            catch(Exception ex)
+            catch (Exception)
+            { }
+            base.OnClosing(e);
+        }
+
+        void btnConnect_Click(object sender, EventArgs e)
+        {
+            if (client.Connected)
+            {//已连接，则断开
+                try
+                {
+                    client.Disconnect();
+                }
+                catch (Exception)
+                { }
+            }
+            else
             {
-                MessageBox.Show(this, "连接失败，" + ex.Message, "提示");
+                if (string.IsNullOrEmpty(txtToken.Text.Trim()))
+                {
+                    LoginForm form = new LoginForm(this.client);
+                    if (form.ShowDialog(this) != System.Windows.Forms.DialogResult.OK)
+                        return;
+                    txtToken.Text = settings.AccessToken;
+                }
+                else
+                {
+                    settings.AccessToken = txtToken.Text.Trim();
+                    settings.Save();
+                }
+
+                try
+                {
+                    client.Connect(settings.AccessToken);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "连接到服务器时发生错误：" + ex.Message, "提示");
+                }
             }
+            RefreshUI();
+        }
+        void RefreshUI()
+        {
+            if (client.Connected)
+            {
+                txtToken.Enabled = false;
+                btnConnect.Text = "Disconnect";
+            }
+            else
+            {
+                txtToken.Enabled = true;
+                btnConnect.Text = "Connect";
+            }
+
             if (client.UserInfo == null)
             {
                 pictureBoxUser.Image = null;
