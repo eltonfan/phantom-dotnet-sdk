@@ -29,7 +29,10 @@ namespace Mavplus.Phantom.Win
             base.OnShown(e);
 
             txtUserName.Text = settings.UserName;
-            //txtPassword.Text = "";
+            chkRememberPassword.Checked = settings.RememberPassword;
+            if(settings.RememberPassword)
+                txtPassword.Text = settings.LoginPassword;
+
             txtPassword.Focus();
         }
 
@@ -49,12 +52,23 @@ namespace Mavplus.Phantom.Win
                 return;
             }
             settings.UserName = userName;
+            settings.RememberPassword = chkRememberPassword.Checked;
+            settings.LoginPassword = settings.RememberPassword ? password : "";
             settings.Save();
 
-            Token token = client.Login(userName, password);
-            if(token == null)
+            Token token = null;
+            try
             {
-                MessageBox.Show(this, "登录失败，token == null。", "登录失败");
+                token = client.Login(userName, password);
+                if (token == null)
+                {
+                    MessageBox.Show(this, "登录失败，token == null。", "登录失败");
+                    return;
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(this, "登录失败，" + ex.Message, "登录失败");
                 return;
             }
             settings.AccessToken = token.AccessToken;

@@ -23,22 +23,6 @@ namespace Mavplus.Phantom.Win.Properties {
             }
         }
         
-        /// <summary>
-        /// 访问API的令牌。
-        /// </summary>
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Configuration.SettingsDescriptionAttribute("访问API的令牌。")]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AccessToken {
-            get {
-                return ((string)(this["AccessToken"]));
-            }
-            set {
-                this["AccessToken"] = value;
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -48,6 +32,42 @@ namespace Mavplus.Phantom.Win.Properties {
             }
             set {
                 this["UserName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LoginPasswordData {
+            get {
+                return ((string)(this["LoginPasswordData"]));
+            }
+            set {
+                this["LoginPasswordData"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AccessTokenData {
+            get {
+                return ((string)(this["AccessTokenData"]));
+            }
+            set {
+                this["AccessTokenData"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RememberPassword {
+            get {
+                return ((bool)(this["RememberPassword"]));
+            }
+            set {
+                this["RememberPassword"] = value;
             }
         }
     }

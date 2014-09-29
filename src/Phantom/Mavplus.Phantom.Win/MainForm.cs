@@ -180,7 +180,6 @@ namespace Mavplus.Phantom.Win
             RefreshScenarios();
             RefreshBulbs();
 
-            txtToken.Text = settings.AccessToken;
             btnConnect.Click += btnConnect_Click;
         }
 
@@ -225,17 +224,13 @@ namespace Mavplus.Phantom.Win
             }
             else
             {
-                if (string.IsNullOrEmpty(txtToken.Text.Trim()))
-                {
+                if (string.IsNullOrEmpty(settings.AccessToken))
+                {//获取新的令牌
                     LoginForm form = new LoginForm(this.client);
+                    form.StartPosition = FormStartPosition.CenterParent;
+                    form.ShowInTaskbar = false;
                     if (form.ShowDialog(this) != System.Windows.Forms.DialogResult.OK)
                         return;
-                    txtToken.Text = settings.AccessToken;
-                }
-                else
-                {
-                    settings.AccessToken = txtToken.Text.Trim();
-                    settings.Save();
                 }
 
                 try
@@ -253,13 +248,11 @@ namespace Mavplus.Phantom.Win
         {
             if (client.Connected)
             {
-                txtToken.Enabled = false;
-                btnConnect.Text = "Disconnect";
+                btnConnect.Text = "登录";
             }
             else
             {
-                txtToken.Enabled = true;
-                btnConnect.Text = "Connect";
+                btnConnect.Text = "退出";
             }
 
             if (client.UserInfo == null)
@@ -276,11 +269,6 @@ namespace Mavplus.Phantom.Win
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtToken.Text.Trim()))
-                return;
-            settings.AccessToken = txtToken.Text.Trim();
-            settings.Save();
-
             PhantomClient.TestAPI(settings.AccessToken);
         }
     }

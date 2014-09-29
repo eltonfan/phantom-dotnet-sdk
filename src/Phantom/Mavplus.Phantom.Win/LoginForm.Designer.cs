@@ -34,6 +34,7 @@
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.chkRememberPassword = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnOK
@@ -88,6 +89,16 @@
             this.btnCancel.Text = "取消";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
+            // chkRememberPassword
+            // 
+            this.chkRememberPassword.AutoSize = true;
+            this.chkRememberPassword.Location = new System.Drawing.Point(84, 92);
+            this.chkRememberPassword.Name = "chkRememberPassword";
+            this.chkRememberPassword.Size = new System.Drawing.Size(72, 16);
+            this.chkRememberPassword.TabIndex = 14;
+            this.chkRememberPassword.Text = "记住密码";
+            this.chkRememberPassword.UseVisualStyleBackColor = true;
+            // 
             // LoginForm
             // 
             this.AcceptButton = this.btnOK;
@@ -95,6 +106,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(327, 179);
+            this.Controls.Add(this.chkRememberPassword);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.label1);
@@ -118,5 +130,6 @@
         private System.Windows.Forms.TextBox txtUserName;
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.CheckBox chkRememberPassword;
     }
 }
