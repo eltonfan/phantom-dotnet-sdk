@@ -74,9 +74,9 @@ namespace Mavplus.Phantom.Win.Controls
                 foreach (Bulb item in this.client.Bulbs)
                 {
                     if (item.Name == this.TopBulbName)
-                        this.brightnessTop = item.Brightness;
+                        this.brightnessTop = item.TurnedOn ? item.Brightness : 0.0F;
                     else if (item.Name == this.BottomBulbName)
-                        this.brightnessBottom = item.Brightness;
+                        this.brightnessBottom = item.TurnedOn ? item.Brightness : 0.0F;
                     else
                     {
                         continue;

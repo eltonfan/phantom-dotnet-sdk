@@ -52,7 +52,7 @@ namespace Mavplus.Phantom.Models
         /// <summary>
         /// 记录的更新日期
         /// </summary>
-        public DateTime updated_at  { get; set; }
+        public DateTime? updated_at  { get; set; }
     }
     /// <summary>
     /// 情景。

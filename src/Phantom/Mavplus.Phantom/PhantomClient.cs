@@ -156,18 +156,9 @@ namespace Mavplus.Phantom
                 DateUpdated = DateTime.MinValue,
                 ContentItems = new ScenarioContentItem[0],
             });
-            if (hasDetails)
-            {
-                foreach (Scenario item in api.GetScenarios())
-                {
-                    Scenario details = api.GetScenario(item.Id);
-                    listCurrent.Add(details);
-                }
-            }
-            else
-            {
-                listCurrent.AddRange(api.GetScenarios());
-            }
+            Scenario[] response = api.GetScenarios(hasDetails);
+            if(response != null)
+                listCurrent.AddRange(response);
 
             foreach(KeyValuePair<int, Scenario> pair in this.dicScenarios)
             {
@@ -225,20 +216,7 @@ namespace Mavplus.Phantom
             List<Bulb> listNew = new List<Bulb>();
             List<Bulb> listChanged = new List<Bulb>();
 
-            List<Bulb> listCurrent = new List<Bulb>();
-            if (hasDetails)
-            {
-                foreach (Bulb item in api.GetBulbs())
-                {
-                    Bulb details = api.GetBulb(item.Id);
-                    listCurrent.Add(details);
-                }
-            }
-            else
-            {
-                listCurrent.AddRange(api.GetBulbs());
-            }
-
+            Bulb[] listCurrent = api.GetBulbs(hasDetails);
             foreach (KeyValuePair<int, Bulb> pair in this.dicBulbs)
             {
                 bool removed = true;

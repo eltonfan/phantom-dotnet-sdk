@@ -1,4 +1,5 @@
 ﻿using Mavplus.Phantom.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,32 @@ namespace Mavplus.Phantom.API
 {
     partial class PhantomAPI
     {
-        public Scenario[] GetScenarios()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hasDetails">如果为true，则同时获取详细信息。</param>
+        /// <returns></returns>
+        public Scenario[] GetScenarios(bool hasDetails = false)
         {
-            return GET<Scenario[]>("scenarios.json");
+            Scenario[] arrayScenarios = this.GET<Scenario[]>("scenarios.json");
+            if (!hasDetails || arrayScenarios == null || arrayScenarios.Length < 1)
+                return arrayScenarios;
+
+            List<Operation> list = new List<Operation>();
+            foreach (Scenario item in arrayScenarios)
+                list.Add(new Operation("GET", string.Format("/api/scenarios/{0}.json", item.Id)));
+
+            OperationResult[] results = this.Batch(list.ToArray());
+            List<Scenario> listDetails = new List<Scenario>();
+            foreach (OperationResult item in results)
+            {
+                if (item.Status == 200)
+                {
+                    Scenario Scenario = JsonConvert.DeserializeObject<Scenario>(item.Body);
+                    listDetails.Add(Scenario);
+                }
+            }
+            return listDetails.ToArray();
         }
         public Scenario GetScenario(int scenarioId)
         {

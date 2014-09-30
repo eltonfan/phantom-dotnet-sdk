@@ -14,7 +14,7 @@ namespace Mavplus.Phantom.API
     partial class PhantomAPI
     {
         /// <summary>
-        /// 获取当前用户的一个令牌。
+        /// 获取当前用户的一个令牌。获取新令牌后，旧令牌失效。
         /// </summary>
         /// <param name="userName"></param>
         /// <param name="password"></param>
@@ -40,9 +40,42 @@ namespace Mavplus.Phantom.API
                 new Argument("app_id", config.AppId),
                 new Argument("app_secret", config.AppSecret));
         }
-        public Token RefreshToken()
+        /// <summary>
+        /// 换取令牌。请使用基本身份认证与POST /tokens接口获取令牌，获取时需要传递第一步中获取的键/密对，亦即app_id和app_secret。
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <param name="userInfo"></param>
+        /// <returns></returns>
+        public Token CreateToken(string userName, string password, out User userInfo)
         {
-            Token[] list = GET<Token[]>("tokens.json");
+            Token token = null;
+            userInfo = null;
+
+            Operation ops1 = new Operation("GET", "/api/user.json");
+            Operation ops2 = new Operation("POST", "/api/tokens.json");
+            JsonObject para = new JsonObject();
+            para.Add("app_id", config.AppId);
+            para.Add("app_secret", config.AppSecret);
+            ops2.Parameters = para;
+
+            OperationResult[] results = this.Batch(
+                "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(userName + ":" + password)),
+                ops1, ops2);
+            if (results[0].Status == 200)
+                userInfo = JsonConvert.DeserializeObject<User>(results[0].Body);
+            if (results[1].Status == 201)
+                token = JsonConvert.DeserializeObject<Token>(results[1].Body);
+
+            return token;
+        }
+        public Token[] GetTokens()
+        {
+            return GET<Token[]>("tokens.json");
+        }
+        public Token GetCurrentToken()
+        {
+            Token[] list = GetTokens();
 
             Token token = null;
             if (list != null)

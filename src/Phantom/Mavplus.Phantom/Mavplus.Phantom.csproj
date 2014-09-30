@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Argument.cs" />
+    <Compile Include="API\Operation.cs" />
+    <Compile Include="API\OperationResult.cs" />
     <Compile Include="API\PhantomAPI.Bulbs.cs" />
     <Compile Include="API\PhantomAPI.cs" />
     <Compile Include="API\PhantomAPI.Devices.cs" />

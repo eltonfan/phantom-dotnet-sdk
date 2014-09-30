@@ -1,4 +1,5 @@
 ﻿using Mavplus.Phantom.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,32 @@ namespace Mavplus.Phantom.API
 {
     partial class PhantomAPI
     {
-        public Bulb[] GetBulbs()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hasDetails">如果为true，则同时获取详细信息。</param>
+        /// <returns></returns>
+        public Bulb[] GetBulbs(bool hasDetails = false)
         {
-            return GET<Bulb[]>("bulbs.json");
+            Bulb[] arrayBulbs = this.GET<Bulb[]>("bulbs.json");
+            if (!hasDetails || arrayBulbs == null || arrayBulbs.Length < 1)
+                return arrayBulbs;
+
+            List<Operation> list = new List<Operation>();
+            foreach (Bulb item in arrayBulbs)
+                list.Add(new Operation("GET", string.Format("/api/bulbs/{0}.json", item.Id)));
+
+            OperationResult[] results = this.Batch(list.ToArray());
+            List<Bulb> listDetails = new List<Bulb>();
+            foreach (OperationResult item in results)
+            {
+                if (item.Status == 200)
+                {
+                    Bulb bulb = JsonConvert.DeserializeObject<Bulb>(item.Body);
+                    listDetails.Add(bulb);
+                }
+            }
+            return listDetails.ToArray();
         }
         public Bulb GetBulb(int id)
         {

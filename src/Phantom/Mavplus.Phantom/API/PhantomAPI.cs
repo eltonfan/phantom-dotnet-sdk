@@ -91,6 +91,44 @@ namespace Mavplus.Phantom.API
             CheckError(response);
             return JsonConvert.DeserializeObject<T>(response.Content);
         }
+        /// <summary>
+        /// 批命令请求。
+        /// </summary>
+        /// <param name="authorization"></param>
+        /// <param name="ops"></param>
+        /// <returns></returns>
+        protected OperationResult[] Batch(string authorization, params Operation[] ops)
+        {
+            JsonObject content = new JsonObject();
+            content.Add("ops", ops);
+            content.Add("sequential", true);
+
+            List<OperationResult> results = new List<OperationResult>();
+
+            string URI = "https://huantengsmart.com/massapi";
+            using (WebClient wc = new WebClient())
+            {
+                wc.Headers[HttpRequestHeader.Accept] = "application/vnd.huantengsmart-v1+json"; //"application/json"
+                wc.Headers[HttpRequestHeader.Authorization] = authorization;
+                wc.Headers[HttpRequestHeader.ContentType] = "application/json; charset=utf-8";
+                wc.Headers[HttpRequestHeader.UserAgent] = config.UserAgent;
+
+                string responseText = wc.UploadString(URI, "POST", JsonConvert.SerializeObject(content));
+
+                JObject result = JsonConvert.DeserializeObject(responseText) as JObject;
+
+                foreach (JToken item in result["results"] as JArray)
+                {
+                    results.Add(new OperationResult(item.Value<int>("status"), item["body"].ToString()));
+                }
+            }
+
+            return results.ToArray();
+        }
+        protected OperationResult[] Batch(params Operation[] ops)
+        {
+            return Batch("token " + this.token, ops);
+        }
         static void CheckError(IRestResponse response)
         {
             if (response.ErrorException != null)
