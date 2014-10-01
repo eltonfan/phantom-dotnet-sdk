@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.btnTest = new System.Windows.Forms.Button();
             this.btnScenario7 = new System.Windows.Forms.Button();
             this.btnScenario6 = new System.Windows.Forms.Button();
             this.btnScenario5 = new System.Windows.Forms.Button();
@@ -53,16 +52,6 @@
             this.bulbView1 = new Mavplus.Phantom.Win.Controls.BulbView();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUser)).BeginInit();
             this.SuspendLayout();
-            // 
-            // btnTest
-            // 
-            this.btnTest.Location = new System.Drawing.Point(520, 11);
-            this.btnTest.Name = "btnTest";
-            this.btnTest.Size = new System.Drawing.Size(45, 22);
-            this.btnTest.TabIndex = 2;
-            this.btnTest.Text = "Test";
-            this.btnTest.UseVisualStyleBackColor = true;
-            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
             // btnScenario7
             // 
@@ -318,7 +307,6 @@
             this.Controls.Add(this.btnScenario2);
             this.Controls.Add(this.btnScenario1);
             this.Controls.Add(this.btnScenario0);
-            this.Controls.Add(this.btnTest);
             this.Name = "MainForm";
             this.Text = "幻腾API测试";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUser)).EndInit();
@@ -328,7 +316,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btnTest;
         private System.Windows.Forms.Button btnScenario7;
         private System.Windows.Forms.Button btnScenario6;
         private System.Windows.Forms.Button btnScenario5;

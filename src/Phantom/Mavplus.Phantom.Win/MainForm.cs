@@ -250,11 +250,11 @@ namespace Mavplus.Phantom.Win
         {
             if (client.Connected)
             {
-                btnConnect.Text = "登录";
+                btnConnect.Text = "退出";
             }
             else
             {
-                btnConnect.Text = "退出";
+                btnConnect.Text = "登录";
             }
 
             if (client.UserInfo == null)
@@ -267,11 +267,6 @@ namespace Mavplus.Phantom.Win
                 pictureBoxUser.Image = client.UserImage;
                 labelDisplayName.Text = client.UserInfo.Name;
             }
-        }
-
-        private void btnTest_Click(object sender, EventArgs e)
-        {
-            PhantomClient.TestAPI(settings.AccessToken);
         }
     }
 }
