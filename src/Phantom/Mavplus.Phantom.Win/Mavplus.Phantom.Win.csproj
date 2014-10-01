@@ -59,11 +59,11 @@
     <Compile Include="Controls\BulbView.Designer.cs">
       <DependentUpon>BulbView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\House.cs">
+    <Compile Include="Controls\HouseView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\House.Designer.cs">
-      <DependentUpon>House.cs</DependentUpon>
+    <Compile Include="Controls\HouseView.Designer.cs">
+      <DependentUpon>HouseView.cs</DependentUpon>
     </Compile>
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
@@ -79,6 +79,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\AssemblyVersion.cs">
+      <Link>Properties\AssemblyVersion.cs</Link>
+    </Compile>
     <Compile Include="Properties\Settings.cs" />
     <EmbeddedResource Include="BulbDetailsForm.resx">
       <DependentUpon>BulbDetailsForm.cs</DependentUpon>
@@ -86,8 +89,8 @@
     <EmbeddedResource Include="Controls\BulbView.resx">
       <DependentUpon>BulbView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\House.resx">
-      <DependentUpon>House.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\HouseView.resx">
+      <DependentUpon>HouseView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Coded by chuangen http://chuangen.name.
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -12,12 +14,12 @@ using Mavplus.Phantom.Models;
 
 namespace Mavplus.Phantom.Win.Controls
 {
-    public partial class House : UserControl
+    public partial class HouseView : UserControl
     {
         readonly Bitmap background = Properties.Resources.house_256;
         readonly Bitmap windowTop = Properties.Resources.house_window_top;
         readonly Bitmap windowBottom = Properties.Resources.house_window_bottom;
-        public House()
+        public HouseView()
         {
             InitializeComponent();
 

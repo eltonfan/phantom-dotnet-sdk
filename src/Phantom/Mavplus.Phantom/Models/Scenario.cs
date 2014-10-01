@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿// Coded by chuangen http://chuangen.name.
+
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,6 @@
-﻿using Mavplus.Phantom.Models;
+﻿// Coded by chuangen http://chuangen.name.
+
+using Mavplus.Phantom.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;

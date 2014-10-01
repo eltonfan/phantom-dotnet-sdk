@@ -1,4 +1,6 @@
-﻿using Mavplus.Phantom.API;
+﻿// Coded by chuangen http://chuangen.name.
+
+using Mavplus.Phantom.API;
 using Mavplus.Phantom.Models;
 using Mavplus.Phantom.Win.Controls;
 using System;

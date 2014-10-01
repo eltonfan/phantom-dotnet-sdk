@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Coded by chuangen http://chuangen.name.
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;

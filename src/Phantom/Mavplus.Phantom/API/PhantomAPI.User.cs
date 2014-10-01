@@ -1,4 +1,6 @@
-﻿using Mavplus.Phantom.Models;
+﻿// Coded by chuangen http://chuangen.name.
+
+using Mavplus.Phantom.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

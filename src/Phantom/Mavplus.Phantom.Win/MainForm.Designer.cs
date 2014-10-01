@@ -44,7 +44,7 @@
             this.bulbView7 = new Mavplus.Phantom.Win.Controls.BulbView();
             this.bulbView8 = new Mavplus.Phantom.Win.Controls.BulbView();
             this.bulbView9 = new Mavplus.Phantom.Win.Controls.BulbView();
-            this.house1 = new Mavplus.Phantom.Win.Controls.House();
+            this.house1 = new Mavplus.Phantom.Win.Controls.HouseView();
             this.bulbView6 = new Mavplus.Phantom.Win.Controls.BulbView();
             this.bulbView5 = new Mavplus.Phantom.Win.Controls.BulbView();
             this.bulbView4 = new Mavplus.Phantom.Win.Controls.BulbView();
@@ -345,7 +345,7 @@
         private Controls.BulbView bulbView4;
         private Controls.BulbView bulbView5;
         private Controls.BulbView bulbView6;
-        private Controls.House house1;
+        private Controls.HouseView house1;
         private Controls.BulbView bulbView7;
         private Controls.BulbView bulbView8;
         private Controls.BulbView bulbView9;
