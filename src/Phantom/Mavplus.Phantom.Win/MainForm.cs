@@ -24,6 +24,7 @@ namespace Mavplus.Phantom.Win
         public MainForm()
         {
             InitializeComponent();
+            this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
             client = new PhantomClient();
 
