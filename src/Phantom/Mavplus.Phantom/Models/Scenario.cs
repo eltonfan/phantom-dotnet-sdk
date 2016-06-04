@@ -26,19 +26,19 @@ namespace Mavplus.Phantom.Models
         /// <summary>
         /// 目标开／关状态
         /// </summary>
-        public bool turned_on  { get; set; }
+        public bool? turned_on  { get; set; }
         /// <summary>
         /// 目标灯泡的ID
         /// </summary>
-        public int bulb_id  { get; set; }
+        public int? bulb_id  { get; set; }
         /// <summary>
         /// 目标灯泡的目标亮度
         /// </summary>
-        public float brightness  { get; set; }
+        public float? brightness  { get; set; }
         /// <summary>
         /// 目标灯泡的目标色温
         /// </summary>
-        public float hue  { get; set; }
+        public float? hue  { get; set; }
         /// <summary>
         /// 目标EcoTower的ID
         /// </summary>
@@ -47,6 +47,10 @@ namespace Mavplus.Phantom.Models
         /// 目标EcoTower的目标温度
         /// </summary>
         public int? target_temperature  { get; set; }
+
+        public int? generic_module_id { get; set; }
+
+        public string info { get; set; }
         /// <summary>
         /// 记录的创建日期
         /// </summary>
