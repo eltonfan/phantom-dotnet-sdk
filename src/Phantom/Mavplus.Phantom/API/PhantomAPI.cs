@@ -59,6 +59,7 @@ namespace Mavplus.Phantom.API
         protected T GET<T>(string url, params UrlSegment[] urlSegments)
         {
             var request = new RestRequest(url, Method.GET);
+            request.RequestFormat = DataFormat.Json;
             if (urlSegments != null)
             {
                 foreach (UrlSegment item in urlSegments)
@@ -93,6 +94,44 @@ namespace Mavplus.Phantom.API
             CheckError(response);
             return JsonConvert.DeserializeObject<T>(response.Content);
         }
+
+        protected T POST<T>(string url, UrlSegment[] urlSegments, object data)
+        {
+            var request = new RestRequest(url, Method.POST);
+            request.RequestFormat = DataFormat.Json;
+            if (urlSegments != null)
+            {
+                foreach (UrlSegment item in urlSegments)
+                    request.AddUrlSegment(item.Key, item.Value);
+            }
+            request.AddHeader("Authorization", "token " + this.token);
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+
+            request.AddBody(data);
+
+            IRestResponse response = client.Execute(request);
+            CheckError(response);
+            return JsonConvert.DeserializeObject<T>(response.Content);
+        }
+        protected T PUT<T>(string url, UrlSegment[] urlSegments, object data)
+        {
+            var request = new RestRequest(url, Method.PUT);
+            request.RequestFormat = DataFormat.Json;
+            if (urlSegments != null)
+            {
+                foreach (UrlSegment item in urlSegments)
+                    request.AddUrlSegment(item.Key, item.Value);
+            }
+            request.AddHeader("Authorization", "token " + this.token);
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+
+            request.AddBody(data);
+
+            IRestResponse response = client.Execute(request);
+            CheckError(response);
+            return JsonConvert.DeserializeObject<T>(response.Content);
+        }
+
         /// <summary>
         /// 批命令请求。
         /// </summary>

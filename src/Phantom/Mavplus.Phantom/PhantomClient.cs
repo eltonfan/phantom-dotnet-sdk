@@ -112,6 +112,29 @@ namespace Mavplus.Phantom
             timerRefresh.Stop();
         }
 
+        public void AddScenario()
+        {
+            Scenario result = api.UpdateScenario(33003, "中央空调·开",
+                new[]
+                {
+                    new
+                    {
+                        generic_module_id = 721,
+                        info = "[{\"type\":\"mode\",\"index\":0,\"value\":1}]",
+                    },
+                });
+
+            result = api.UpdateScenario(33006, "中央空调·关",
+                new[]
+                {
+                    new
+                    {
+                        generic_module_id = 721,
+                        info = "[{\"type\":\"mode\",\"index\":0,\"value\":0}]",
+                    },
+                });
+        }
+
         public bool Connected { get; private set; }
 
         public void SetScenario(Scenario scenario)
@@ -158,7 +181,7 @@ namespace Mavplus.Phantom
                 DateUpdated = DateTime.MinValue,
                 ContentItems = new ScenarioContentItem[0],
             });
-            Scenario[] response = api.GetScenarios(hasDetails);
+            Scenario[] response = api.GetScenarios(0, hasDetails);
             if(response != null)
                 listCurrent.AddRange(response);
 
@@ -324,7 +347,7 @@ namespace Mavplus.Phantom
             api.SetBulbSwitchOn(listBulbs[0].Id);
             api.SetBulbTune(listBulbs[0].Id, 0.5F, 0.5F);
 
-            Scenario[] listScenarios = api.GetScenarios();
+            Scenario[] listScenarios = api.GetScenarios(0);
             api.SetScenario(listScenarios[0].Id);
             api.SetScenarioAllOff();
             api.SetScenarioAllOn();

@@ -17,9 +17,9 @@ namespace Mavplus.Phantom.API
         /// </summary>
         /// <param name="hasDetails">如果为true，则同时获取详细信息。</param>
         /// <returns></returns>
-        public Scenario[] GetScenarios(bool hasDetails = false)
+        public Scenario[] GetScenarios(int zoneId, bool hasDetails = false)
         {
-            Scenario[] arrayScenarios = this.GET<Scenario[]>("scenarios.json");
+            Scenario[] arrayScenarios = this.GET<Scenario[]>("scenarios?zone_id=" + zoneId);
             if (!hasDetails || arrayScenarios == null || arrayScenarios.Length < 1)
                 return arrayScenarios;
 
@@ -55,6 +55,36 @@ namespace Mavplus.Phantom.API
         {
             this.POST<Scenario>("scenarios/{id}/apply.json",
                 new UrlSegment[] { new UrlSegment("id", scenarioId.ToString()) });
+        }
+
+
+        public Scenario AddScenario(string name)
+        {
+            var data = new
+            {
+                name = name,
+                scenario_content_items_attributes = new[]
+                {
+                    new
+                    {
+                        generic_module_id = 741,
+                         info = "[{\"type\":\"mode\",\"index\":0,\"value\":6}]",
+                    },
+                }
+            };
+
+            return this.POST<Scenario>("scenarios.json", null, data);
+        }
+        public Scenario UpdateScenario(int scenarioId, string name, params object[] contentItems)
+        {
+            var data = new
+            {
+                name = name,
+                scenario_content_items_attributes = contentItems,
+            };
+
+            return this.PUT<Scenario>("scenarios/{id}.json", new UrlSegment[]{ new UrlSegment("id", scenarioId.ToString()) },
+                data);
         }
     }
 }

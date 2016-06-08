@@ -44,6 +44,18 @@ namespace Mavplus.Phantom.Win
                 btnScenario5,
                 btnScenario6,
                 btnScenario7,
+                btnScenario8,
+                btnScenario9,
+                btnScenario10,
+                btnScenario11,
+                btnScenario12,
+                btnScenario13,
+                btnScenario14,
+                btnScenario15,
+                btnScenario16,
+                btnScenario17,
+                btnScenario18,
+                btnScenario19,
             };
             foreach (Button btn in scenarioButtons)
                 btn.Click += scenarioButton_Click;
@@ -58,6 +70,7 @@ namespace Mavplus.Phantom.Win
                 bulbView7,
                 bulbView8,
                 bulbView9,
+                bulbView10,
             };
             foreach (BulbView item in bulbViews)
                 item.SetClient(this.client);
@@ -268,6 +281,11 @@ namespace Mavplus.Phantom.Win
                 pictureBoxUser.Image = client.UserImage;
                 labelDisplayName.Text = client.UserInfo.Name;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            client.AddScenario();
         }
     }
 }
