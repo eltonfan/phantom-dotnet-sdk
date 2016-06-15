@@ -86,5 +86,9 @@ namespace Mavplus.Phantom.API
             return this.PUT<Scenario>("scenarios/{id}.json", new UrlSegment[]{ new UrlSegment("id", scenarioId.ToString()) },
                 data);
         }
+        public bool DeleteScenario(int scenarioId)
+        {
+            return DELETE("scenarios/{id}", new UrlSegment("id", scenarioId.ToString()));
+        }
     }
 }

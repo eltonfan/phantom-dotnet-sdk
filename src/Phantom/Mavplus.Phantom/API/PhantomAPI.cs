@@ -56,7 +56,7 @@ namespace Mavplus.Phantom.API
             return result.Contains("pong");
         }
 
-        protected T GET<T>(string url, params UrlSegment[] urlSegments)
+        string GetString(string url, params UrlSegment[] urlSegments)
         {
             var request = new RestRequest(url, Method.GET);
             request.RequestFormat = DataFormat.Json;
@@ -65,14 +65,44 @@ namespace Mavplus.Phantom.API
                 foreach (UrlSegment item in urlSegments)
                     request.AddUrlSegment(item.Key, item.Value);
             }
-            if(this.token != null)
+            if (this.token != null)
                 request.AddHeader("Authorization", "token " + this.token);
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
 
             IRestResponse response = client.Execute(request);
             CheckError(response);
-            return JsonConvert.DeserializeObject<T>(response.Content);
+
+            return response.Content;
         }
+        protected T GET<T>(string url, params UrlSegment[] urlSegments)
+        {
+            return JsonConvert.DeserializeObject<T>(GetString(url, urlSegments));
+        }
+        protected dynamic GET(string url, params UrlSegment[] urlSegments)
+        {
+            return JsonConvert.DeserializeObject(GetString(url, urlSegments));
+        }
+
+        protected bool DELETE(string url, params UrlSegment[] urlSegments)
+        {
+            var request = new RestRequest(url, Method.DELETE);
+            request.RequestFormat = DataFormat.Json;
+            if (urlSegments != null)
+            {
+                foreach (UrlSegment item in urlSegments)
+                    request.AddUrlSegment(item.Key, item.Value);
+            }
+            if (this.token != null)
+                request.AddHeader("Authorization", "token " + this.token);
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+
+            IRestResponse response = client.Execute(request);
+            CheckError(response);
+
+            dynamic result = JsonConvert.DeserializeObject(response.Content);
+            return result.success;
+        }
+        
 
         protected T POST<T>(string authorization, string url, UrlSegment[] urlSegments, params Argument[] arguments)
         {
