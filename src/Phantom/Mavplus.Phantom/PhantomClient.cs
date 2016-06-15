@@ -112,28 +112,31 @@ namespace Mavplus.Phantom
             timerRefresh.Stop();
         }
 
-        public void AddScenario()
+        public void UpdateScenarioMode(int id, string name, byte mode)
         {
-            Scenario result = api.UpdateScenario(33003, "中央空调·开",
+            Scenario result = api.UpdateScenario(id, name,
                 new[]
                 {
                     new
                     {
                         generic_module_id = 721,
-                        info = "[{\"type\":\"mode\",\"index\":0,\"value\":1}]",
-                    },
-                });
-
-            result = api.UpdateScenario(33006, "中央空调·关",
-                new[]
-                {
-                    new
-                    {
-                        generic_module_id = 721,
-                        info = "[{\"type\":\"mode\",\"index\":0,\"value\":0}]",
+                        info = string.Format("[{{\"type\":\"mode\",\"index\":0,\"value\":{0}}}]", mode),
                     },
                 });
         }
+        public void UpdateScenarioData(int id, string name, int data)
+        {
+            Scenario result = api.UpdateScenario(id, name,
+                new[]
+                {
+                    new
+                    {
+                        generic_module_id = 721,
+                        info = string.Format("[{{\"type\":\"data\",\"index\":0,\"value\":{0}}}]", data),
+                    },
+                });
+        }
+
 
         public bool Connected { get; private set; }
 
@@ -146,6 +149,18 @@ namespace Mavplus.Phantom
             else
                 api.SetScenario(scenario.Id);
         }
+
+        public void SetScenario(int scenarioId)
+        {
+            if (scenarioId == SCENARIO_ID_AllOff)//实际上是全关
+                api.SetScenarioAllOff();
+            else if (scenarioId == SCENARIO_ID_AllOn)
+                api.SetScenarioAllOn();
+            else
+                api.SetScenario(scenarioId);
+        }
+
+
         public void SetBulb(Bulb bulb, bool isOn)
         {
             if (isOn)
