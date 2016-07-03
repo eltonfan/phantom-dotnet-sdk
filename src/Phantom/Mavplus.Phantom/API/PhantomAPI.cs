@@ -211,6 +211,7 @@ namespace Mavplus.Phantom.API
                 case HttpStatusCode.Created:
                     break;
                 case HttpStatusCode.Unauthorized:
+                    throw new PhantomUnauthorizedException();
                 default://其他错误
                     string message = "";
                     PhantomExceptionStatus status = PhantomExceptionStatus.Unknown;

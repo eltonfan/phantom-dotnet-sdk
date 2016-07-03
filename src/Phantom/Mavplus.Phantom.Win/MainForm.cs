@@ -201,19 +201,9 @@ namespace Mavplus.Phantom.Win
 
         protected override void OnShown(EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(settings.AccessToken))
-            {//尝试自动登录
-                try
-                {
-                    client.Connect(settings.AccessToken);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(this, "连接到服务器时发生错误：" + ex.Message, "提示");
-                }
-                RefreshUI();
-            }
             base.OnShown(e);
+
+            btnConnect_Click(btnConnect, EventArgs.Empty);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -251,7 +241,19 @@ namespace Mavplus.Phantom.Win
 
                 try
                 {
-                    client.Connect(settings.AccessToken);
+                    string newAccessToken, newRefreshToken;
+                    client.Connect(settings.AccessToken, settings.RefreshToken, out newAccessToken, out newRefreshToken);
+                    settings.AccessToken = newAccessToken;
+                    settings.RefreshToken = newRefreshToken;
+                    settings.Save();
+                }
+                catch(PhantomUnauthorizedException)
+                {
+                    LoginForm form = new LoginForm(this.client);
+                    form.StartPosition = FormStartPosition.CenterParent;
+                    form.ShowInTaskbar = false;
+                    if (form.ShowDialog(this) != System.Windows.Forms.DialogResult.OK)
+                        return;
                 }
                 catch (Exception ex)
                 {
@@ -285,7 +287,7 @@ namespace Mavplus.Phantom.Win
 
         private void button1_Click(object sender, EventArgs e)
         {
-            client.AddScenario();
+            //client.UpdateScenario();
         }
     }
 }

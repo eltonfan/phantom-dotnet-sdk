@@ -74,6 +74,7 @@ namespace Mavplus.Phantom.Win
                 return;
             }
             settings.AccessToken = token.AccessToken;
+            settings.RefreshToken = token.RefreshToken;
             settings.Save();
 
             this.DialogResult = System.Windows.Forms.DialogResult.OK;

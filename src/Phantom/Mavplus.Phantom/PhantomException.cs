@@ -71,6 +71,13 @@ namespace Mavplus.Phantom
         public PhantomExceptionStatus Status { get; private set; }
     }
 
+    public class PhantomUnauthorizedException : PhantomException
+    {
+        public PhantomUnauthorizedException()
+            : base()
+        { }
+    }
+
     /// <summary>
     /// Phantom错误编号。
     /// </summary>

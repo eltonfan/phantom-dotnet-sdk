@@ -95,5 +95,16 @@ namespace Mavplus.Phantom.API
             }
             return token;
         }
+
+        public Token RefreshToken(string refreshToken)
+        {
+            return this.PUT<Token>("tokens/refresh", null,
+                new
+                {
+                    app_id = config.AppId,
+                    app_secret = config.AppSecret,
+                    refresh_token = refreshToken,
+                });
+        }
     }
 }

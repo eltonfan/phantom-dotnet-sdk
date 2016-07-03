@@ -57,5 +57,14 @@ namespace Mavplus.Phantom.Win.Properties
             get { return Unprotect(this.LoginPasswordData); }
             set { this.LoginPasswordData = Protect(value); }
         }
+
+        /// <summary>
+        /// 访问API的令牌。
+        /// </summary>
+        public string RefreshToken
+        {
+            get { return Unprotect(this.RefreshTokenData); }
+            set { this.RefreshTokenData = Protect(value); }
+        }
     }
 }

@@ -72,8 +72,11 @@ namespace Mavplus.Phantom
             }
         }
 
-        public void Connect(string accessToken)
+        public void Connect(string accessToken, string refreshToken, out string newAccessToken, out string newRefreshToken)
         {
+            newAccessToken = null;
+            newRefreshToken = null;
+
             api.Ping();
 
             this.token = accessToken;
@@ -81,6 +84,24 @@ namespace Mavplus.Phantom
             this.currentUser = api.GetUser();
             if (this.currentUser.Name == null)
                 throw new Exception();
+
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                newAccessToken = accessToken;
+                newRefreshToken = refreshToken;
+            }
+            else
+            {//尝试刷新令牌
+                Token newToken = this.api.RefreshToken(refreshToken);
+                newAccessToken = newToken.AccessToken;
+                newRefreshToken = newToken.RefreshToken;
+
+                this.token = newAccessToken;
+                this.api.SetCredentials(token);
+                this.currentUser = api.GetUser();
+                if (this.currentUser.Name == null)
+                    throw new Exception();
+            }
 
             try
             {//尝试获取用户头像
