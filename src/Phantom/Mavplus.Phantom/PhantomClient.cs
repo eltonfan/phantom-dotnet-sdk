@@ -140,22 +140,54 @@ namespace Mavplus.Phantom
                 {
                     new
                     {
-                        generic_module_id = 721,
+                        generic_module_id = 741,
                         info = string.Format("[{{\"type\":\"mode\",\"index\":0,\"value\":{0}}}]", mode),
                     },
                 });
         }
         public void UpdateScenarioData(int id, string name, int data)
         {
-            Scenario result = api.UpdateScenario(id, name,
-                new[]
+            Scenario old = api.GetScenario(id);
+
+            List<object> list = new List<object>();
+            bool hasData = false;
+            foreach(var item in old.ContentItems)
+            {
+                if (item.generic_module_id != 741 || hasData)
+                {//不正确，或者已经存在记录，则删除
+                    list.Add(
+                            new
+                            {
+                                id = item.id,
+                                _destroy = true,
+                            }
+                        );
+                }
+                else
                 {
+                    hasData = true;
+                    list.Add(
+                            new
+                            {
+                                id = item.id,
+                                generic_module_id = 741,
+                                info = string.Format("[{{\"type\":\"data\",\"index\":0,\"value\":{0}}}]", data),
+                            }
+                        );
+                }
+            }
+            if(!hasData)
+            {//添加记录
+                list.Add(
                     new
                     {
-                        generic_module_id = 721,
+                        generic_module_id = 741,
                         info = string.Format("[{{\"type\":\"data\",\"index\":0,\"value\":{0}}}]", data),
-                    },
-                });
+                    });
+            }
+            
+
+            Scenario result = api.UpdateScenario(id, name, list.ToArray());
         }
 
 
