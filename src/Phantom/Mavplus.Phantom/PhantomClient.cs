@@ -426,7 +426,12 @@ namespace Mavplus.Phantom
         public void GetUserLog()
         {
             string nextCursor;
-            api.GetUserLog(null, 20, out nextCursor);
+            List<UserLog> result = api.GetUserLog(null, 20, out nextCursor);
+        }
+        public void GetDeviceLog()
+        {
+            string nextCursor;
+            List<DeviceLog> result = api.GetDeviceLog("door_sensor", null, null, 20, out nextCursor);
         }
     }
 }

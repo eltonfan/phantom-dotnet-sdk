@@ -8,6 +8,13 @@ using System.Threading.Tasks;
 
 namespace Mavplus.Phantom.API
 {
+    public class DeviceLog
+    {
+        public string Message { get; set; }
+        public DateTime Timestamp { get; set; }
+        public string IconUrl { get; set; }
+    }
+
     partial class PhantomAPI
     {
         /// <summary>
@@ -15,7 +22,7 @@ namespace Mavplus.Phantom.API
         /// </summary>
         /// <param name="device_type"></param>
         /// <returns></returns>
-        public object GetDeviceLog(string device_type, int? device_id, string cursor, int count, out string nextCursor)
+        public List<DeviceLog> GetDeviceLog(string device_type, int? device_id, string cursor, int count, out string nextCursor)
         {
             List<UrlSegment> list = new List<UrlSegment>();
             list.Add(new UrlSegment("device_type", device_type));
@@ -24,29 +31,34 @@ namespace Mavplus.Phantom.API
             if (!string.IsNullOrEmpty(cursor))
                 list.Add(new UrlSegment("next_cursor", cursor));
             list.Add(new UrlSegment("count", count.ToString()));
-            dynamic data = GET("device_log?device_type={device_type}&count={count}",
+            dynamic data = GET2("device_log?device_type={device_type}&count={count}",
                 list.ToArray());
+
+            List<DeviceLog> result = new List<API.DeviceLog>();
             foreach(var item in data.data)
             {
-                string message = item.message;
-                long timestamp = item.timestamp;
-                string icon = item.icon;
+                result.Add(new DeviceLog
+                {
+                    Message = item.message,
+                    Timestamp = new DateTime(1970, 1, 1).AddMilliseconds((long)item.timestamp).ToLocalTime(),
+                    IconUrl = item.icon,
+                });
             }
 
             nextCursor = data.next_cursor;
 
-            return null;
+            return result;
         }
         /*
         {
   "data": [
     {
-      "message": "冰箱被关闭",
+      "message": "---",
       "timestamp": 1465918848000,
       "icon": "https://dn-huantengsmartpublic-four.qbox.me/assets/icons/door-sensor-close-9b589a99eddb1676840d90b668f3e844.png"
     },
     {
-      "message": "冰箱被打开",
+      "message": "---",
       "timestamp": 1465903308000,
       "icon": "https://dn-huantengsmartpublic-four.qbox.me/assets/icons/door-sensor-open-4e426504425454af8ba5e59395515757.png"
     }

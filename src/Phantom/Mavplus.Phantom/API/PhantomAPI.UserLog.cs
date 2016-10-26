@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace Mavplus.Phantom.API
 {
+    public class UserLog
+    {
+        public string Message { get; set; }
+        public DateTime Timestamp { get; set; }
+    }
+
     partial class PhantomAPI
     {
         /// <summary>
@@ -15,34 +21,36 @@ namespace Mavplus.Phantom.API
         /// </summary>
         /// <param name="device_type"></param>
         /// <returns></returns>
-        public object GetUserLog(string cursor, int count, out string nextCursor)
+        public List<UserLog> GetUserLog(string cursor, int count, out string nextCursor)
         {
             List<UrlSegment> list = new List<UrlSegment>();
             if (!string.IsNullOrEmpty(cursor))
                 list.Add(new UrlSegment("next_cursor", cursor));
             list.Add(new UrlSegment("count", count.ToString()));
-            dynamic data = GET("user_log.json?count={count}",
+            dynamic data = GET2("user_log.json?count={count}",
                 list.ToArray());
-            foreach(var item in data)
-            {
-                string message = item.message;
-                long timestamp = item.timestamp;
 
-                 DateTime now = new DateTime(1970, 1, 1).AddMilliseconds(timestamp).ToLocalTime();
+            List<UserLog> result = new List<UserLog>();
+            foreach(var item in data.data)
+            {
+                result.Add(new UserLog {
+                    Message = item.message,
+                    Timestamp = new DateTime(1970, 1, 1).AddMilliseconds((long)item.timestamp).ToLocalTime(),
+                });
             }
 
-            nextCursor = null;// data.next_cursor;
-            return null;
+            nextCursor = data.next_cursor;
+            return result;
         }
 /*
 {
   "data": [
     {
-      "message": "门磁启动了0A.冰箱门.开情景",
+      "message": "---",
       "timestamp": 1477455511715
     },
     {
-      "message": "凯旋.冰箱被打开",
+      "message": "---",
       "timestamp": 1477455511000
     },
   ],

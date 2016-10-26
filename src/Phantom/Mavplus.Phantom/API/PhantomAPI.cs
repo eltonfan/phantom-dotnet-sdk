@@ -35,12 +35,12 @@ namespace Mavplus.Phantom.API
 
             client = new RestClient("https://huantengsmart.com/api/");
             client.UserAgent = config.UserAgent;
-
+            client.DefaultParameters.Clear();
             client.DefaultParameters.Add(new Parameter
             {
                 Name = "Accept",
                 Type = ParameterType.HttpHeader,
-                Value = "application/vnd.huantengsmart-v2+json",
+                Value = "application/vnd.huantengsmart-v1+json",
             });//"application/json"
         }
 
@@ -60,7 +60,17 @@ namespace Mavplus.Phantom.API
 
         string GetString(string url, params UrlSegment[] urlSegments)
         {
+            return GetString(url, false, urlSegments);
+        }
+        string GetStringV2(string url, params UrlSegment[] urlSegments)
+        {
+            return GetString(url, true, urlSegments);
+        }
+        string GetString(string url, bool version2, params UrlSegment[] urlSegments)
+        {
             var request = new RestRequest(url, Method.GET);
+            if(version2)
+                request.AddHeader("Accept", "application/vnd.huantengsmart-v2+json");
             request.RequestFormat = DataFormat.Json;
             if (urlSegments != null)
             {
@@ -83,6 +93,10 @@ namespace Mavplus.Phantom.API
         protected dynamic GET(string url, params UrlSegment[] urlSegments)
         {
             return JsonConvert.DeserializeObject(GetString(url, urlSegments));
+        }
+        protected dynamic GET2(string url, params UrlSegment[] urlSegments)
+        {
+            return JsonConvert.DeserializeObject(GetStringV2(url, urlSegments));
         }
 
         protected bool DELETE(string url, params UrlSegment[] urlSegments)
