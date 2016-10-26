@@ -62,6 +62,7 @@
     <Compile Include="API\OperationResult.cs" />
     <Compile Include="API\PhantomAPI.Bulbs.cs" />
     <Compile Include="API\PhantomAPI.cs" />
+    <Compile Include="API\PhantomAPI.UserLog.cs" />
     <Compile Include="API\PhantomAPI.DeviceLog.cs" />
     <Compile Include="API\PhantomAPI.Devices.cs" />
     <Compile Include="API\PhantomAPI.Routers.cs" />

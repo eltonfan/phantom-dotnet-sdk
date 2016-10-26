@@ -422,5 +422,11 @@ namespace Mavplus.Phantom
             api.SetScenarioAllOff();
             api.SetScenarioAllOn();
         }
+
+        public void GetUserLog()
+        {
+            string nextCursor;
+            api.GetUserLog(null, 20, out nextCursor);
+        }
     }
 }

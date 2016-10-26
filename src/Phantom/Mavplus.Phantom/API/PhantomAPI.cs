@@ -40,7 +40,7 @@ namespace Mavplus.Phantom.API
             {
                 Name = "Accept",
                 Type = ParameterType.HttpHeader,
-                Value = "application/vnd.huantengsmart-v1+json",
+                Value = "application/vnd.huantengsmart-v2+json",
             });//"application/json"
         }
 
