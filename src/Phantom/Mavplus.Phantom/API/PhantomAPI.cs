@@ -20,6 +20,8 @@ namespace Mavplus.Phantom.API
     /// <remarks> https://huantengsmart.com/doc/api_v1 </remarks>
     internal partial class PhantomAPI
     {
+        static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         readonly RestClient client = null;
         readonly PhantomConfiguration config = null;
         readonly Dictionary<int, Bulb> dicBulbs = new Dictionary<int, Bulb>();

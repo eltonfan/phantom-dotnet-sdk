@@ -15,6 +15,8 @@ namespace Mavplus.Phantom.Win.Controls
 {
     public partial class BulbView : UserControl
     {
+        static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public BulbView()
         {
             InitializeComponent();

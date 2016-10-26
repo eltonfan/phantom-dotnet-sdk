@@ -15,6 +15,8 @@ namespace Mavplus.Phantom.Win
 {
     public partial class LoginForm : Form
     {
+        static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         Properties.Settings settings = Properties.Settings.Default;
         readonly PhantomClient client = null;
         public LoginForm(PhantomClient client)

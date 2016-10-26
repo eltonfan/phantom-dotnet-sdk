@@ -16,6 +16,8 @@ namespace Mavplus.Phantom.Win.Controls
 {
     public partial class HouseView : UserControl
     {
+        static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         readonly Bitmap background = Properties.Resources.house_256;
         readonly Bitmap windowTop = Properties.Resources.house_window_top;
         readonly Bitmap windowBottom = Properties.Resources.house_window_bottom;

@@ -17,6 +17,8 @@ namespace Mavplus.Phantom.Win
 {
     public partial class MainForm : Form
     {
+        static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         Properties.Settings settings = Properties.Settings.Default;
         readonly PhantomClient client = null;
         readonly Button[] scenarioButtons = null;

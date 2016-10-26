@@ -19,6 +19,8 @@ namespace Mavplus.Phantom
 {
     public partial class PhantomClient
     {
+        static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         /// <summary>
         /// 全关的情景ID。
         /// </summary>
