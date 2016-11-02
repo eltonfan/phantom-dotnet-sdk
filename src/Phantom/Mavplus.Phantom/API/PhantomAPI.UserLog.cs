@@ -11,7 +11,18 @@ namespace Mavplus.Phantom.API
     public class UserLog
     {
         public string Message { get; set; }
-        public DateTime Timestamp { get; set; }
+        public long Timestamp { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0} - {1} {2}",
+                this.GetDateTime(), this.Timestamp, this.Message);
+        }
+
+        public DateTime GetDateTime()
+        {
+            return new DateTime(1970, 1, 1).AddMilliseconds((long)this.Timestamp).ToLocalTime();
+        }
     }
 
     partial class PhantomAPI
@@ -24,18 +35,27 @@ namespace Mavplus.Phantom.API
         public List<UserLog> GetUserLog(string cursor, int count, out string nextCursor)
         {
             List<UrlSegment> list = new List<UrlSegment>();
-            if (!string.IsNullOrEmpty(cursor))
-                list.Add(new UrlSegment("next_cursor", cursor));
             list.Add(new UrlSegment("count", count.ToString()));
-            dynamic data = GET2("user_log.json?count={count}",
-                list.ToArray());
+
+            dynamic data = null;
+            if (string.IsNullOrEmpty(cursor))
+            {
+                data = GET2("user_log.json?count={count}",
+                    list.ToArray());
+            }
+            else
+            {
+                list.Add(new UrlSegment("next_cursor", cursor));
+                data = GET2("user_log.json?count={count}&next_cursor={next_cursor}",
+                    list.ToArray());
+            }
 
             List<UserLog> result = new List<UserLog>();
             foreach(var item in data.data)
             {
                 result.Add(new UserLog {
                     Message = item.message,
-                    Timestamp = new DateTime(1970, 1, 1).AddMilliseconds((long)item.timestamp).ToLocalTime(),
+                    Timestamp = item.timestamp,
                 });
             }
 

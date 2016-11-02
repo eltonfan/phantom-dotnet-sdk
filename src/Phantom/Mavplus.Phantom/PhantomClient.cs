@@ -423,10 +423,10 @@ namespace Mavplus.Phantom
             api.SetScenarioAllOn();
         }
 
-        public void GetUserLog()
+        public List<UserLog> GetUserLog(string cursor, int count, out string nextCursor)
         {
-            string nextCursor;
-            List<UserLog> result = api.GetUserLog(null, 20, out nextCursor);
+            List<UserLog> result = api.GetUserLog(cursor, count, out nextCursor);
+            return result;
         }
         public void GetDeviceLog()
         {
