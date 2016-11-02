@@ -16,12 +16,19 @@ namespace Mavplus.Phantom.API
         public override string ToString()
         {
             return string.Format("{0} - {1} {2}",
-                this.GetDateTime(), this.Timestamp, this.Message);
+                this.DateTime, this.Timestamp, this.Message);
         }
 
-        public DateTime GetDateTime()
+        public DateTime DateTime
         {
-            return new DateTime(1970, 1, 1).AddMilliseconds((long)this.Timestamp).ToLocalTime();
+            get
+            {
+                return new DateTime(1970, 1, 1).AddMilliseconds((long)this.Timestamp).ToLocalTime();
+            }
+            set
+            {
+                this.Timestamp = (long)value.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
+            }
         }
     }
 
