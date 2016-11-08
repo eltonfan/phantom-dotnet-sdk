@@ -6,16 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mavplus.Phantom.API
+namespace Mavplus.Phantom
 {
     /// <summary>
-    /// 请求参数。
+    /// URL参数。
     /// </summary>
-    internal class Argument
+    internal class UrlSegment
     {
         public string Key { get; private set; }
-        public object Value { get; private set; }
-        public Argument(string key, object value)
+        public string Value { get; private set; }
+        public UrlSegment(string key, string value)
         {
             this.Key = key;
             this.Value = value;

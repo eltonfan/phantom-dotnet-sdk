@@ -1,20 +1,14 @@
 ﻿// Coded by chuangen http://chuangen.name.
 
+using Mavplus.Phantom.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mavplus.Phantom.API
+namespace Mavplus.Phantom.ApiVersion2
 {
-    public class DeviceLog
-    {
-        public string Message { get; set; }
-        public DateTime Timestamp { get; set; }
-        public string IconUrl { get; set; }
-    }
-
     partial class PhantomAPI
     {
         /// <summary>
@@ -31,10 +25,10 @@ namespace Mavplus.Phantom.API
             if (!string.IsNullOrEmpty(cursor))
                 list.Add(new UrlSegment("next_cursor", cursor));
             list.Add(new UrlSegment("count", count.ToString()));
-            dynamic data = GET2("device_log?device_type={device_type}&count={count}",
+            dynamic data = GET("device_log?device_type={device_type}&count={count}",
                 list.ToArray());
 
-            List<DeviceLog> result = new List<API.DeviceLog>();
+            List<DeviceLog> result = new List<DeviceLog>();
             foreach(var item in data.data)
             {
                 result.Add(new DeviceLog

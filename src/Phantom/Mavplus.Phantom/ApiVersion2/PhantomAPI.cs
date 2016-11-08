@@ -12,12 +12,12 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mavplus.Phantom.API
+namespace Mavplus.Phantom.ApiVersion2
 {
     /// <summary>
     /// 实现对幻腾API的各功能封装。
     /// </summary>
-    /// <remarks> https://huantengsmart.com/doc/api_v1 </remarks>
+    /// <remarks> https://huantengsmart.com/doc/api_v2 </remarks>
     public partial class PhantomAPI
     {
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -27,11 +27,13 @@ namespace Mavplus.Phantom.API
         readonly Dictionary<int, Bulb> dicBulbs = new Dictionary<int, Bulb>();
 
         string token = null;
-        public PhantomAPI(PhantomConfiguration config)
+        readonly bool bearerToken = false;
+        public PhantomAPI(PhantomConfiguration config, bool bearerToken = false)
         {
             if (config == null)
                 throw new ArgumentNullException("config", "config 不能为空。");
             this.config = config;
+            this.bearerToken = bearerToken;
 
             client = new RestClient("https://huantengsmart.com/api/");
             client.UserAgent = config.UserAgent;
@@ -40,7 +42,7 @@ namespace Mavplus.Phantom.API
             {
                 Name = "Accept",
                 Type = ParameterType.HttpHeader,
-                Value = "application/vnd.huantengsmart-v1+json",
+                Value = "application/vnd.huantengsmart-v2+json",
             });//"application/json"
         }
 
@@ -58,6 +60,18 @@ namespace Mavplus.Phantom.API
             return result.Contains("pong");
         }
 
+        void AddHeaders(RestRequest request)
+        {
+            if (this.token != null)
+            {
+                if (bearerToken)
+                    request.AddHeader("Authorization", "token " + this.token);
+                else
+                    request.AddHeader("Authorization", "token " + this.token);
+            }
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+        }
+
         string GetString(string url, params UrlSegment[] urlSegments)
         {
             var request = new RestRequest(url, Method.GET);
@@ -67,15 +81,16 @@ namespace Mavplus.Phantom.API
                 foreach (UrlSegment item in urlSegments)
                     request.AddUrlSegment(item.Key, item.Value);
             }
-            if (this.token != null)
-                request.AddHeader("Authorization", "token " + this.token);
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            AddHeaders(request);
 
             IRestResponse response = client.Execute(request);
             CheckError(response);
 
             return response.Content;
         }
+
+
+
         T GET<T>(string url, params UrlSegment[] urlSegments)
         {
             return JsonConvert.DeserializeObject<T>(GetString(url, urlSegments));
@@ -94,9 +109,7 @@ namespace Mavplus.Phantom.API
                 foreach (UrlSegment item in urlSegments)
                     request.AddUrlSegment(item.Key, item.Value);
             }
-            if (this.token != null)
-                request.AddHeader("Authorization", "token " + this.token);
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            AddHeaders(request);
 
             IRestResponse response = client.Execute(request);
             CheckError(response);
@@ -136,8 +149,7 @@ namespace Mavplus.Phantom.API
                 foreach (UrlSegment item in urlSegments)
                     request.AddUrlSegment(item.Key, item.Value);
             }
-            request.AddHeader("Authorization", "token " + this.token);
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            AddHeaders(request);
 
             request.AddBody(data);
 
@@ -154,8 +166,7 @@ namespace Mavplus.Phantom.API
                 foreach (UrlSegment item in urlSegments)
                     request.AddUrlSegment(item.Key, item.Value);
             }
-            request.AddHeader("Authorization", "token " + this.token);
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            AddHeaders(request);
 
             request.AddBody(data);
 
@@ -164,44 +175,6 @@ namespace Mavplus.Phantom.API
             return JsonConvert.DeserializeObject<T>(response.Content);
         }
 
-        /// <summary>
-        /// 批命令请求。
-        /// </summary>
-        /// <param name="authorization"></param>
-        /// <param name="ops"></param>
-        /// <returns></returns>
-        OperationResult[] Batch(string authorization, params Operation[] ops)
-        {
-            JsonObject content = new JsonObject();
-            content.Add("ops", ops);
-            content.Add("sequential", true);
-
-            List<OperationResult> results = new List<OperationResult>();
-
-            string URI = "https://huantengsmart.com/massapi";
-            using (WebClient wc = new WebClient())
-            {
-                wc.Headers[HttpRequestHeader.Accept] = "application/vnd.huantengsmart-v1+json"; //"application/json"
-                wc.Headers[HttpRequestHeader.Authorization] = authorization;
-                wc.Headers[HttpRequestHeader.ContentType] = "application/json; charset=utf-8";
-                wc.Headers[HttpRequestHeader.UserAgent] = config.UserAgent;
-
-                string responseText = wc.UploadString(URI, "POST", JsonConvert.SerializeObject(content));
-
-                JObject result = JsonConvert.DeserializeObject(responseText) as JObject;
-
-                foreach (JToken item in result["results"] as JArray)
-                {
-                    results.Add(new OperationResult(item.Value<int>("status"), item["body"].ToString()));
-                }
-            }
-
-            return results.ToArray();
-        }
-        OperationResult[] Batch(params Operation[] ops)
-        {
-            return Batch("token " + this.token, ops);
-        }
         static void CheckError(IRestResponse response)
         {
             if (response.ErrorException != null)

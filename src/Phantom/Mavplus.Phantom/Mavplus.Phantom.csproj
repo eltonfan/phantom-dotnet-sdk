@@ -57,20 +57,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\Argument.cs" />
+    <Compile Include="ApiVersion2\PhantomAPI.cs" />
+    <Compile Include="Models\DeviceLog.cs" />
+    <Compile Include="Models\UserLog.cs" />
+    <Compile Include="Utils\Argument.cs" />
     <Compile Include="API\Operation.cs" />
     <Compile Include="API\OperationResult.cs" />
     <Compile Include="API\PhantomAPI.Bulbs.cs" />
     <Compile Include="API\PhantomAPI.cs" />
-    <Compile Include="API\PhantomAPI.UserLog.cs" />
-    <Compile Include="API\PhantomAPI.DeviceLog.cs" />
+    <Compile Include="ApiVersion2\PhantomAPI.UserLog.cs" />
+    <Compile Include="ApiVersion2\PhantomAPI.DeviceLog.cs" />
     <Compile Include="API\PhantomAPI.Devices.cs" />
     <Compile Include="API\PhantomAPI.Routers.cs" />
     <Compile Include="API\PhantomAPI.Scenarios.cs" />
     <Compile Include="API\PhantomAPI.Switches.cs" />
     <Compile Include="API\PhantomAPI.Tokens.cs" />
     <Compile Include="API\PhantomAPI.User.cs" />
-    <Compile Include="API\UrlSegment.cs" />
+    <Compile Include="Utils\UrlSegment.cs" />
     <Compile Include="ConcreteTypeConverter.cs" />
     <Compile Include="Models\Bulb.cs" />
     <Compile Include="Models\Scenario.cs" />

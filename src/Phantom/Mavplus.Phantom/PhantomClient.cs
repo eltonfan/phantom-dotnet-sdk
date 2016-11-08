@@ -30,6 +30,7 @@ namespace Mavplus.Phantom
         /// </summary>
         const int SCENARIO_ID_AllOn = 0xFFFF;
         readonly PhantomAPI api = null;
+        readonly ApiVersion2.PhantomAPI api2 = null;
         readonly Dictionary<int, Bulb> dicBulbs = new Dictionary<int, Bulb>();
         readonly Dictionary<int, Scenario> dicScenarios = new Dictionary<int, Scenario>();
 
@@ -41,6 +42,7 @@ namespace Mavplus.Phantom
         public PhantomClient()
         {
             this.api = new PhantomAPI(PhantomConfiguration.Default);
+            this.api2 = new ApiVersion2.PhantomAPI(PhantomConfiguration.Default);
 
             this.timerRefresh = new System.Timers.Timer(PhantomConfiguration.Default.RequestInterval);
             this.timerRefresh.AutoReset = false;
@@ -83,6 +85,7 @@ namespace Mavplus.Phantom
 
             this.token = accessToken;
             this.api.SetCredentials(token);
+            this.api2.SetCredentials(token);
             this.currentUser = api.GetUser();
             if (this.currentUser.Name == null)
                 throw new Exception();
@@ -425,13 +428,13 @@ namespace Mavplus.Phantom
 
         public List<UserLog> GetUserLog(string cursor, int count, out string nextCursor)
         {
-            List<UserLog> result = api.GetUserLog(cursor, count, out nextCursor);
+            List<UserLog> result = api2.GetUserLog(cursor, count, out nextCursor);
             return result;
         }
         public void GetDeviceLog()
         {
             string nextCursor;
-            List<DeviceLog> result = api.GetDeviceLog("door_sensor", null, null, 20, out nextCursor);
+            List<DeviceLog> result = api2.GetDeviceLog("door_sensor", null, null, 20, out nextCursor);
         }
     }
 }

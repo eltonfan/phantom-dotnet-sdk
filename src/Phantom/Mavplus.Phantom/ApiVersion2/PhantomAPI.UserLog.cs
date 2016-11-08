@@ -1,37 +1,14 @@
 ﻿// Coded by chuangen http://chuangen.name.
 
+using Mavplus.Phantom.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mavplus.Phantom.API
+namespace Mavplus.Phantom.ApiVersion2
 {
-    public class UserLog
-    {
-        public string Message { get; set; }
-        public long Timestamp { get; set; }
-
-        public override string ToString()
-        {
-            return string.Format("{0} - {1} {2}",
-                this.DateTime, this.Timestamp, this.Message);
-        }
-
-        public DateTime DateTime
-        {
-            get
-            {
-                return new DateTime(1970, 1, 1).AddMilliseconds((long)this.Timestamp).ToLocalTime();
-            }
-            set
-            {
-                this.Timestamp = (long)value.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
-            }
-        }
-    }
-
     partial class PhantomAPI
     {
         /// <summary>
@@ -47,13 +24,13 @@ namespace Mavplus.Phantom.API
             dynamic data = null;
             if (string.IsNullOrEmpty(cursor))
             {
-                data = GET2("user_log.json?count={count}",
+                data = GET("user_log.json?count={count}",
                     list.ToArray());
             }
             else
             {
                 list.Add(new UrlSegment("next_cursor", cursor));
-                data = GET2("user_log.json?count={count}&next_cursor={next_cursor}",
+                data = GET("user_log.json?count={count}&next_cursor={next_cursor}",
                     list.ToArray());
             }
 
