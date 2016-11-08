@@ -291,7 +291,8 @@ namespace Mavplus.Phantom.Win
         {
             //client.UpdateScenario();
             //client.GetUserLog();
-            client.GetDeviceLog();
+            //client.GetDeviceLog();
+            Login();
         }
     }
 }

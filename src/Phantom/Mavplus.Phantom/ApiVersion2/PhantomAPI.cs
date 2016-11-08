@@ -24,16 +24,14 @@ namespace Mavplus.Phantom.ApiVersion2
 
         readonly RestClient client = null;
         readonly PhantomConfiguration config = null;
-        readonly Dictionary<int, Bulb> dicBulbs = new Dictionary<int, Bulb>();
 
         string token = null;
-        readonly bool bearerToken = false;
-        public PhantomAPI(PhantomConfiguration config, bool bearerToken = false)
+        bool bearerToken = false;
+        public PhantomAPI(PhantomConfiguration config)
         {
             if (config == null)
                 throw new ArgumentNullException("config", "config 不能为空。");
             this.config = config;
-            this.bearerToken = bearerToken;
 
             client = new RestClient("https://huantengsmart.com/api/");
             client.UserAgent = config.UserAgent;
@@ -46,9 +44,22 @@ namespace Mavplus.Phantom.ApiVersion2
             });//"application/json"
         }
 
-        public void SetCredentials(string token)
+        public void SetCredentials(string token, bool bearerToken = false)
         {
             this.token = token;
+            this.bearerToken = bearerToken;
+        }
+
+        void AddHeaders(RestRequest request)
+        {
+            if (this.token != null)
+            {
+                if (bearerToken)
+                    request.AddHeader("Authorization", "bearer " + this.token);
+                else
+                    request.AddHeader("Authorization", "token " + this.token);
+            }
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
         }
 
         public bool Ping()
@@ -58,18 +69,6 @@ namespace Mavplus.Phantom.ApiVersion2
                 return false;
 
             return result.Contains("pong");
-        }
-
-        void AddHeaders(RestRequest request)
-        {
-            if (this.token != null)
-            {
-                if (bearerToken)
-                    request.AddHeader("Authorization", "token " + this.token);
-                else
-                    request.AddHeader("Authorization", "token " + this.token);
-            }
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
         }
 
         string GetString(string url, params UrlSegment[] urlSegments)

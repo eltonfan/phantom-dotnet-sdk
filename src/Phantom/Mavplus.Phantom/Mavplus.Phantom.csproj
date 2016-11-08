@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiVersion2\PhantomAPI.cs" />
+    <Compile Include="ApiVersion2\PhantomAPI.Tokens.cs" />
     <Compile Include="Models\DeviceLog.cs" />
     <Compile Include="Models\UserLog.cs" />
     <Compile Include="Utils\Argument.cs" />

@@ -27,6 +27,7 @@ namespace Mavplus.Phantom
 
         public string AppId { get; set; }
         public string AppSecret { get; set; }
+        public string RedirectUri { get; set; }
         /// <summary>
         /// 客户端的 User-Agent。
         /// </summary>

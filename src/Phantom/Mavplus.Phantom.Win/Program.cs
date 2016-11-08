@@ -24,6 +24,7 @@ namespace Mavplus.Phantom.Win
             PhantomConfiguration config = PhantomConfiguration.Default;
             config.AppId = SecretKeys.PhantomAppId;
             config.AppSecret = SecretKeys.PhantomAppSecret;
+            config.RedirectUri = SecretKeys.PhantomRedirectUri;
             config.UserAgent = "chuangen@live.cn/1.0.0 (Windows 8.1)";
             config.RequestInterval = 2000;
 

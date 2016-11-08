@@ -27,6 +27,7 @@ namespace Mavplus.Phantom.API
         readonly Dictionary<int, Bulb> dicBulbs = new Dictionary<int, Bulb>();
 
         string token = null;
+        bool bearerToken = false;
         public PhantomAPI(PhantomConfiguration config)
         {
             if (config == null)
@@ -44,9 +45,22 @@ namespace Mavplus.Phantom.API
             });//"application/json"
         }
 
-        public void SetCredentials(string token)
+        public void SetCredentials(string token, bool bearerToken = false)
         {
             this.token = token;
+            this.bearerToken = bearerToken;
+        }
+
+        void AddHeaders(RestRequest request)
+        {
+            if (this.token != null)
+            {
+                if (bearerToken)
+                    request.AddHeader("Authorization", "bearer " + this.token);
+                else
+                    request.AddHeader("Authorization", "token " + this.token);
+            }
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
         }
 
         public bool Ping()
@@ -67,11 +81,9 @@ namespace Mavplus.Phantom.API
                 foreach (UrlSegment item in urlSegments)
                     request.AddUrlSegment(item.Key, item.Value);
             }
-            if (this.token != null)
-                request.AddHeader("Authorization", "token " + this.token);
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            AddHeaders(request);
 
-            IRestResponse response = client.Execute(request);
+           IRestResponse response = client.Execute(request);
             CheckError(response);
 
             return response.Content;
@@ -94,9 +106,7 @@ namespace Mavplus.Phantom.API
                 foreach (UrlSegment item in urlSegments)
                     request.AddUrlSegment(item.Key, item.Value);
             }
-            if (this.token != null)
-                request.AddHeader("Authorization", "token " + this.token);
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            AddHeaders(request);
 
             IRestResponse response = client.Execute(request);
             CheckError(response);
@@ -136,8 +146,7 @@ namespace Mavplus.Phantom.API
                 foreach (UrlSegment item in urlSegments)
                     request.AddUrlSegment(item.Key, item.Value);
             }
-            request.AddHeader("Authorization", "token " + this.token);
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            AddHeaders(request);
 
             request.AddBody(data);
 
