@@ -109,6 +109,9 @@
     <Compile Include="..\AssemblyVersion.cs">
       <Link>Properties\AssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="..\..\SecretKeys.cs">
+      <Link>Properties\SecretKeys.cs</Link>
+    </Compile>
     <Compile Include="Properties\Settings.cs" />
     <EmbeddedResource Include="BulbDetailsForm.resx">
       <DependentUpon>BulbDetailsForm.cs</DependentUpon>

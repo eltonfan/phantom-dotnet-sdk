@@ -18,7 +18,7 @@ namespace Mavplus.Phantom.API
     /// 实现对幻腾API的各功能封装。
     /// </summary>
     /// <remarks> https://huantengsmart.com/doc/api_v1 </remarks>
-    internal partial class PhantomAPI
+    public partial class PhantomAPI
     {
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -86,20 +86,20 @@ namespace Mavplus.Phantom.API
 
             return response.Content;
         }
-        protected T GET<T>(string url, params UrlSegment[] urlSegments)
+        T GET<T>(string url, params UrlSegment[] urlSegments)
         {
             return JsonConvert.DeserializeObject<T>(GetString(url, urlSegments));
         }
-        protected dynamic GET(string url, params UrlSegment[] urlSegments)
+        dynamic GET(string url, params UrlSegment[] urlSegments)
         {
             return JsonConvert.DeserializeObject(GetString(url, urlSegments));
         }
-        protected dynamic GET2(string url, params UrlSegment[] urlSegments)
+        dynamic GET2(string url, params UrlSegment[] urlSegments)
         {
             return JsonConvert.DeserializeObject(GetStringV2(url, urlSegments));
         }
 
-        protected bool DELETE(string url, params UrlSegment[] urlSegments)
+        bool DELETE(string url, params UrlSegment[] urlSegments)
         {
             var request = new RestRequest(url, Method.DELETE);
             request.RequestFormat = DataFormat.Json;
@@ -120,7 +120,7 @@ namespace Mavplus.Phantom.API
         }
         
 
-        protected T POST<T>(string authorization, string url, UrlSegment[] urlSegments, params Argument[] arguments)
+        T POST<T>(string authorization, string url, UrlSegment[] urlSegments, params Argument[] arguments)
         {
             var request = new RestRequest(url, Method.POST);
             if (urlSegments != null)
@@ -141,7 +141,7 @@ namespace Mavplus.Phantom.API
             return JsonConvert.DeserializeObject<T>(response.Content);
         }
 
-        protected T POST<T>(string url, UrlSegment[] urlSegments, object data)
+        T POST<T>(string url, UrlSegment[] urlSegments, object data)
         {
             var request = new RestRequest(url, Method.POST);
             request.RequestFormat = DataFormat.Json;
@@ -159,7 +159,7 @@ namespace Mavplus.Phantom.API
             CheckError(response);
             return JsonConvert.DeserializeObject<T>(response.Content);
         }
-        protected T PUT<T>(string url, UrlSegment[] urlSegments, object data)
+        T PUT<T>(string url, UrlSegment[] urlSegments, object data)
         {
             var request = new RestRequest(url, Method.PUT);
             request.RequestFormat = DataFormat.Json;
@@ -184,7 +184,7 @@ namespace Mavplus.Phantom.API
         /// <param name="authorization"></param>
         /// <param name="ops"></param>
         /// <returns></returns>
-        protected OperationResult[] Batch(string authorization, params Operation[] ops)
+        OperationResult[] Batch(string authorization, params Operation[] ops)
         {
             JsonObject content = new JsonObject();
             content.Add("ops", ops);
@@ -212,7 +212,7 @@ namespace Mavplus.Phantom.API
 
             return results.ToArray();
         }
-        protected OperationResult[] Batch(params Operation[] ops)
+        OperationResult[] Batch(params Operation[] ops)
         {
             return Batch("token " + this.token, ops);
         }
@@ -269,7 +269,7 @@ namespace Mavplus.Phantom.API
         }
 
 
-        protected T POST<T>(string url, UrlSegment[] urlSegments, params Argument[] arguments)
+        T POST<T>(string url, UrlSegment[] urlSegments, params Argument[] arguments)
         {
             if (string.IsNullOrEmpty(this.token))
                 throw new PhantomException("尚未换取令牌。");

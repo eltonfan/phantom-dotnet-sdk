@@ -22,8 +22,8 @@ namespace Mavplus.Phantom.Win
             Application.SetCompatibleTextRenderingDefault(false);
 
             PhantomConfiguration config = PhantomConfiguration.Default;
-            config.AppId = "******";
-            config.AppSecret = "******";
+            config.AppId = SecretKeys.PhantomAppId;
+            config.AppSecret = SecretKeys.PhantomAppSecret;
             config.UserAgent = "chuangen@live.cn/1.0.0 (Windows 8.1)";
             config.RequestInterval = 2000;
 
