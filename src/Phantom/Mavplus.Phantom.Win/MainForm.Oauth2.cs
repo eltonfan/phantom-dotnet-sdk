@@ -106,9 +106,9 @@ namespace Mavplus.Phantom.Win
             string scope = string.Join("+", arrayScopes);
 
             string url = string.Format("https://huantengsmart.com/oauth2/authorize?client_id={0}&scope={1}&redirect_uri={2}&response_type=code",
-                SecretKeys.Phantom.AppId,
+                SecretKeys.PhantomAlexa.AppId,
                 scope,
-                System.Web.HttpUtility.UrlEncode("http://localhost:6060/18ec7769c06d45d788d1d3d73612d2d2", Encoding.UTF8));
+                System.Web.HttpUtility.UrlEncode(SecretKeys.PhantomAlexa.RedirectUri, Encoding.UTF8));
             System.Diagnostics.Process.Start(url);
         }
     }

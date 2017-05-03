@@ -22,9 +22,9 @@ namespace Mavplus.Phantom.Win
             Application.SetCompatibleTextRenderingDefault(false);
 
             PhantomConfiguration config = PhantomConfiguration.Default;
-            config.AppId = SecretKeys.Phantom.AppId;
-            config.AppSecret = SecretKeys.Phantom.AppSecret;
-            config.RedirectUri = SecretKeys.Phantom.RedirectUri;
+            config.AppId = SecretKeys.PhantomAlexa.AppId;
+            config.AppSecret = SecretKeys.PhantomAlexa.AppSecret;
+            config.RedirectUri = SecretKeys.PhantomAlexa.RedirectUri;
             config.UserAgent = "chuangen@live.cn/1.0.0 (Windows 8.1)";
             config.RequestInterval = 2000;
 
