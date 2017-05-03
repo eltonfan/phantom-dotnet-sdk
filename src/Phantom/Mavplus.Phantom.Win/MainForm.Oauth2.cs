@@ -49,7 +49,8 @@ namespace Mavplus.Phantom.Win
                         }
                         string authorizeCode = queryString["code"];
                         ApiVersion2.PhantomAPI api = new ApiVersion2.PhantomAPI(PhantomConfiguration.Default);
-                        api.CreateToken(authorizeCode);
+                        var token = api.CreateToken(authorizeCode);
+                        log.Info("AccessToken: " + token.access_token);
 
                         httpListenerContext.Response.StatusCode = 200;
                         title = "Finished";
@@ -101,7 +102,7 @@ namespace Mavplus.Phantom.Win
             string scope = string.Join("+", arrayScopes);
 
             string url = string.Format("https://huantengsmart.com/oauth2/authorize?client_id={0}&scope={1}&redirect_uri={2}&response_type=code",
-                SecretKeys.PhantomAppId,
+                SecretKeys.Phantom.AppId,
                 scope,
                 System.Web.HttpUtility.UrlEncode("http://localhost:6060/18ec7769c06d45d788d1d3d73612d2d2", Encoding.UTF8));
             System.Diagnostics.Process.Start(url);
