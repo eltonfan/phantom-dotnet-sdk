@@ -56,7 +56,7 @@ namespace Mavplus.Phantom.API
 
             Operation ops1 = new Operation("GET", "/api/user.json");
             Operation ops2 = new Operation("POST", "/api/tokens.json");
-            JsonObject para = new JsonObject();
+            JObject para = new JObject();
             para.Add("app_id", config.AppId);
             para.Add("app_secret", config.AppSecret);
             ops2.Parameters = para;

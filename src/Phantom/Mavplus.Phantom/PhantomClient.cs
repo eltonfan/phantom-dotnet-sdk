@@ -7,7 +7,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -19,7 +18,7 @@ namespace Mavplus.Phantom
 {
     public partial class PhantomClient
     {
-        static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(typeof(PhantomClient));
 
         /// <summary>
         /// 全关的情景ID。
@@ -35,22 +34,20 @@ namespace Mavplus.Phantom
         readonly Dictionary<int, Scenario> dicScenarios = new Dictionary<int, Scenario>();
 
         User currentUser = null;
-        Image image = null;
+        //Image image = null;
         string token = null;
 
-        readonly System.Timers.Timer timerRefresh = null;
+        readonly System.Threading.Timer timerRefresh = null;
         public PhantomClient()
         {
             this.api = new PhantomAPI(PhantomConfiguration.Default);
             this.api2 = new ApiVersion2.PhantomAPI(PhantomConfiguration.Default);
 
-            this.timerRefresh = new System.Timers.Timer(PhantomConfiguration.Default.RequestInterval);
-            this.timerRefresh.AutoReset = false;
-            this.timerRefresh.Elapsed += timerRefresh_Elapsed;
+            this.timerRefresh = new System.Threading.Timer(RefreshTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         volatile int refreshCount = 0;
-        void timerRefresh_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        void RefreshTimerCallback(object state)
         {
             try
             {
@@ -71,8 +68,10 @@ namespace Mavplus.Phantom
             {
                 refreshCount++;
 
-                if(this.Connected)
-                    timerRefresh.Start();
+                if (this.Connected)
+                {
+                    timerRefresh.Change(PhantomConfiguration.Default.RequestInterval, Timeout.Infinite);
+                }
             }
         }
 
@@ -107,35 +106,14 @@ namespace Mavplus.Phantom
                 if (this.currentUser.Name == null)
                     throw new Exception();
             }
-
-            try
-            {//尝试获取用户头像
-                string email = this.currentUser.Email;
-                string imageUrl = null;
-                using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
-                {
-                    byte[] dataEmail = Encoding.UTF8.GetBytes(email.Trim().ToLower());
-                    string hashString = BitConverter.ToString(md5.ComputeHash(dataEmail)).Replace("-", "").ToLower();
-                    imageUrl = "https://gravatar.com/avatar/" + hashString + ".png";
-                }
-                using (WebClient client = new WebClient())
-                {
-                    byte[] imageData = client.DownloadData(imageUrl);
-                    this.image = Image.FromStream(new MemoryStream(imageData));
-                }
-            }
-            catch(Exception ex)
-            {
-                this.image = null;
-            }
-
-            timerRefresh.Start();
+            
+            timerRefresh.Change(0, Timeout.Infinite);
             this.Connected = true;
         }
         public void Disconnect()
         {
             this.Connected = false;
-            timerRefresh.Stop();
+            timerRefresh.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
         public void UpdateScenarioMode(int id, string name, byte mode)
@@ -389,10 +367,10 @@ namespace Mavplus.Phantom
         {
             get { return this.currentUser; }
         }
-        public Image UserImage
-        {
-            get { return this.image; }
-        }
+        //public Image UserImage
+        //{
+        //    get { return this.image; }
+        //}
 
         public ICollection<Bulb> Bulbs
         {

@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -282,8 +284,32 @@ namespace Mavplus.Phantom.Win
             }
             else
             {
-                pictureBoxUser.Image = client.UserImage;
                 labelDisplayName.Text = client.UserInfo.Name;
+
+                Image userImage = null;
+                try
+                {//尝试获取用户头像
+
+                    string email = client.UserInfo.Email;
+                    string imageUrl = null;
+                    using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+                    {
+                        byte[] dataEmail = Encoding.UTF8.GetBytes(email.Trim().ToLower());
+                        string hashString = BitConverter.ToString(md5.ComputeHash(dataEmail)).Replace("-", "").ToLower();
+                        imageUrl = "https://gravatar.com/avatar/" + hashString + ".png";
+                    }
+                    using (WebClient client = new WebClient())
+                    {
+                        byte[] imageData = client.DownloadData(imageUrl);
+                        userImage = Image.FromStream(new MemoryStream(imageData));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //this.image = null;
+                }
+
+                pictureBoxUser.Image = userImage;
             }
         }
 

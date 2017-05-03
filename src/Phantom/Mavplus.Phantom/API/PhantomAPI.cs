@@ -4,6 +4,8 @@ using Mavplus.Phantom.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using RestSharp.Portable;
+using RestSharp.Portable.HttpClient;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -20,7 +22,7 @@ namespace Mavplus.Phantom.API
     /// <remarks> https://huantengsmart.com/doc/api_v1 </remarks>
     public partial class PhantomAPI
     {
-        static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(typeof(PhantomAPI));
 
         readonly RestClient client = null;
         readonly PhantomConfiguration config = null;
@@ -35,8 +37,8 @@ namespace Mavplus.Phantom.API
             this.config = config;
 
             client = new RestClient("https://huantengsmart.com/api/");
-            client.UserAgent = config.UserAgent;
             client.DefaultParameters.Clear();
+            client.UserAgent = config.UserAgent;
             client.DefaultParameters.Add(new Parameter
             {
                 Name = "Accept",
@@ -75,7 +77,7 @@ namespace Mavplus.Phantom.API
         string GetString(string url, params UrlSegment[] urlSegments)
         {
             var request = new RestRequest(url, Method.GET);
-            request.RequestFormat = DataFormat.Json;
+            //request.RequestFormat = DataFormat.Json;
             if (urlSegments != null)
             {
                 foreach (UrlSegment item in urlSegments)
@@ -83,7 +85,7 @@ namespace Mavplus.Phantom.API
             }
             AddHeaders(request);
 
-           IRestResponse response = client.Execute(request);
+           IRestResponse response = client.Execute(request).GetAwaiter().GetResult();
             CheckError(response);
 
             return response.Content;
@@ -100,7 +102,7 @@ namespace Mavplus.Phantom.API
         bool DELETE(string url, params UrlSegment[] urlSegments)
         {
             var request = new RestRequest(url, Method.DELETE);
-            request.RequestFormat = DataFormat.Json;
+            //request.RequestFormat = DataFormat.Json;
             if (urlSegments != null)
             {
                 foreach (UrlSegment item in urlSegments)
@@ -108,7 +110,7 @@ namespace Mavplus.Phantom.API
             }
             AddHeaders(request);
 
-            IRestResponse response = client.Execute(request);
+            IRestResponse response = client.Execute(request).GetAwaiter().GetResult();
             CheckError(response);
 
             dynamic result = JsonConvert.DeserializeObject(response.Content);
@@ -124,23 +126,25 @@ namespace Mavplus.Phantom.API
                 foreach (UrlSegment item in urlSegments)
                     request.AddUrlSegment(item.Key, item.Value);
             }
-            request.AddHeader("Authorization", authorization);
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            if(!string.IsNullOrWhiteSpace(authorization))
+                request.AddHeader("Authorization", authorization);
+            //request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             if (arguments != null)
             {
                 foreach (Argument item in arguments)
                     request.AddParameter(item.Key, item.Value);
             }
 
-            IRestResponse response = client.Execute(request);
+            IRestResponse<T> response = client.Execute<T>(request).GetAwaiter().GetResult();
             CheckError(response);
-            return JsonConvert.DeserializeObject<T>(response.Content);
+            return response.Data;
         }
 
         T POST<T>(string url, UrlSegment[] urlSegments, object data)
         {
             var request = new RestRequest(url, Method.POST);
-            request.RequestFormat = DataFormat.Json;
+            //request.RequestFormat = DataFormat.Json;
             if (urlSegments != null)
             {
                 foreach (UrlSegment item in urlSegments)
@@ -150,14 +154,14 @@ namespace Mavplus.Phantom.API
 
             request.AddBody(data);
 
-            IRestResponse response = client.Execute(request);
+            IRestResponse response = client.Execute(request).GetAwaiter().GetResult();
             CheckError(response);
             return JsonConvert.DeserializeObject<T>(response.Content);
         }
         T PUT<T>(string url, UrlSegment[] urlSegments, object data)
         {
             var request = new RestRequest(url, Method.PUT);
-            request.RequestFormat = DataFormat.Json;
+            //request.RequestFormat = DataFormat.Json;
             if (urlSegments != null)
             {
                 foreach (UrlSegment item in urlSegments)
@@ -168,7 +172,7 @@ namespace Mavplus.Phantom.API
 
             request.AddBody(data);
 
-            IRestResponse response = client.Execute(request);
+            IRestResponse response = client.Execute(request).GetAwaiter().GetResult();
             CheckError(response);
             return JsonConvert.DeserializeObject<T>(response.Content);
         }
@@ -181,6 +185,8 @@ namespace Mavplus.Phantom.API
         /// <returns></returns>
         OperationResult[] Batch(string authorization, params Operation[] ops)
         {
+            throw new NotImplementedException();
+            /*
             JsonObject content = new JsonObject();
             content.Add("ops", ops);
             content.Add("sequential", true);
@@ -205,7 +211,7 @@ namespace Mavplus.Phantom.API
                 }
             }
 
-            return results.ToArray();
+            return results.ToArray();*/
         }
         OperationResult[] Batch(params Operation[] ops)
         {
@@ -213,8 +219,8 @@ namespace Mavplus.Phantom.API
         }
         static void CheckError(IRestResponse response)
         {
-            if (response.ErrorException != null)
-                throw response.ErrorException;
+            //if (response.ErrorException != null)
+            //    throw response.ErrorException;
 
             switch (response.StatusCode)
             {

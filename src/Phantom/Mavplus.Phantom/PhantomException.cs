@@ -1,6 +1,7 @@
 ﻿// Coded by chuangen http://chuangen.name.
 
 using RestSharp;
+using RestSharp.Portable;
 using System;
 using System.Collections.Generic;
 using System.Linq;

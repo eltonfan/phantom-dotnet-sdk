@@ -56,6 +56,10 @@ namespace Mavplus.Phantom.Win
                         title = "Finished";
                         desc = "Well done, you now have an access token which allows you to call Phantom API on behalf of the user.<br />Please return to the application.";
                     }
+                    catch(Exception ex)
+                    {
+                        log.Error("Failed to create token.", ex);
+                    }
                     finally
                     {
                         using (StreamWriter writer = new StreamWriter(httpListenerContext.Response.OutputStream))

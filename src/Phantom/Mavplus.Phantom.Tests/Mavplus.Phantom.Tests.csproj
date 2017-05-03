@@ -68,12 +68,6 @@
     <Compile Include="UnitTest1.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mavplus.Phantom\Mavplus.Phantom.csproj">
-      <Project>{65079ca1-3296-4986-b832-7df7ac9cb924}</Project>
-      <Name>Mavplus.Phantom</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Choose>
