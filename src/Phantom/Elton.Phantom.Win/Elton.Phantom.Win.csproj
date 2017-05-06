@@ -183,8 +183,8 @@
     <None Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mavplus.Phantom\Elton.Phantom.csproj">
-      <Project>{7916bba6-4360-46cb-a85e-cde201e83b1a}</Project>
+    <ProjectReference Include="..\Elton.Phantom\Elton.Phantom.csproj">
+      <Project>{30fe14ef-e3d2-4714-9d28-6e80e2052792}</Project>
       <Name>Elton.Phantom</Name>
     </ProjectReference>
   </ItemGroup>
