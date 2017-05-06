@@ -1,6 +1,6 @@
 ﻿// Coded by chuangen http://chuangen.name.
 
-using Mavplus.Phantom.Models;
+using Elton.Phantom.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Mavplus.Phantom.Win
+namespace Elton.Phantom.Win
 {
     public partial class BulbDetailsForm : Form
     {

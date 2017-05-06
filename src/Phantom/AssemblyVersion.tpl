@@ -6,10 +6,10 @@
 [assembly: AssemblyConfiguration("Release")]
 #endif
 
-[assembly: AssemblyCompany("MAVPLUS")]
+[assembly: AssemblyCompany("Elton FAN")]
 [assembly: AssemblyProduct("Phantom.NET")]
-[assembly: AssemblyCopyright("\u00A9 2014 MAVPLUS. http://www.mavplus.com/")]
-[assembly: AssemblyTrademark("MAVPLUS")]
+[assembly: AssemblyCopyright("\u00A9 2014 Elton FAN. http://elton.io/")]
+[assembly: AssemblyTrademark("Elton FAN")]
 
 [assembly: AssemblyVersion("1.0.0.$REV$")]
 [assembly: AssemblyFileVersion("1.0.0.$REV$")]

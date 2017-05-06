@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Mavplus.Phantom.Win
+namespace Elton.Phantom.Win
 {
     static class Program
     {

@@ -10,9 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
-using Mavplus.Phantom.Models;
+using Elton.Phantom.Models;
 
-namespace Mavplus.Phantom.Win.Controls
+namespace Elton.Phantom.Win.Controls
 {
     public partial class HouseView : UserControl
     {

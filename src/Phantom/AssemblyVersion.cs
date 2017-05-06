@@ -6,12 +6,12 @@ using System.Reflection;
 [assembly: AssemblyConfiguration("Release")]
 #endif
 
-[assembly: AssemblyCompany("MAVPLUS")]
+[assembly: AssemblyCompany("Elton FAN")]
 [assembly: AssemblyProduct("Phantom.NET")]
-[assembly: AssemblyCopyright("\u00A9 2014 MAVPLUS. http://www.mavplus.com/")]
-[assembly: AssemblyTrademark("MAVPLUS")]
+[assembly: AssemblyCopyright("\u00A9 2014 Elton FAN. http://elton.io/")]
+[assembly: AssemblyTrademark("Elton FAN")]
 
-[assembly: AssemblyVersion("1.0.0.12")]
-[assembly: AssemblyFileVersion("1.0.0.12")]
+[assembly: AssemblyVersion("1.0.0.42")]
+[assembly: AssemblyFileVersion("1.0.0.42")]
 [assembly: AssemblyInformationalVersion("v1.0.0 Alpha")]
-[assembly: AssemblyDefaultAlias("b4ed2557990c8f39706432b184e7c8025f2e5bb9 2014-09-30T17:57:17+08:00")]
+[assembly: AssemblyDefaultAlias("f0f091b37b7ffc465b47353c02e255bd55af7ffd 2017-05-06")]

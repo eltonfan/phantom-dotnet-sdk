@@ -1,4 +1,4 @@
-﻿namespace Mavplus.Phantom.Win.Controls
+﻿namespace Elton.Phantom.Win.Controls
 {
     partial class BulbView
     {
@@ -46,7 +46,7 @@
             // btnMore
             // 
             this.btnMore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMore.Image = global::Mavplus.Phantom.Win.Properties.Resources.more_10;
+            this.btnMore.Image = global::Elton.Phantom.Win.Properties.Resources.more_10;
             this.btnMore.Location = new System.Drawing.Point(63, 4);
             this.btnMore.Name = "btnMore";
             this.btnMore.Size = new System.Drawing.Size(21, 21);
@@ -59,7 +59,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.labelBulb.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.labelBulb.Image = global::Mavplus.Phantom.Win.Properties.Resources.bulb_off_48;
+            this.labelBulb.Image = global::Elton.Phantom.Win.Properties.Resources.bulb_off_48;
             this.labelBulb.Location = new System.Drawing.Point(18, 2);
             this.labelBulb.Name = "labelBulb";
             this.labelBulb.Size = new System.Drawing.Size(48, 48);

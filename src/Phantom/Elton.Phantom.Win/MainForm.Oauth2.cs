@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mavplus.Phantom.Win
+namespace Elton.Phantom.Win
 {
     partial class MainForm
     {

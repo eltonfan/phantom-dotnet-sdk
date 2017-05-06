@@ -1,7 +1,7 @@
 ﻿// Coded by chuangen http://chuangen.name.
 
-using Mavplus.Phantom.API;
-using Mavplus.Phantom.Models;
+using Elton.Phantom.API;
+using Elton.Phantom.Models;
 using RestSharp;
 using System;
 using System.Collections;
@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mavplus.Phantom
+namespace Elton.Phantom
 {
     public partial class PhantomClient
     {

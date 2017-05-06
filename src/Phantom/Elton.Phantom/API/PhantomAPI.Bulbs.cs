@@ -1,6 +1,6 @@
 ﻿// Coded by chuangen http://chuangen.name.
 
-using Mavplus.Phantom.Models;
+using Elton.Phantom.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mavplus.Phantom.API
+namespace Elton.Phantom.API
 {
     partial class PhantomAPI
     {

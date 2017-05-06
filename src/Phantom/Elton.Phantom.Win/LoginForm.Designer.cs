@@ -1,4 +1,4 @@
-﻿namespace Mavplus.Phantom.Win
+﻿namespace Elton.Phantom.Win
 {
     partial class LoginForm
     {

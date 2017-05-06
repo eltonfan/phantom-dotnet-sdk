@@ -1,4 +1,4 @@
-﻿namespace Mavplus.Phantom.Win
+﻿namespace Elton.Phantom.Win
 {
     partial class BulbDetailsForm
     {
@@ -79,7 +79,7 @@
             // labelBulb
             // 
             this.labelBulb.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.labelBulb.Image = global::Mavplus.Phantom.Win.Properties.Resources.bulb_off_48;
+            this.labelBulb.Image = global::Elton.Phantom.Win.Properties.Resources.bulb_off_48;
             this.labelBulb.Location = new System.Drawing.Point(29, 36);
             this.labelBulb.Name = "labelBulb";
             this.labelBulb.Size = new System.Drawing.Size(48, 48);

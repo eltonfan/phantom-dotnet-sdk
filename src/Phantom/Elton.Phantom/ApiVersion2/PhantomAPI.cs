@@ -1,6 +1,6 @@
 ﻿// Coded by chuangen http://chuangen.name.
 
-using Mavplus.Phantom.Models;
+using Elton.Phantom.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -14,7 +14,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mavplus.Phantom.ApiVersion2
+namespace Elton.Phantom.ApiVersion2
 {
     /// <summary>
     /// 实现对幻腾API的各功能封装。

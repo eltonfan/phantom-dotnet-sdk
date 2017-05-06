@@ -1,13 +1,13 @@
 ﻿// Coded by chuangen http://chuangen.name.
 
-using Mavplus.Phantom.Models;
+using Elton.Phantom.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mavplus.Phantom.ApiVersion2
+namespace Elton.Phantom.ApiVersion2
 {
     partial class PhantomAPI
     {

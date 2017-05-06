@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Mavplus.Phantom.Win.Properties {
+namespace Elton.Phantom.Win.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

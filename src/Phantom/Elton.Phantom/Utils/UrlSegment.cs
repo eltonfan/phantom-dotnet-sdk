@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mavplus.Phantom
+namespace Elton.Phantom
 {
     /// <summary>
     /// URL参数。

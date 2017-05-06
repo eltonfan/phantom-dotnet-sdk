@@ -1,4 +1,4 @@
-﻿namespace Mavplus.Phantom.Win.Controls
+﻿namespace Elton.Phantom.Win.Controls
 {
     partial class HouseView
     {
@@ -34,7 +34,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Mavplus.Phantom.Win.Properties.Resources.house_256;
+            this.BackgroundImage = global::Elton.Phantom.Win.Properties.Resources.house_256;
             this.Name = "House";
             this.Size = new System.Drawing.Size(256, 256);
             this.ResumeLayout(false);

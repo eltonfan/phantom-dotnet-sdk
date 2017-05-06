@@ -7,7 +7,7 @@
     <ProjectGuid>{BCB84F16-D465-470B-B05B-332FDC673045}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mavplus.Phantom.Win</RootNamespace>
+    <RootNamespace>Elton.Phantom.Win</RootNamespace>
     <AssemblyName>PhantomWin</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

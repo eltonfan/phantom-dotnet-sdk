@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mavplus.Phantom
+namespace Elton.Phantom
 {
     /// <summary>
     /// 通过HTTPS访问幻腾应用编程接口期间出错时引发的异常。

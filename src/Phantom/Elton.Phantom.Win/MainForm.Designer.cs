@@ -1,4 +1,4 @@
-﻿namespace Mavplus.Phantom.Win
+﻿namespace Elton.Phantom.Win
 {
     partial class MainForm
     {
@@ -53,17 +53,17 @@
             this.btnScenario11 = new System.Windows.Forms.Button();
             this.btnScenario10 = new System.Windows.Forms.Button();
             this.btnScenario19 = new System.Windows.Forms.Button();
-            this.bulbView10 = new Mavplus.Phantom.Win.Controls.BulbView();
-            this.bulbView7 = new Mavplus.Phantom.Win.Controls.BulbView();
-            this.bulbView8 = new Mavplus.Phantom.Win.Controls.BulbView();
-            this.bulbView9 = new Mavplus.Phantom.Win.Controls.BulbView();
-            this.house1 = new Mavplus.Phantom.Win.Controls.HouseView();
-            this.bulbView6 = new Mavplus.Phantom.Win.Controls.BulbView();
-            this.bulbView5 = new Mavplus.Phantom.Win.Controls.BulbView();
-            this.bulbView4 = new Mavplus.Phantom.Win.Controls.BulbView();
-            this.bulbView3 = new Mavplus.Phantom.Win.Controls.BulbView();
-            this.bulbView2 = new Mavplus.Phantom.Win.Controls.BulbView();
-            this.bulbView1 = new Mavplus.Phantom.Win.Controls.BulbView();
+            this.bulbView10 = new Elton.Phantom.Win.Controls.BulbView();
+            this.bulbView7 = new Elton.Phantom.Win.Controls.BulbView();
+            this.bulbView8 = new Elton.Phantom.Win.Controls.BulbView();
+            this.bulbView9 = new Elton.Phantom.Win.Controls.BulbView();
+            this.house1 = new Elton.Phantom.Win.Controls.HouseView();
+            this.bulbView6 = new Elton.Phantom.Win.Controls.BulbView();
+            this.bulbView5 = new Elton.Phantom.Win.Controls.BulbView();
+            this.bulbView4 = new Elton.Phantom.Win.Controls.BulbView();
+            this.bulbView3 = new Elton.Phantom.Win.Controls.BulbView();
+            this.bulbView2 = new Elton.Phantom.Win.Controls.BulbView();
+            this.bulbView1 = new Elton.Phantom.Win.Controls.BulbView();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUser)).BeginInit();
             this.SuspendLayout();
             // 
@@ -175,7 +175,7 @@
             // btnScenario0
             // 
             this.btnScenario0.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnScenario0.Image = global::Mavplus.Phantom.Win.Properties.Resources.switch_48;
+            this.btnScenario0.Image = global::Elton.Phantom.Win.Properties.Resources.switch_48;
             this.btnScenario0.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnScenario0.Location = new System.Drawing.Point(13, 340);
             this.btnScenario0.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);

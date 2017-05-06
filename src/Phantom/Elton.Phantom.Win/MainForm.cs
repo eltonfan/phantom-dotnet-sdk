@@ -1,8 +1,8 @@
 ﻿// Coded by chuangen http://chuangen.name.
 
-using Mavplus.Phantom.API;
-using Mavplus.Phantom.Models;
-using Mavplus.Phantom.Win.Controls;
+using Elton.Phantom.API;
+using Elton.Phantom.Models;
+using Elton.Phantom.Win.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Mavplus.Phantom.Win
+namespace Elton.Phantom.Win
 {
     public partial class MainForm : Form
     {

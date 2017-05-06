@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mavplus.Phantom
+namespace Elton.Phantom
 {
     /// <summary>
     /// 幻腾接口配置。（配置客户端信息）

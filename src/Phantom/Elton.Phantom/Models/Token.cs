@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mavplus.Phantom.Models
+namespace Elton.Phantom.Models
 {
     /// <summary>
     /// 令牌。
