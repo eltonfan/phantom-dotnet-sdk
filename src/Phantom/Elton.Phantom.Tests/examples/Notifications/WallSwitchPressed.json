@@ -1,0 +1,8 @@
+﻿{
+  "type": "WallSwitchPressed-v1-1400742372",
+  "content": {
+    "type": "long_tap",
+    "channel": 8,
+    "switch_id": 3106
+  }
+}

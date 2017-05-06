@@ -1,0 +1,14 @@
+﻿{
+  "type": "BulbsChanged-v2-1400742372",
+  "content": {
+    "device_identifier": "N7295",
+    "house_id": 4536,
+    "bulb_id": 7295,
+    "wall_switch_id": null,
+    "channel": null,
+    "hue": 0.46,
+    "brightness": 1.0,
+    "turned_on": true,
+    "script_end_time": null
+  }
+}

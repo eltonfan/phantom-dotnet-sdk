@@ -1,0 +1,9 @@
+﻿{
+  "type": "WallSwitchesChanged-v1-1400742372",
+  "content": {
+    "wall_switch_id": 3507,
+    "device_identifier": "y3507",
+    "status": [ true, true ],
+    "change_mask": 2
+  }
+}

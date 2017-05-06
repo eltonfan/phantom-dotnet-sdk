@@ -105,10 +105,11 @@ namespace Elton.Phantom.Win
             };
             string scope = string.Join("+", arrayScopes);
 
+            PhantomConfiguration config = PhantomConfiguration.Default;
             string url = string.Format("https://huantengsmart.com/oauth2/authorize?client_id={0}&scope={1}&redirect_uri={2}&response_type=code",
-                SecretKeys.PhantomAlexa.AppId,
+                config.AppId,
                 scope,
-                System.Web.HttpUtility.UrlEncode(SecretKeys.PhantomAlexa.RedirectUri, Encoding.UTF8));
+                System.Web.HttpUtility.UrlEncode(config.RedirectUri, Encoding.UTF8));
             System.Diagnostics.Process.Start(url);
         }
     }

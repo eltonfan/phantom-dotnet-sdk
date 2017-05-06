@@ -1,0 +1,9 @@
+﻿{
+  "type": "WallSwitchesChanged-v1-1400742372",
+  "content": {
+    "wall_switch_id": 3493,
+    "device_identifier": "z3493",
+    "status": [ false, true, true ],
+    "change_mask": 2
+  }
+}

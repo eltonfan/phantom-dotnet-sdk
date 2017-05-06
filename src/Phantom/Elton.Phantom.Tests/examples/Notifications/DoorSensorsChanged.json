@@ -1,0 +1,16 @@
+﻿{
+  "type": "DoorSensorsChanged-v2-1400742372",
+  "content": {
+    "door_sensor_id": 825,
+    "door_sensor_name": "凯旋.书桌左",
+    "is_open": false,
+    "alert_mode": 0,
+    "alert_status": 1,
+    "behaviors": [
+      {
+        "action": "close",
+        "timestamp": 1478689951000
+      }
+    ]
+  }
+}

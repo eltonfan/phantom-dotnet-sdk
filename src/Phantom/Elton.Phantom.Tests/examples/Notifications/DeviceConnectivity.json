@@ -1,0 +1,9 @@
+﻿{
+  "type": "DeviceConnectivity-v1-1400742372",
+  "content": {
+    "device_identifier": "S1516",
+    "connectivity_string": "在线",
+    "reason": "ro",
+    "connectivity": 7
+  }
+}
