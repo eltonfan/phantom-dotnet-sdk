@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Mavplus.Phantom.Tests
+namespace Elton.Phantom.Tests
 {
     [TestClass]
     public class UnitTest1
@@ -9,7 +9,6 @@ namespace Mavplus.Phantom.Tests
         [TestMethod]
         public void TestMethod1()
         {
-            //PhantomClient.TestAPI(settings.AccessToken);
         }
     }
 }
