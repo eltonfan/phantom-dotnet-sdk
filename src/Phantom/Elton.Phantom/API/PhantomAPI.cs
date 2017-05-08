@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -185,33 +186,22 @@ namespace Elton.Phantom.API
         /// <returns></returns>
         OperationResult[] Batch(string authorization, params Operation[] ops)
         {
-            throw new NotImplementedException();
-            /*
-            JsonObject content = new JsonObject();
-            content.Add("ops", ops);
+            var content = new JObject();
+            content.Add("ops", JToken.FromObject(ops));
             content.Add("sequential", true);
 
             List<OperationResult> results = new List<OperationResult>();
 
-            string URI = "https://huantengsmart.com/massapi";
-            using (WebClient wc = new WebClient())
+            //string URI = "https://huantengsmart.com/massapi";
+            //Accept = "application/vnd.huantengsmart-v1+json";
+            //Authorization = authorization
+            //ContentType = "application/json; charset=utf-8";
+            JObject result = this.POST<JObject>("../massapi", null, content);
+            foreach (JToken item in result["results"] as JArray)
             {
-                wc.Headers[HttpRequestHeader.Accept] = "application/vnd.huantengsmart-v1+json"; //"application/json"
-                wc.Headers[HttpRequestHeader.Authorization] = authorization;
-                wc.Headers[HttpRequestHeader.ContentType] = "application/json; charset=utf-8";
-                wc.Headers[HttpRequestHeader.UserAgent] = config.UserAgent;
-
-                string responseText = wc.UploadString(URI, "POST", JsonConvert.SerializeObject(content));
-
-                JObject result = JsonConvert.DeserializeObject(responseText) as JObject;
-
-                foreach (JToken item in result["results"] as JArray)
-                {
-                    results.Add(new OperationResult(item.Value<int>("status"), item["body"].ToString()));
-                }
+                results.Add(new OperationResult(item.Value<int>("status"), item["body"].ToString()));
             }
-
-            return results.ToArray();*/
+            return results.ToArray();
         }
         OperationResult[] Batch(params Operation[] ops)
         {
