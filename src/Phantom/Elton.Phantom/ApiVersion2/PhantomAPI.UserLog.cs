@@ -24,13 +24,13 @@ namespace Elton.Phantom.ApiVersion2
             dynamic data = null;
             if (string.IsNullOrEmpty(cursor))
             {
-                data = GET("user_log.json?count={count}",
+                data = GetJson("user_log.json?count={count}",
                     list.ToArray());
             }
             else
             {
                 list.Add(new UrlSegment("next_cursor", cursor));
-                data = GET("user_log.json?count={count}&next_cursor={next_cursor}",
+                data = GetJson("user_log.json?count={count}&next_cursor={next_cursor}",
                     list.ToArray());
             }
 

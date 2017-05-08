@@ -25,4 +25,19 @@ namespace Elton.Phantom.Models
         [JsonProperty("user_agent")]
         public string UserAgent { get; set; }
     }
+
+    //https://github.com/HuanTeng/huanteng.github.io/blob/master/oauth.md
+
+    public class TokenV2
+    {
+        public string access_token { get; set; }
+        /// <summary>
+        /// bearer
+        /// </summary>
+        public string token_type { get; set; }
+        public long expires_in { get; set; }
+        public string refresh_token { get; set; }
+        public string scope { get; set; }
+        public long created_at { get; set; }
+    }
 }

@@ -75,6 +75,21 @@ namespace Elton.Phantom
             }
         }
 
+        public void Connect(string accessToken, bool bearerToken = false)
+        {
+            api.Ping();
+
+            this.token = accessToken;
+            this.api.SetCredentials(token, bearerToken);
+            this.api2.SetCredentials(token, bearerToken);
+            this.currentUser = api.GetUser();
+            if (this.currentUser.Name == null)
+                throw new Exception();
+
+            timerRefresh.Change(0, Timeout.Infinite);
+            this.Connected = true;
+        }
+
         public void Connect(string accessToken, string refreshToken, out string newAccessToken, out string newRefreshToken)
         {
             newAccessToken = null;

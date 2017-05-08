@@ -9,6 +9,7 @@ using RestSharp.Portable.HttpClient;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -33,8 +34,7 @@ namespace Elton.Phantom.API
         bool bearerToken = false;
         public PhantomAPI(PhantomConfiguration config)
         {
-            if (config == null)
-                throw new ArgumentNullException("config", "config 不能为空。");
+            Contract.Requires(config != null, "config can not be empty.");
             this.config = config;
 
             client = new RestClient("https://huantengsmart.com/api/");

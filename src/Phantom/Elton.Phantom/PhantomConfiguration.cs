@@ -25,25 +25,19 @@ namespace Elton.Phantom
             }
         }
 
-        public string AppId { get; set; }
-        public string AppSecret { get; set; }
-        public string RedirectUri { get; set; }
+        public string AppId { get; set; } = null;
+        public string AppSecret { get; set; } = null;
+        public string RedirectUri { get; set; } = null;
         /// <summary>
         /// 客户端的 User-Agent。
         /// </summary>
-        public string UserAgent { get; set; }
+        public string UserAgent { get; set; } = null;
         /// <summary>
         /// 请求的时间间隔。（毫秒）
         /// </summary>
-        public int RequestInterval { get; set; }
+        public int RequestInterval { get; set; } = 20 * 1000;
 
         private PhantomConfiguration()
-        {
-            this.AppId = null;
-            this.AppSecret = null;
-            this.UserAgent = null;
-
-            this.RequestInterval = 1000;
-        }
+        { }
     }
 }

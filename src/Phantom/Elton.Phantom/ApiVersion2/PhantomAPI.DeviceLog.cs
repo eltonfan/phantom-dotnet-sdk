@@ -25,7 +25,7 @@ namespace Elton.Phantom.ApiVersion2
             if (!string.IsNullOrEmpty(cursor))
                 list.Add(new UrlSegment("next_cursor", cursor));
             list.Add(new UrlSegment("count", count.ToString()));
-            dynamic data = GET("device_log?device_type={device_type}&count={count}",
+            dynamic data = GetJson("device_log?device_type={device_type}&count={count}",
                 list.ToArray());
 
             List<DeviceLog> result = new List<DeviceLog>();
