@@ -111,6 +111,56 @@ namespace Elton.Phantom.Win.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///
+        ///&lt;html lang=&quot;en&quot; xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///&lt;head&gt;
+        ///    &lt;meta charset=&quot;utf-8&quot; /&gt;
+        ///    &lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+        ///        function messageBox(message) {
+        ///            alert(message);
+        ///        }
+        ///    &lt;/script&gt;
+        ///    &lt;title&gt;%title%&lt;/title&gt;
+        ///&lt;/head&gt;
+        ///&lt;body&gt;
+        ///    &lt;div style=\&quot;height:20px;color:blue;text-align:center;\&quot;&gt;&lt;p&gt;%desc%&lt;/p&gt;&lt;/div&gt;
+        ///    &lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;window.external.OnFinished();&lt;/script&gt;
+        ///&lt;/body&gt;
+        ///&lt;/html&gt;.
+        /// </summary>
+        internal static string HTML_Error {
+            get {
+                return ResourceManager.GetString("HTML_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///
+        ///&lt;html lang=&quot;en&quot; xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///&lt;head&gt;
+        ///    &lt;meta charset=&quot;utf-8&quot; /&gt;
+        ///    &lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;
+        ///        function messageBox(message) {
+        ///            alert(message);
+        ///        }
+        ///    &lt;/script&gt;
+        ///    &lt;title&gt;%title%&lt;/title&gt;
+        ///&lt;/head&gt;
+        ///&lt;body&gt;
+        ///    &lt;div style=\&quot;height:20px;color:blue;text-align:center;\&quot;&gt;&lt;p&gt;%desc%&lt;/p&gt;&lt;/div&gt;
+        ///    &lt;script language=&quot;javascript&quot; type=&quot;text/javascript&quot;&gt;window.external.OnFinished();&lt;/script&gt;
+        ///&lt;/body&gt;
+        ///&lt;/html&gt;.
+        /// </summary>
+        internal static string HTML_Finished {
+            get {
+                return ResourceManager.GetString("HTML_Finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap more_10 {

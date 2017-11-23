@@ -13,73 +13,38 @@ using System.Windows.Forms;
 
 namespace Elton.Phantom.Win
 {
+    [System.Runtime.InteropServices.ComVisible(true)]
     public partial class LoginForm : Form
     {
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         Properties.Settings settings = Properties.Settings.Default;
         readonly PhantomClient client = null;
-        public LoginForm(PhantomClient client)
+        readonly string urlString = null;
+        public LoginForm(PhantomClient client, string urlString)
         {
             this.client = client;
+            this.urlString = urlString;
             InitializeComponent();
 
-            btnOK.Click += btnOK_Click;
+            webBrowser.ObjectForScripting = this;
         }
 
-
-        protected override void OnShown(EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
-            base.OnShown(e);
+            base.OnLoad(e);
 
-            txtUserName.Text = settings.UserName;
-            chkRememberPassword.Checked = settings.RememberPassword;
-            if(settings.RememberPassword)
-                txtPassword.Text = settings.LoginPassword;
-
-            txtPassword.Focus();
+            webBrowser.Navigate(urlString);
         }
 
-
-        void btnOK_Click(object sender, EventArgs e)
+        public void OnFinished()
         {
-            string userName = txtUserName.Text.Trim();
-            if(string.IsNullOrEmpty(userName))
-            {
-                MessageBox.Show(this, "用户名不能为空。", "提示");
-                return;
-            }
-            string password = txtPassword.Text;
-            if (string.IsNullOrEmpty(password))
-            {
-                MessageBox.Show(this, "密码不能为空。", "提示");
-                return;
-            }
-            settings.UserName = userName;
-            settings.RememberPassword = chkRememberPassword.Checked;
-            settings.LoginPassword = settings.RememberPassword ? password : "";
-            settings.Save();
+            this.DialogResult = DialogResult.OK;
+        }
 
-            Token token = null;
-            try
-            {
-                token = client.Login(userName, password);
-                if (token == null)
-                {
-                    MessageBox.Show(this, "登录失败，token == null。", "登录失败");
-                    return;
-                }
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(this, "登录失败，" + ex.Message, "登录失败");
-                return;
-            }
-            settings.AccessToken = token.AccessToken;
-            settings.RefreshToken = token.RefreshToken;
-            settings.Save();
-
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
+        public void OnError()
+        {
+            //
         }
     }
 }

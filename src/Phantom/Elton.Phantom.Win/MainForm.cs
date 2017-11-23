@@ -207,7 +207,7 @@ namespace Elton.Phantom.Win
         {
             base.OnShown(e);
 
-            btnConnect_Click(btnConnect, EventArgs.Empty);
+            RefreshUI();
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -223,23 +223,23 @@ namespace Elton.Phantom.Win
 
         void btnConnect_Click(object sender, EventArgs e)
         {
-            if (client.Connected)
-            {//已连接，则断开
-                try
-                {
-                    client.Disconnect();
-                }
-                catch (Exception)
-                { }
-            }
-            else
+            try
             {
+                if (client.Connected)
+                {//已连接，则断开
+                    try
+                    {
+                        client.Disconnect();
+                    }
+                    catch (Exception)
+                    { }
+
+                    return;
+                }
+
                 if (string.IsNullOrEmpty(settings.AccessToken))
                 {//获取新的令牌
-                    LoginForm form = new LoginForm(this.client);
-                    form.StartPosition = FormStartPosition.CenterParent;
-                    form.ShowInTaskbar = false;
-                    if (form.ShowDialog(this) != System.Windows.Forms.DialogResult.OK)
+                    if (ShowLoginForm() != System.Windows.Forms.DialogResult.OK)
                         return;
                 }
 
@@ -251,12 +251,18 @@ namespace Elton.Phantom.Win
                     settings.RefreshToken = newRefreshToken;
                     settings.Save();
                 }
-                catch(PhantomUnauthorizedException)
+                catch (PhantomUnauthorizedException)
                 {
-                    LoginForm form = new LoginForm(this.client);
-                    form.StartPosition = FormStartPosition.CenterParent;
-                    form.ShowInTaskbar = false;
-                    if (form.ShowDialog(this) != System.Windows.Forms.DialogResult.OK)
+                    if (ShowLoginForm() != System.Windows.Forms.DialogResult.OK)
+                        return;
+                }
+                catch(System.Net.Http.HttpRequestException ex)
+                {
+                    if (ex.InnerException is WebException &&
+                        ((WebException)ex.InnerException).Status == WebExceptionStatus.UnknownError)
+                    {
+                    }
+                    if (ShowLoginForm() != System.Windows.Forms.DialogResult.OK)
                         return;
                 }
                 catch (Exception ex)
@@ -264,8 +270,28 @@ namespace Elton.Phantom.Win
                     MessageBox.Show(this, "连接到服务器时发生错误：" + ex.Message, "提示");
                 }
             }
-            RefreshUI();
+            finally
+            {
+                RefreshUI();
+            }
         }
+
+        DialogResult ShowLoginForm()
+        {
+            StartHttpListener();
+            var scope = PhantomScopes.GetString();
+            PhantomConfiguration config = PhantomConfiguration.Default;
+            string urlString = string.Format("https://huantengsmart.com/oauth2/authorize?client_id={0}&scope={1}&redirect_uri={2}&response_type=code",
+                config.AppId,
+                scope,
+                System.Web.HttpUtility.UrlEncode(config.RedirectUri, Encoding.UTF8));
+            
+            LoginForm form = new LoginForm(this.client, urlString);
+            form.StartPosition = FormStartPosition.CenterParent;
+            form.ShowInTaskbar = false;
+            return form.ShowDialog(this);
+        }
+
         void RefreshUI()
         {
             if (client.Connected)

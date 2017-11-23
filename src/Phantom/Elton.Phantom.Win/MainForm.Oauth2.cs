@@ -80,11 +80,12 @@ namespace Elton.Phantom.Win
 
         void WriteHtml(StreamWriter writer, string title, string desc)
         {
-            writer.WriteLine("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/><title>" + title + "</title></head><body>");
-            writer.WriteLine("<div style=\"height:20px;color:blue;text-align:center;\"><p>" + desc + "</p></div>");
-            writer.WriteLine("<ul>");
-            writer.WriteLine("</ul>");
-            writer.WriteLine("</body></html>");
+            string template = Properties.Resources.HTML_Finished;
+            var html = template
+                .Replace("%title%", title)
+                .Replace("%desc%", desc);
+
+            writer.Write(html);
         }
 
         public void Login()
