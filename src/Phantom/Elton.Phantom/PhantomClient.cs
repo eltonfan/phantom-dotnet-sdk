@@ -1,7 +1,6 @@
 ﻿// Coded by chuangen http://chuangen.name.
 
 using Elton.Phantom.Models;
-using RestSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,7 +26,7 @@ namespace Elton.Phantom
         /// 全开的情景ID。
         /// </summary>
         const int SCENARIO_ID_AllOn = 0xFFFF;
-        readonly Version1.PhantomAPI api = null;
+        readonly Version1.PhantomAPI api1 = null;
         readonly Version2.PhantomAPI api2 = null;
         readonly Dictionary<int, Bulb> dicBulbs = new Dictionary<int, Bulb>();
         readonly Dictionary<int, Scenario> dicScenarios = new Dictionary<int, Scenario>();
@@ -39,7 +38,7 @@ namespace Elton.Phantom
         readonly System.Threading.Timer timerRefresh = null;
         public PhantomClient()
         {
-            this.api = new Version1.PhantomAPI(PhantomConfiguration.Default);
+            this.api1 = new Version1.PhantomAPI(PhantomConfiguration.Default);
             this.api2 = new Version2.PhantomAPI(PhantomConfiguration.Default);
 
             this.timerRefresh = new System.Threading.Timer(RefreshTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
@@ -76,12 +75,12 @@ namespace Elton.Phantom
 
         public void Connect(string accessToken)
         {
-            api.Ping();
+            api1.Ping();
 
             this.token = accessToken;
-            this.api.SetCredentials(token);
+            this.api1.SetCredentials(token);
             this.api2.SetCredentials(token);
-            this.currentUser = api.GetUser();
+            this.currentUser = api1.GetUser();
             if (this.currentUser.Name == null)
                 throw new Exception();
 
@@ -94,12 +93,12 @@ namespace Elton.Phantom
             newAccessToken = null;
             newRefreshToken = null;
 
-            api.Ping();
+            api1.Ping();
 
             this.token = accessToken;
-            this.api.SetCredentials(token);
+            this.api1.SetCredentials(token);
             this.api2.SetCredentials(token);
-            this.currentUser = api.GetUser();
+            this.currentUser = api1.GetUser();
             if (this.currentUser.Name == null)
                 throw new Exception();
 
@@ -110,13 +109,13 @@ namespace Elton.Phantom
             }
             else
             {//尝试刷新令牌
-                Token newToken = this.api.RefreshToken(refreshToken);
+                Token newToken = this.api1.RefreshToken(refreshToken);
                 newAccessToken = newToken.AccessToken;
                 newRefreshToken = newToken.RefreshToken;
 
                 this.token = newAccessToken;
-                this.api.SetCredentials(token);
-                this.currentUser = api.GetUser();
+                this.api1.SetCredentials(token);
+                this.currentUser = api1.GetUser();
                 if (this.currentUser.Name == null)
                     throw new Exception();
             }
@@ -132,7 +131,7 @@ namespace Elton.Phantom
 
         public void UpdateScenarioMode(int id, string name, byte mode)
         {
-            Scenario result = api.UpdateScenario(id, name,
+            var result = api1.UpdateScenario(id, name,
                 new[]
                 {
                     new
@@ -144,9 +143,9 @@ namespace Elton.Phantom
         }
         public void UpdateScenarioData(int id, string name, int data)
         {
-            Scenario old = api.GetScenario(id);
+            var old = api1.GetScenario(id);
 
-            List<object> list = new List<object>();
+            var list = new List<object>();
             bool hasData = false;
             foreach(var item in old.ContentItems)
             {
@@ -184,7 +183,7 @@ namespace Elton.Phantom
             }
             
 
-            Scenario result = api.UpdateScenario(id, name, list.ToArray());
+            Scenario result = api1.UpdateScenario(id, name, list.ToArray());
         }
 
 
@@ -193,34 +192,34 @@ namespace Elton.Phantom
         public void SetScenario(Scenario scenario)
         {
             if (scenario.Id == SCENARIO_ID_AllOff)//实际上是全关
-                api.SetScenarioAllOff();
+                api1.SetScenarioAllOff();
             else if (scenario.Id == SCENARIO_ID_AllOn)
-                api.SetScenarioAllOn();
+                api1.SetScenarioAllOn();
             else
-                api.SetScenario(scenario.Id);
+                api1.SetScenario(scenario.Id);
         }
 
         public void SetScenario(int scenarioId)
         {
             if (scenarioId == SCENARIO_ID_AllOff)//实际上是全关
-                api.SetScenarioAllOff();
+                api1.SetScenarioAllOff();
             else if (scenarioId == SCENARIO_ID_AllOn)
-                api.SetScenarioAllOn();
+                api1.SetScenarioAllOn();
             else
-                api.SetScenario(scenarioId);
+                api1.SetScenario(scenarioId);
         }
 
 
         public void SetBulb(Bulb bulb, bool isOn)
         {
             if (isOn)
-                api.SetBulbSwitchOn(bulb.Id);
+                api1.SetBulbSwitchOn(bulb.Id);
             else
-                api.SetBulbSwitchOff(bulb.Id);
+                api1.SetBulbSwitchOff(bulb.Id);
         }
         public void SetBulb(Bulb bulb, float brightness, float hue)
         {
-            api.SetBulbTune(bulb.Id, brightness, hue);
+            api1.SetBulbTune(bulb.Id, brightness, hue);
         }
 
         public void RefreshScenarios(bool hasDetails = false)
@@ -246,7 +245,7 @@ namespace Elton.Phantom
                 DateUpdated = DateTime.MinValue,
                 ContentItems = new ScenarioContentItem[0],
             });
-            Scenario[] response = api.GetScenarios(0, hasDetails);
+            Scenario[] response = api1.GetScenarios(0, hasDetails);
             if(response != null)
                 listCurrent.AddRange(response);
 
@@ -306,7 +305,7 @@ namespace Elton.Phantom
             List<Bulb> listNew = new List<Bulb>();
             List<Bulb> listChanged = new List<Bulb>();
 
-            Bulb[] listCurrent = api.GetBulbs(hasDetails);
+            Bulb[] listCurrent = api1.GetBulbs(hasDetails);
             foreach (KeyValuePair<int, Bulb> pair in this.dicBulbs)
             {
                 bool removed = true;
@@ -388,29 +387,7 @@ namespace Elton.Phantom
         {
             get { return dicScenarios.Values; }
         }
-
-        [Obsolete("仅供测试。")]
-        public static void TestAPI(string token)
-        {
-            var api = new Version1.PhantomAPI(PhantomConfiguration.Default);
-            bool isOK = api.Ping();
-            api.SetCredentials(token);
-
-            User user = api.GetUser();
-            //api.RefreshToken();
-
-            Bulb[] listBulbs = api.GetBulbs();
-            Bulb bulb = api.GetBulb(listBulbs[0].Id);
-            api.SetBulbSwitchOff(listBulbs[0].Id);
-            api.SetBulbSwitchOn(listBulbs[0].Id);
-            api.SetBulbTune(listBulbs[0].Id, 0.5F, 0.5F);
-
-            Scenario[] listScenarios = api.GetScenarios(0);
-            api.SetScenario(listScenarios[0].Id);
-            api.SetScenarioAllOff();
-            api.SetScenarioAllOn();
-        }
-
+        
         public List<UserLog> GetUserLog(string cursor, int count, out string nextCursor)
         {
             List<UserLog> result = api2.GetUserLog(cursor, count, out nextCursor);
