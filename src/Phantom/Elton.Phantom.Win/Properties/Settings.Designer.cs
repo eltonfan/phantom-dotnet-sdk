@@ -26,48 +26,12 @@ namespace Elton.Phantom.Win.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string UserName {
-            get {
-                return ((string)(this["UserName"]));
-            }
-            set {
-                this["UserName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LoginPasswordData {
-            get {
-                return ((string)(this["LoginPasswordData"]));
-            }
-            set {
-                this["LoginPasswordData"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string AccessTokenData {
             get {
                 return ((string)(this["AccessTokenData"]));
             }
             set {
                 this["AccessTokenData"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool RememberPassword {
-            get {
-                return ((bool)(this["RememberPassword"]));
-            }
-            set {
-                this["RememberPassword"] = value;
             }
         }
         

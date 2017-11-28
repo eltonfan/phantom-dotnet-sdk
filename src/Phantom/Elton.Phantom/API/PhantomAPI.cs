@@ -31,7 +31,6 @@ namespace Elton.Phantom.API
         readonly Dictionary<int, Bulb> dicBulbs = new Dictionary<int, Bulb>();
 
         string token = null;
-        bool bearerToken = false;
         public PhantomAPI(PhantomConfiguration config)
         {
             Contract.Requires(config != null, "config can not be empty.");
@@ -48,21 +47,21 @@ namespace Elton.Phantom.API
             });//"application/json"
         }
 
-        public void SetCredentials(string token, bool bearerToken = false)
+        string Authorization
+        {
+            get => "bearer " + this.token;
+        }
+
+        public void SetCredentials(string token)
         {
             this.token = token;
-            this.bearerToken = bearerToken;
         }
 
         void AddHeaders(RestRequest request)
         {
             if (this.token != null)
-            {
-                if (bearerToken)
-                    request.AddHeader("Authorization", "bearer " + this.token);
-                else
-                    request.AddHeader("Authorization", "token " + this.token);
-            }
+                request.AddHeader("Authorization", Authorization);
+
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
         }
 
@@ -168,7 +167,7 @@ namespace Elton.Phantom.API
                 foreach (UrlSegment item in urlSegments)
                     request.AddUrlSegment(item.Key, item.Value);
             }
-            request.AddHeader("Authorization", "token " + this.token);
+            request.AddHeader("Authorization", Authorization);
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
 
             request.AddBody(data);
@@ -205,7 +204,7 @@ namespace Elton.Phantom.API
         }
         OperationResult[] Batch(params Operation[] ops)
         {
-            return Batch("token " + this.token, ops);
+            return Batch(Authorization, ops);
         }
         static void CheckError(IRestResponse response)
         {
@@ -265,7 +264,7 @@ namespace Elton.Phantom.API
             if (string.IsNullOrEmpty(this.token))
                 throw new PhantomException("尚未换取令牌。");
 
-            return this.POST<T>("token " + this.token, url, urlSegments, arguments);
+            return this.POST<T>(Authorization, url, urlSegments, arguments);
         }
 
         public PhantomConfiguration Configuration

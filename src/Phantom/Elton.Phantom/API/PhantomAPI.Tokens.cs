@@ -29,27 +29,13 @@ namespace Elton.Phantom.API
                 new Argument("app_secret", config.AppSecret));
         }
         /// <summary>
-        /// 使用基本认证方式，获取当前用户的一个令牌。
-        /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public Token CreateToken(string userName, string password)
-        {
-            return this.POST<Token>(
-                "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(userName + ":" + password)),
-                "tokens.json", null,
-                new Argument("app_id", config.AppId),
-                new Argument("app_secret", config.AppSecret));
-        }
-        /// <summary>
         /// 换取令牌。请使用基本身份认证与POST /tokens接口获取令牌，获取时需要传递第一步中获取的键/密对，亦即app_id和app_secret。
         /// </summary>
         /// <param name="userName"></param>
         /// <param name="password"></param>
         /// <param name="userInfo"></param>
         /// <returns></returns>
-        public Token CreateToken(string userName, string password, out User userInfo)
+        public Token CreateToken(string authorization, out User userInfo)
         {
             Token token = null;
             userInfo = null;
@@ -62,7 +48,7 @@ namespace Elton.Phantom.API
             ops2.Parameters = para;
 
             OperationResult[] results = this.Batch(
-                "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(userName + ":" + password)),
+                authorization,
                 ops1, ops2);
             if (results[0].Status == 200)
                 userInfo = JsonConvert.DeserializeObject<User>(results[0].Body);

@@ -29,7 +29,6 @@ namespace Elton.Phantom.ApiVersion2
         readonly PhantomConfiguration config = null;
 
         string token = null;
-        bool bearerToken = false;
         public PhantomAPI(PhantomConfiguration config)
         {
             Contract.Requires(config != null, "config can not be empty.");
@@ -46,21 +45,20 @@ namespace Elton.Phantom.ApiVersion2
             });//"application/json"
         }
 
-        public void SetCredentials(string token, bool bearerToken = false)
+        string Authorization
+        {
+            get => "bearer " + this.token;
+        }
+
+        public void SetCredentials(string token)
         {
             this.token = token;
-            this.bearerToken = bearerToken;
         }
 
         void AddHeaders(RestRequest request)
         {
             if (this.token != null)
-            {
-                if (bearerToken)
-                    request.AddHeader("Authorization", "bearer " + this.token);
-                else
-                    request.AddHeader("Authorization", "token " + this.token);
-            }
+                request.AddHeader("Authorization", Authorization);
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
         }
 

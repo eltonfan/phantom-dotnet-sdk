@@ -75,13 +75,13 @@ namespace Elton.Phantom
             }
         }
 
-        public void Connect(string accessToken, bool bearerToken = false)
+        public void Connect(string accessToken)
         {
             api.Ping();
 
             this.token = accessToken;
-            this.api.SetCredentials(token, bearerToken);
-            this.api2.SetCredentials(token, bearerToken);
+            this.api.SetCredentials(token);
+            this.api2.SetCredentials(token);
             this.currentUser = api.GetUser();
             if (this.currentUser.Name == null)
                 throw new Exception();
@@ -369,13 +369,6 @@ namespace Elton.Phantom
                 foreach (Bulb item in listChanged)
                     this.BulbStateChanged(this, new BulbEventArgs(item));
             }
-        }
-        public Token Login(string userName, string password)
-        {
-            Token token = api.CreateToken(userName, password);
-            this.token = token.AccessToken;
-
-            return token;
         }
 
         public User UserInfo

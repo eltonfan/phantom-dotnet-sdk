@@ -55,7 +55,7 @@ namespace Elton.Phantom.Win
                         settings.RefreshToken = token.refresh_token;
                         settings.Save();
 
-                        client.Connect(settings.AccessToken, true);
+                        client.Connect(settings.AccessToken);
 
                         log.Info("AccessToken: " + token.access_token);
 
