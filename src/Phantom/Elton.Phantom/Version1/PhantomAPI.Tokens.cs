@@ -59,7 +59,7 @@ namespace Elton.Phantom.Version1
         }
         public Token[] GetTokens()
         {
-            return GET<Token[]>("tokens.json");
+            return GetJson<Token[]>("tokens.json");
         }
         public Token GetCurrentToken()
         {

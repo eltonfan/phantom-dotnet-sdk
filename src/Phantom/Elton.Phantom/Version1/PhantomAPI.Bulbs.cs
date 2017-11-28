@@ -19,7 +19,7 @@ namespace Elton.Phantom.Version1
         /// <returns></returns>
         public Bulb[] GetBulbs(bool hasDetails = false)
         {
-            Bulb[] arrayBulbs = this.GET<Bulb[]>("bulbs.json");
+            Bulb[] arrayBulbs = this.GetJson<Bulb[]>("bulbs.json");
             if (!hasDetails || arrayBulbs == null || arrayBulbs.Length < 1)
                 return arrayBulbs;
 
@@ -41,7 +41,7 @@ namespace Elton.Phantom.Version1
         }
         public Bulb GetBulb(int id)
         {
-            return GET<Bulb>("bulbs/{id}.json", new UrlSegment("id", id.ToString()));
+            return GetJson<Bulb>("bulbs/{id}.json", new UrlSegment("id", id.ToString()));
         }
 
         public void SetBulbSwitchOn(int bulbId)

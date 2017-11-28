@@ -19,7 +19,7 @@ namespace Elton.Phantom.Version1
         /// <returns></returns>
         public Scenario[] GetScenarios(int zoneId, bool hasDetails = false)
         {
-            Scenario[] arrayScenarios = this.GET<Scenario[]>("scenarios?zone_id=" + zoneId);
+            Scenario[] arrayScenarios = this.GetJson<Scenario[]>("scenarios?zone_id=" + zoneId);
             if (!hasDetails || arrayScenarios == null || arrayScenarios.Length < 1)
                 return arrayScenarios;
 
@@ -41,7 +41,7 @@ namespace Elton.Phantom.Version1
         }
         public Scenario GetScenario(int scenarioId)
         {
-            return GET<Scenario>("scenarios/{id}.json", new UrlSegment("id", scenarioId.ToString()));
+            return GetJson<Scenario>("scenarios/{id}.json", new UrlSegment("id", scenarioId.ToString()));
         }
         public void SetScenarioAllOn()
         {
@@ -88,7 +88,7 @@ namespace Elton.Phantom.Version1
         }
         public bool DeleteScenario(int scenarioId)
         {
-            return DELETE("scenarios/{id}", new UrlSegment("id", scenarioId.ToString()));
+            return Delete("scenarios/{id}", new UrlSegment("id", scenarioId.ToString()));
         }
     }
 }

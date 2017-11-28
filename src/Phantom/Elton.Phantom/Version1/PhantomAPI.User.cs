@@ -13,7 +13,7 @@ namespace Elton.Phantom.Version1
     {
         public User GetUser()
         {
-            return GET<User>("user.json");
+            return GetJson<User>("user.json");
         }
 
     }

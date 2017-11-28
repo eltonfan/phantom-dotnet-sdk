@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Elton.Phantom.Version1
 {
-    internal class OperationResult
+    public class OperationResult
     {
         [JsonProperty("status")]
         public int Status { get; set; }
