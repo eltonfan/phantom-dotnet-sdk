@@ -1,6 +1,6 @@
 ﻿// Coded by chuangen http://chuangen.name.
 
-using Elton.Phantom.API;
+using Elton.Phantom.Version1;
 using Elton.Phantom.Models;
 using Elton.Phantom.Win.Controls;
 using System;

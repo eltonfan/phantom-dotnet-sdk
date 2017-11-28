@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Elton.Phantom.ApiVersion2
+namespace Elton.Phantom.Version2
 {
     partial class PhantomAPI
     {

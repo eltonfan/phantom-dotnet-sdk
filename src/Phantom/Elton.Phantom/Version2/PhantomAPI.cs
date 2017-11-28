@@ -15,7 +15,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Elton.Phantom.ApiVersion2
+namespace Elton.Phantom.Version2
 {
     /// <summary>
     /// 实现对幻腾API的各功能封装。

@@ -48,7 +48,7 @@ namespace Elton.Phantom.Win
                             continue;
                         }
                         string authorizeCode = queryString["code"];
-                        ApiVersion2.PhantomAPI api = new ApiVersion2.PhantomAPI(PhantomConfiguration.Default);
+                        var api = new Version2.PhantomAPI(PhantomConfiguration.Default);
                         var token = api.CreateToken(authorizeCode);
 
                         settings.AccessToken = token.access_token;

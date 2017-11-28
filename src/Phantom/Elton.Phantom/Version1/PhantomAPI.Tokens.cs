@@ -11,7 +11,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Elton.Phantom.API
+namespace Elton.Phantom.Version1
 {
     partial class PhantomAPI
     {

@@ -1,6 +1,5 @@
 ﻿// Coded by chuangen http://chuangen.name.
 
-using Elton.Phantom.API;
 using Elton.Phantom.Models;
 using RestSharp;
 using System;
@@ -28,8 +27,8 @@ namespace Elton.Phantom
         /// 全开的情景ID。
         /// </summary>
         const int SCENARIO_ID_AllOn = 0xFFFF;
-        readonly PhantomAPI api = null;
-        readonly ApiVersion2.PhantomAPI api2 = null;
+        readonly Version1.PhantomAPI api = null;
+        readonly Version2.PhantomAPI api2 = null;
         readonly Dictionary<int, Bulb> dicBulbs = new Dictionary<int, Bulb>();
         readonly Dictionary<int, Scenario> dicScenarios = new Dictionary<int, Scenario>();
 
@@ -40,8 +39,8 @@ namespace Elton.Phantom
         readonly System.Threading.Timer timerRefresh = null;
         public PhantomClient()
         {
-            this.api = new PhantomAPI(PhantomConfiguration.Default);
-            this.api2 = new ApiVersion2.PhantomAPI(PhantomConfiguration.Default);
+            this.api = new Version1.PhantomAPI(PhantomConfiguration.Default);
+            this.api2 = new Version2.PhantomAPI(PhantomConfiguration.Default);
 
             this.timerRefresh = new System.Threading.Timer(RefreshTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
         }
@@ -393,7 +392,7 @@ namespace Elton.Phantom
         [Obsolete("仅供测试。")]
         public static void TestAPI(string token)
         {
-            PhantomAPI api = new PhantomAPI(PhantomConfiguration.Default);
+            var api = new Version1.PhantomAPI(PhantomConfiguration.Default);
             bool isOK = api.Ping();
             api.SetCredentials(token);
 

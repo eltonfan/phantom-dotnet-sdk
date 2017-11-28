@@ -16,7 +16,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Elton.Phantom.API
+namespace Elton.Phantom.Version1
 {
     /// <summary>
     /// 实现对幻腾API的各功能封装。

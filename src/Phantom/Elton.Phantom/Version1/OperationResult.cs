@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Elton.Phantom.API
+namespace Elton.Phantom.Version1
 {
     internal class OperationResult
     {

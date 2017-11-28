@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Elton.Phantom.API;
 
 namespace Elton.Phantom.Tests
 {
@@ -10,7 +9,7 @@ namespace Elton.Phantom.Tests
         [TestMethod]
         public void TestMethod1()
         {
-            var api = new PhantomAPI(PhantomConfiguration.Default);
+            var api = new Version1.PhantomAPI(PhantomConfiguration.Default);
         }
     }
 }
