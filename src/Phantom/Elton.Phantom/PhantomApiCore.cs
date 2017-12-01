@@ -22,7 +22,7 @@ namespace Elton.Phantom
     /// <summary>
     /// 实现对幻腾API的各功能封装。
     /// </summary>
-    public class PhantomApiCore
+    internal class PhantomApiCore
     {
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(typeof(PhantomApiCore));
 

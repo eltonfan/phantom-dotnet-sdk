@@ -53,7 +53,7 @@ namespace Elton.Phantom.Win
             if (isMyself)
                 return;
 
-            client.SetBulb(this.bulb,
+            client.Api.SetBulb(this.bulb,
                 (float)(trackBarBrightness.Value / 100.0),
                 (float)(trackBarHue.Value / 100.0));
         }

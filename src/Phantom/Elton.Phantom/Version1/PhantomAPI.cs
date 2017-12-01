@@ -22,7 +22,7 @@ namespace Elton.Phantom.Version1
     /// 实现对幻腾API的各功能封装。
     /// </summary>
     /// <remarks> https://huantengsmart.com/doc/api_v1 </remarks>
-    public partial class PhantomAPI : PhantomApiCore
+    internal partial class PhantomAPI : PhantomApiCore
     {
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(typeof(PhantomAPI));
 

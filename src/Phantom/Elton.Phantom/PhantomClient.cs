@@ -26,8 +26,7 @@ namespace Elton.Phantom
         /// 全开的情景ID。
         /// </summary>
         const int SCENARIO_ID_AllOn = 0xFFFF;
-        readonly Version1.PhantomAPI api1 = null;
-        readonly Version2.PhantomAPI api2 = null;
+
         readonly Dictionary<int, Bulb> dicBulbs = new Dictionary<int, Bulb>();
         readonly Dictionary<int, Scenario> dicScenarios = new Dictionary<int, Scenario>();
 
@@ -35,11 +34,11 @@ namespace Elton.Phantom
         //Image image = null;
         string token = null;
 
+        readonly PhantomApi api = null;
         readonly System.Threading.Timer timerRefresh = null;
         public PhantomClient()
         {
-            this.api1 = new Version1.PhantomAPI(PhantomConfiguration.Default);
-            this.api2 = new Version2.PhantomAPI(PhantomConfiguration.Default);
+            this.api = new PhantomApi(PhantomConfiguration.Default);
 
             this.timerRefresh = new System.Threading.Timer(RefreshTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
         }
@@ -75,12 +74,11 @@ namespace Elton.Phantom
 
         public void Connect(string accessToken)
         {
-            api1.Ping();
+            api.Ping();
 
             this.token = accessToken;
-            this.api1.SetCredentials(token);
-            this.api2.SetCredentials(token);
-            this.currentUser = api1.GetUser();
+            this.api.SetCredentials(token);
+            this.currentUser = api.GetUser();
             if (this.currentUser.Name == null)
                 throw new Exception();
 
@@ -93,12 +91,11 @@ namespace Elton.Phantom
             newAccessToken = null;
             newRefreshToken = null;
 
-            api1.Ping();
+            api.Ping();
 
             this.token = accessToken;
-            this.api1.SetCredentials(token);
-            this.api2.SetCredentials(token);
-            this.currentUser = api1.GetUser();
+            this.api.SetCredentials(token);
+            this.currentUser = api.GetUser();
             if (this.currentUser.Name == null)
                 throw new Exception();
 
@@ -109,13 +106,13 @@ namespace Elton.Phantom
             }
             else
             {//尝试刷新令牌
-                Token newToken = this.api1.RefreshToken(refreshToken);
+                Token newToken = this.api.RefreshToken(refreshToken);
                 newAccessToken = newToken.AccessToken;
                 newRefreshToken = newToken.RefreshToken;
 
                 this.token = newAccessToken;
-                this.api1.SetCredentials(token);
-                this.currentUser = api1.GetUser();
+                this.api.SetCredentials(token);
+                this.currentUser = api.GetUser();
                 if (this.currentUser.Name == null)
                     throw new Exception();
             }
@@ -129,98 +126,7 @@ namespace Elton.Phantom
             timerRefresh.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
-        public void UpdateScenarioMode(int id, string name, byte mode)
-        {
-            var result = api1.UpdateScenario(id, name,
-                new[]
-                {
-                    new
-                    {
-                        generic_module_id = 741,
-                        info = string.Format("[{{\"type\":\"mode\",\"index\":0,\"value\":{0}}}]", mode),
-                    },
-                });
-        }
-        public void UpdateScenarioData(int id, string name, int data)
-        {
-            var old = api1.GetScenario(id);
-
-            var list = new List<object>();
-            bool hasData = false;
-            foreach(var item in old.ContentItems)
-            {
-                if (item.generic_module_id != 741 || hasData)
-                {//不正确，或者已经存在记录，则删除
-                    list.Add(
-                            new
-                            {
-                                id = item.id,
-                                _destroy = true,
-                            }
-                        );
-                }
-                else
-                {
-                    hasData = true;
-                    list.Add(
-                            new
-                            {
-                                id = item.id,
-                                generic_module_id = 741,
-                                info = string.Format("[{{\"type\":\"data\",\"index\":0,\"value\":{0}}}]", data),
-                            }
-                        );
-                }
-            }
-            if(!hasData)
-            {//添加记录
-                list.Add(
-                    new
-                    {
-                        generic_module_id = 741,
-                        info = string.Format("[{{\"type\":\"data\",\"index\":0,\"value\":{0}}}]", data),
-                    });
-            }
-            
-
-            Scenario result = api1.UpdateScenario(id, name, list.ToArray());
-        }
-
-
         public bool Connected { get; private set; }
-
-        public void SetScenario(Scenario scenario)
-        {
-            if (scenario.Id == SCENARIO_ID_AllOff)//实际上是全关
-                api1.SetScenarioAllOff();
-            else if (scenario.Id == SCENARIO_ID_AllOn)
-                api1.SetScenarioAllOn();
-            else
-                api1.SetScenario(scenario.Id);
-        }
-
-        public void SetScenario(int scenarioId)
-        {
-            if (scenarioId == SCENARIO_ID_AllOff)//实际上是全关
-                api1.SetScenarioAllOff();
-            else if (scenarioId == SCENARIO_ID_AllOn)
-                api1.SetScenarioAllOn();
-            else
-                api1.SetScenario(scenarioId);
-        }
-
-
-        public void SetBulb(Bulb bulb, bool isOn)
-        {
-            if (isOn)
-                api1.SetBulbSwitchOn(bulb.Id);
-            else
-                api1.SetBulbSwitchOff(bulb.Id);
-        }
-        public void SetBulb(Bulb bulb, float brightness, float hue)
-        {
-            api1.SetBulbTune(bulb.Id, brightness, hue);
-        }
 
         public void RefreshScenarios(bool hasDetails = false)
         {
@@ -245,7 +151,7 @@ namespace Elton.Phantom
                 DateUpdated = DateTime.MinValue,
                 ContentItems = new ScenarioContentItem[0],
             });
-            Scenario[] response = api1.GetScenarios(0, hasDetails);
+            Scenario[] response = api.GetScenarios(0, hasDetails);
             if(response != null)
                 listCurrent.AddRange(response);
 
@@ -305,7 +211,7 @@ namespace Elton.Phantom
             List<Bulb> listNew = new List<Bulb>();
             List<Bulb> listChanged = new List<Bulb>();
 
-            Bulb[] listCurrent = api1.GetBulbs(hasDetails);
+            Bulb[] listCurrent = api.GetBulbs(hasDetails);
             foreach (KeyValuePair<int, Bulb> pair in this.dicBulbs)
             {
                 bool removed = true;
@@ -387,16 +293,7 @@ namespace Elton.Phantom
         {
             get { return dicScenarios.Values; }
         }
-        
-        public List<UserLog> GetUserLog(string cursor, int count, out string nextCursor)
-        {
-            List<UserLog> result = api2.GetUserLog(cursor, count, out nextCursor);
-            return result;
-        }
-        public void GetDeviceLog()
-        {
-            string nextCursor;
-            List<DeviceLog> result = api2.GetDeviceLog("door_sensor", null, null, 20, out nextCursor);
-        }
+
+        public PhantomApi Api => api;
     }
 }

@@ -147,7 +147,7 @@ namespace Elton.Phantom.Win
             if (item == null)
                 return;
 
-            client.SetScenario(item);
+            client.Api.SetScenario(item);
         }
 
         void RefreshBulbs()

@@ -7,11 +7,11 @@ namespace Elton.Phantom.Tests
     [TestClass]
     public class UnitTest1
     {
-        Version1.PhantomAPI api = null;
-        public Version1.PhantomAPI GetApi()
+        PhantomApi api = null;
+        public PhantomApi GetApi()
         {
             if (api == null)
-                api = new Version1.PhantomAPI(PhantomConfiguration.Default);
+                api = new PhantomApi(PhantomConfiguration.Default);
             return api;
         }
 
@@ -29,7 +29,7 @@ namespace Elton.Phantom.Tests
 
             var user = api.GetUser();
             //api.RefreshToken();
-
+            
             Bulb[] listBulbs = api.GetBulbs();
             Bulb bulb = api.GetBulb(listBulbs[0].Id);
             api.SetBulbSwitchOff(listBulbs[0].Id);

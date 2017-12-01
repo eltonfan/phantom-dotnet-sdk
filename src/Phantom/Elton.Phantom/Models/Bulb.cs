@@ -169,14 +169,14 @@ namespace Elton.Phantom.Models
             if (this.client == null)
                 return;
 
-            this.client.SetBulb(this, true);
+            this.client.Api.SetBulb(this, true);
         }
         public void TurnOff()
         {
             if (this.client == null)
                 return;
 
-            this.client.SetBulb(this, false);
+            this.client.Api.SetBulb(this, false);
         }
     }
 }
