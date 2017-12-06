@@ -75,9 +75,20 @@ namespace Elton.Phantom
             else
                 api1.SetBulbSwitchOff(bulb.Id);
         }
+        public void SetBulb(int bulbId, bool isOn)
+        {
+            if (isOn)
+                api1.SetBulbSwitchOn(bulbId);
+            else
+                api1.SetBulbSwitchOff(bulbId);
+        }
         public void SetBulb(Bulb bulb, float brightness, float hue)
         {
             api1.SetBulbTune(bulb.Id, brightness, hue);
+        }
+        public void SetBulb(int bulbId, float brightness, float hue)
+        {
+            api1.SetBulbTune(bulbId, brightness, hue);
         }
 
         public Scenario[] GetScenarios(int zoneId, bool hasDetails = false)
