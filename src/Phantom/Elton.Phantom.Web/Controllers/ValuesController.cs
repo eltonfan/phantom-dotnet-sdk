@@ -48,11 +48,11 @@ namespace Elton.Phantom.Web.Controllers
                 var api = new PhantomApi(MyClient.Default.Configuration);
                 var token = api.CreateToken(authorizeCode);
 
-                //settings.AccessToken = token.access_token;
-                //settings.RefreshToken = token.refresh_token;
+                //settings.AccessToken = token.AccessToken;
+                //settings.RefreshToken = token.RefreshToken;
                 //settings.Save();
-                client.Connect(token.access_token);
-                return new string[] { "Finished", token.access_token, };
+                client.Connect(token.AccessToken);
+                return new string[] { "Finished", token.AccessToken, };
             }
 
         }
