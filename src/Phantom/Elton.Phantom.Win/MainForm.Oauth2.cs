@@ -51,11 +51,12 @@ namespace Elton.Phantom.Win
                         var api = new PhantomApi(appConfig);
                         var token = api.CreateToken(authorizeCode);
 
-                        settings.AccessToken = token.access_token;
-                        settings.RefreshToken = token.refresh_token;
+                        var tokenConfig = new TokenConfig();
+                        tokenConfig.AccessToken = token.access_token;
+                        tokenConfig.RefreshToken = token.refresh_token;
                         settings.Save();
 
-                        client.Connect(settings.AccessToken);
+                        client.Connect(tokenConfig.AccessToken);
 
                         log.Info("AccessToken: " + token.access_token);
 

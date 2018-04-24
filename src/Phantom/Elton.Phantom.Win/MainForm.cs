@@ -24,7 +24,6 @@ namespace Elton.Phantom.Win
 
         Properties.Settings settings = Properties.Settings.Default;
         readonly PhantomConfiguration appConfig;
-        readonly TokenConfig tokenConfig;
         readonly PhantomClient client;
         readonly Button[] scenarioButtons = null;
         readonly BulbView[] bulbViews = null;
@@ -33,20 +32,8 @@ namespace Elton.Phantom.Win
             InitializeComponent();
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
-            dynamic config = new
-            {
-                app = new PhantomConfiguration(),
-                token = new TokenConfig(),
-            };
-
-            var configFile = Path.Combine(settings.ConfigPath, "phantom.json");
-            var jsonString = File.ReadAllText(configFile);
-            config = JsonConvert.DeserializeAnonymousType(jsonString, config);
-
-            this.appConfig = config.app;
-            this.tokenConfig = config.token;
-
-            client = new PhantomClient(config);
+            appConfig = settings.LoadConfig();
+            client = new PhantomClient(appConfig);
 
             client.NewScenario += client_NewScenario;
             client.ScenarioRemoved += client_ScenarioRemoved;
@@ -222,7 +209,17 @@ namespace Elton.Phantom.Win
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-
+            
+            try
+            {
+                var tokenConfig = settings.LoadToken();
+                if (tokenConfig != null)
+                    client.Connect(tokenConfig.AccessToken);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(this, "连接到服务器时发生错误：" + ex.Message, "提示");
+            }
             RefreshUI();
         }
 
@@ -253,7 +250,8 @@ namespace Elton.Phantom.Win
                     return;
                 }
 
-                if (string.IsNullOrEmpty(settings.AccessToken))
+                var tokenConfig = settings.LoadToken();
+                if (tokenConfig == null)
                 {//获取新的令牌
                     if (ShowLoginForm() != System.Windows.Forms.DialogResult.OK)
                         return;
@@ -262,10 +260,10 @@ namespace Elton.Phantom.Win
                 try
                 {
                     string newAccessToken, newRefreshToken;
-                    client.Connect(settings.AccessToken, settings.RefreshToken, out newAccessToken, out newRefreshToken);
-                    settings.AccessToken = newAccessToken;
-                    settings.RefreshToken = newRefreshToken;
-                    settings.Save();
+                    client.Connect(tokenConfig.AccessToken, tokenConfig.RefreshToken, out newAccessToken, out newRefreshToken);
+                    tokenConfig.AccessToken = newAccessToken;
+                    tokenConfig.RefreshToken = newRefreshToken;
+                    settings.SaveToken(tokenConfig);
                 }
                 catch (PhantomUnauthorizedException)
                 {
