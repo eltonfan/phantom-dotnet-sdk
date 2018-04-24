@@ -108,7 +108,7 @@ namespace Elton.Phantom
             }
             else
             {//尝试刷新令牌
-                Token newToken = this.api.RefreshToken(refreshToken);
+                var newToken = api.RefreshToken(refreshToken);
                 newAccessToken = newToken.AccessToken;
                 newRefreshToken = newToken.RefreshToken;
 

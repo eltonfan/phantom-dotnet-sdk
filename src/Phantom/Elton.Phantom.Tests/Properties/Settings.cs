@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -44,6 +45,25 @@ namespace Elton.Phantom.Tests.Properties
                 @"ApplicationData\ConnectedHome\");
 
             configPath = Path.Combine(basePath, "config");
+        }
+
+        public T ReadConfig<T>(string name)
+        {
+            var configFile = Path.Combine(configPath, name + ".json");
+
+            if (!File.Exists(configFile))
+                return default;
+
+            var jsonString = File.ReadAllText(configFile, Encoding.UTF8);
+            return JsonConvert.DeserializeObject<T>(jsonString);
+        }
+
+        public void WriteConfig<T>(string name, T value)
+        {
+            var jsonString = JsonConvert.SerializeObject(value);
+
+            var configFile = Path.Combine(configPath, name + ".json");
+            File.WriteAllText(configFile, jsonString, Encoding.UTF8);
         }
 
         public string ConfigPath => configPath;

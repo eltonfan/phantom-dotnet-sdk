@@ -43,9 +43,9 @@ namespace Elton.Phantom
             return api1.GetUser();
         }
 
-        public Token RefreshToken(string refreshToken)
+        public TokenV2 RefreshToken(string refreshToken)
         {
-            return this.api1.RefreshToken(refreshToken);
+            return this.api2.RefreshToken(refreshToken);
         }
 
         public void SetScenario(Scenario scenario)

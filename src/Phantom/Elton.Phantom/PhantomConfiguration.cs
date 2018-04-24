@@ -51,8 +51,31 @@ namespace Elton.Phantom
         [JsonProperty("scope")]
         public string Scopes { get; set; }
         [JsonProperty("expiresIn")]
-        public long DateExpired { get; set; }
+        public int ExpiresIn { get; set; }
         [JsonProperty("createdAt")]
-        public long DateCreated { get; set; }
+        public int CreatedAt { get; set; }
+
+        [JsonIgnore]
+        public DateTime DateExpired
+        {
+            get => DateCreated.AddSeconds(ExpiresIn);
+            set => ExpiresIn = (int)value.Subtract(DateCreated).TotalSeconds;
+        }
+
+        [JsonIgnore]
+        public DateTime DateCreated
+        {
+            get => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(CreatedAt);
+            set => CreatedAt = (int)value.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+        }
+
+        public void CopyFrom(Models.TokenV2 token)
+        {
+            this.AccessToken = token.AccessToken;
+            this.RefreshToken = token.RefreshToken;
+            this.Scopes = token.Scopes;
+            this.ExpiresIn = token.ExpiresIn;
+            this.CreatedAt = token.CreatedAt;
+        }
     }
 }

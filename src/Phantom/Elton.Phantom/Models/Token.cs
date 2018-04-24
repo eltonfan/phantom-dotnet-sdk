@@ -28,16 +28,47 @@ namespace Elton.Phantom.Models
 
     //https://github.com/HuanTeng/huanteng.github.io/blob/master/oauth.md
 
+    /// <summary>
+    /// 刷新一个令牌。文档有误
+    /// </summary>
     public class TokenV2
     {
-        public string access_token { get; set; }
         /// <summary>
+        /// 访问令牌 cf.RFC6749
+        /// </summary>
+        [JsonProperty("access_token")]
+        public string AccessToken { get; set; }
+        /// <summary>
+        /// 设备的名字 cf.RFC6749
         /// bearer
         /// </summary>
-        public string token_type { get; set; }
-        public long expires_in { get; set; }
-        public string refresh_token { get; set; }
-        public string scope { get; set; }
-        public long created_at { get; set; }
+        [JsonProperty("token_type")]
+        public string TokenType { get; set; }
+        /// <summary>
+        /// 刷新令牌 cf.RFC6749
+        /// </summary>
+        [JsonProperty("refresh_token")]
+        public string RefreshToken { get; set; }
+        /// <summary>
+        /// 几秒后过期 cf.RFC6749
+        /// </summary>
+        [JsonProperty("expires_in")]
+        public int ExpiresIn { get; set; }
+        /// <summary>
+        /// 客户端
+        /// </summary>
+        //[JsonProperty("user_agent")]
+        //public string UserAgent { get; set; }
+        /// <summary>
+        /// utc的时间戳(单位: 秒)
+        /// </summary>
+        //[JsonProperty("timestamp")]
+        //public int Timestamp { get; set; }
+
+        [JsonProperty("created_at")]
+        public int CreatedAt { get; set; }
+
+        [JsonProperty("scope")]
+        public string Scopes { get; set; }
     }
 }

@@ -52,13 +52,12 @@ namespace Elton.Phantom.Win
                         var token = api.CreateToken(authorizeCode);
 
                         var tokenConfig = new TokenConfig();
-                        tokenConfig.AccessToken = token.access_token;
-                        tokenConfig.RefreshToken = token.refresh_token;
-                        settings.Save();
+                        tokenConfig.CopyFrom(token);
+                        settings.SaveToken(tokenConfig);
 
                         client.Connect(tokenConfig.AccessToken);
 
-                        log.Info("AccessToken: " + token.access_token);
+                        log.Info("AccessToken: " + token.AccessToken);
 
                         httpListenerContext.Response.StatusCode = 200;
                         title = "Finished";

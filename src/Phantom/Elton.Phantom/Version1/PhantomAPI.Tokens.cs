@@ -21,6 +21,7 @@ namespace Elton.Phantom.Version1
         /// <param name="userName"></param>
         /// <param name="password"></param>
         /// <returns></returns>
+        [Obsolete]
         public Token CreateToken()
         {
             return this.POST<Token>(
@@ -35,6 +36,7 @@ namespace Elton.Phantom.Version1
         /// <param name="password"></param>
         /// <param name="userInfo"></param>
         /// <returns></returns>
+        [Obsolete]
         public Token CreateToken(string authorization, out User userInfo)
         {
             Token token = null;
@@ -57,10 +59,12 @@ namespace Elton.Phantom.Version1
 
             return token;
         }
+        [Obsolete]
         public Token[] GetTokens()
         {
             return GetJson<Token[]>("tokens.json");
         }
+        [Obsolete]
         public Token GetCurrentToken()
         {
             Token[] list = GetTokens();
@@ -82,6 +86,7 @@ namespace Elton.Phantom.Version1
             return token;
         }
 
+        [Obsolete]
         public Token RefreshToken(string refreshToken)
         {
             return this.PUT<Token>("tokens/refresh", null,

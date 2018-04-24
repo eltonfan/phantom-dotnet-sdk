@@ -53,7 +53,7 @@ namespace Elton.Phantom.Version1
         }
         public void SetScenario(int scenarioId)
         {
-            this.POST<Scenario>("scenarios/{id}/apply.json",
+            this.POST<Scenario>("scenarios/{id}/apply",
                 new UrlSegment[] { new UrlSegment("id", scenarioId.ToString()) });
         }
 
