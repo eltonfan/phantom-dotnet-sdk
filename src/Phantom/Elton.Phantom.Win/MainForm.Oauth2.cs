@@ -48,7 +48,7 @@ namespace Elton.Phantom.Win
                             continue;
                         }
                         string authorizeCode = queryString["code"];
-                        var api = new PhantomApi(PhantomConfiguration.Default);
+                        var api = new PhantomApi(appConfig);
                         var token = api.CreateToken(authorizeCode);
 
                         settings.AccessToken = token.access_token;
@@ -92,11 +92,10 @@ namespace Elton.Phantom.Win
         {
             StartHttpListener();
             var scope = PhantomScopes.GetString();
-            PhantomConfiguration config = PhantomConfiguration.Default;
             string url = string.Format("https://huantengsmart.com/oauth2/authorize?client_id={0}&scope={1}&redirect_uri={2}&response_type=code",
-                config.AppId,
+                appConfig.ApplicationId,
                 scope,
-                System.Web.HttpUtility.UrlEncode(config.RedirectUri, Encoding.UTF8));
+                System.Web.HttpUtility.UrlEncode(appConfig.RedirectUri, Encoding.UTF8));
             System.Diagnostics.Process.Start(url);
         }
     }

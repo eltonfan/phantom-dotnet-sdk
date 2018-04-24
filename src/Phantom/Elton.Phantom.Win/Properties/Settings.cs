@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +11,44 @@ namespace Elton.Phantom.Win.Properties
 {
     partial class Settings
     {
+        [DllImport("Shell32.dll")]
+        static extern int SHGetKnownFolderPath(
+            [MarshalAs(UnmanagedType.LPStruct)]Guid rfid, uint dwFlags, IntPtr hToken,
+            out IntPtr ppszPath);
+
+        public static string GetOneDrivePath()
+        {
+            var skyDriveGuid = new Guid("{A52BBA46-E9E1-435F-B3D9-28DAA648C0F6}");
+            var flags = 0x00004000; //DontVerify
+            var defaultUser = false;
+
+            IntPtr outPath;
+            int result = SHGetKnownFolderPath(skyDriveGuid,
+                (uint)flags, new IntPtr(defaultUser ? -1 : 0), out outPath);
+            if (result >= 0)
+            {
+                return Marshal.PtrToStringUni(outPath);
+            }
+            else
+            {
+                throw new ExternalException("Unable to retrieve the known folder path. It may not "
+                    + "be available on this system.", result);
+            }
+        }
+
+        readonly string basePath = null;
+        readonly string configPath = null;
+        public Settings()
+        {
+            basePath = Path.Combine(
+                GetOneDrivePath(),
+                @"ApplicationData\ConnectedHome\");
+
+            configPath = Path.Combine(basePath, "config");
+        }
+
+        public string ConfigPath => configPath;
+
         static byte[] s_aditionalEntropy = { 0x1D, 0xA4, 0x9F, 0x3B, 0x21 };
 
         string Unprotect(string encrypted)

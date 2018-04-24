@@ -18,8 +18,8 @@ namespace Elton.Phantom.Version2
         public TokenV2 CreateToken(string authorizationCode)
         {
             return this.PostForm<TokenV2>(null, "../oauth2/token", null,
-                new Argument("client_id", config.AppId),
-                new Argument("client_secret", config.AppSecret),
+                new Argument("client_id", config.ApplicationId),
+                new Argument("client_secret", config.ApplicationSecret),
                 new Argument("redirect_uri", config.RedirectUri),
                 new Argument("grant_type", "authorization_code"),
                 new Argument("code", authorizationCode));

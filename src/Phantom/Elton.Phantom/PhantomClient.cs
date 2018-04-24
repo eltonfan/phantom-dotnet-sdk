@@ -34,11 +34,13 @@ namespace Elton.Phantom
         //Image image = null;
         string token = null;
 
-        readonly PhantomApi api = null;
-        readonly System.Threading.Timer timerRefresh = null;
-        public PhantomClient()
+        readonly PhantomConfiguration config;
+        readonly PhantomApi api;
+        readonly System.Threading.Timer timerRefresh;
+        public PhantomClient(PhantomConfiguration config)
         {
-            this.api = new PhantomApi(PhantomConfiguration.Default);
+            this.config = config;
+            this.api = new PhantomApi(config);
 
             this.timerRefresh = new System.Threading.Timer(RefreshTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
         }
@@ -67,7 +69,7 @@ namespace Elton.Phantom
 
                 if (this.Connected)
                 {
-                    timerRefresh.Change(PhantomConfiguration.Default.RequestInterval, Timeout.Infinite);
+                    timerRefresh.Change(config.RequestInterval, Timeout.Infinite);
                 }
             }
         }

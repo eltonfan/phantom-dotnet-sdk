@@ -25,8 +25,8 @@ namespace Elton.Phantom.Version1
         {
             return this.POST<Token>(
                 "tokens.json", null,
-                new Argument("app_id", config.AppId),
-                new Argument("app_secret", config.AppSecret));
+                new Argument("app_id", config.ApplicationId),
+                new Argument("app_secret", config.ApplicationSecret));
         }
         /// <summary>
         /// 换取令牌。请使用基本身份认证与POST /tokens接口获取令牌，获取时需要传递第一步中获取的键/密对，亦即app_id和app_secret。
@@ -43,8 +43,8 @@ namespace Elton.Phantom.Version1
             Operation ops1 = new Operation("GET", "/api/user.json");
             Operation ops2 = new Operation("POST", "/api/tokens.json");
             JObject para = new JObject();
-            para.Add("app_id", config.AppId);
-            para.Add("app_secret", config.AppSecret);
+            para.Add("app_id", config.ApplicationId);
+            para.Add("app_secret", config.ApplicationSecret);
             ops2.Parameters = para;
 
             OperationResult[] results = this.Batch(
@@ -87,8 +87,8 @@ namespace Elton.Phantom.Version1
             return this.PUT<Token>("tokens/refresh", null,
                 new
                 {
-                    app_id = config.AppId,
-                    app_secret = config.AppSecret,
+                    app_id = config.ApplicationId,
+                    app_secret = config.ApplicationSecret,
                     refresh_token = refreshToken,
                 });
         }

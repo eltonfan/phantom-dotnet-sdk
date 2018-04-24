@@ -20,14 +20,7 @@ namespace Elton.Phantom.Win
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            PhantomConfiguration config = PhantomConfiguration.Default;
-            config.AppId = SecretKeys.Phantom606.AppId;
-            config.AppSecret = SecretKeys.Phantom606.AppSecret;
-            config.RedirectUri = SecretKeys.Phantom606.RedirectUri;
-            config.UserAgent = "chuangen@live.cn/1.0.0 (Windows 8.1)";
-            config.RequestInterval = 20 * 1000;
-
+            
             Application.Run(new MainForm());
         }
     }

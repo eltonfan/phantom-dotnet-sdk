@@ -14,6 +14,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace Elton.Phantom.Win
 {
@@ -22,7 +23,9 @@ namespace Elton.Phantom.Win
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         Properties.Settings settings = Properties.Settings.Default;
-        readonly PhantomClient client = null;
+        readonly PhantomConfiguration appConfig;
+        readonly TokenConfig tokenConfig;
+        readonly PhantomClient client;
         readonly Button[] scenarioButtons = null;
         readonly BulbView[] bulbViews = null;
         public MainForm()
@@ -30,7 +33,20 @@ namespace Elton.Phantom.Win
             InitializeComponent();
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
-            client = new PhantomClient();
+            dynamic config = new
+            {
+                app = new PhantomConfiguration(),
+                token = new TokenConfig(),
+            };
+
+            var configFile = Path.Combine(settings.ConfigPath, "phantom.json");
+            var jsonString = File.ReadAllText(configFile);
+            config = JsonConvert.DeserializeAnonymousType(jsonString, config);
+
+            this.appConfig = config.app;
+            this.tokenConfig = config.token;
+
+            client = new PhantomClient(config);
 
             client.NewScenario += client_NewScenario;
             client.ScenarioRemoved += client_ScenarioRemoved;
@@ -280,11 +296,10 @@ namespace Elton.Phantom.Win
         {
             StartHttpListener();
             var scope = PhantomScopes.GetString();
-            PhantomConfiguration config = PhantomConfiguration.Default;
             string urlString = string.Format("https://huantengsmart.com/oauth2/authorize?client_id={0}&scope={1}&redirect_uri={2}&response_type=code",
-                config.AppId,
+                appConfig.ApplicationId,
                 scope,
-                System.Web.HttpUtility.UrlEncode(config.RedirectUri, Encoding.UTF8));
+                System.Web.HttpUtility.UrlEncode(appConfig.RedirectUri, Encoding.UTF8));
             
             LoginForm form = new LoginForm(this.client, urlString);
             form.StartPosition = FormStartPosition.CenterParent;

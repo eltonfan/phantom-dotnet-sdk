@@ -29,7 +29,7 @@ namespace Elton.Phantom
         protected readonly RestClient client = null;
         protected readonly PhantomConfiguration config = null;
         string token = null;
-        public PhantomApiCore(PhantomConfiguration config)
+        public PhantomApiCore(PhantomConfiguration config, string accept = "application/json")
         {
             Contract.Requires(config != null, "config can not be empty.");
             this.config = config;
@@ -37,18 +37,23 @@ namespace Elton.Phantom
             client = new RestClient("https://huantengsmart.com/api/");
             client.DefaultParameters.Clear();
             client.UserAgent = config.UserAgent;
-            //client.DefaultParameters.Add(new Parameter
-            //{
-            //    Name = "Accept",
-            //    Type = ParameterType.HttpHeader,
-            //    Value = "application/vnd.huantengsmart-v1+json",
-            //});//"application/json"
+            client.DefaultParameters.Add(new Parameter
+            {
+                Name = "Accept",
+                Type = ParameterType.HttpHeader,
+                Value = accept,
+            });
         }
 
-        protected string Authorization
+        public bool Ping()
         {
-            get => "bearer " + this.token;
+            string result = this.GetJson<string>("ping.json");
+            if (string.IsNullOrEmpty(result))
+                return false;
+
+            return result.Contains("pong");
         }
+
 
         public void SetCredentials(string token)
         {
@@ -324,14 +329,8 @@ namespace Elton.Phantom
             return this.PostForm<T>(Authorization, url, urlSegments, arguments);
         }
 
-        public PhantomConfiguration Configuration
-        {
-            get { return this.config; }
-        }
-
-        public string Token
-        {
-            get { return this.token; }
-        }
+        protected string Authorization => "bearer " + token;
+        public PhantomConfiguration Configuration => config;
+        public string Token => token;
     }
 }

@@ -47,12 +47,12 @@ namespace Elton.Phantom.Version1
         public void SetBulbSwitchOn(int bulbId)
         {
             this.POST<Scenario>("bulbs/{id}/switch_on.json",
-                new UrlSegment[] { new UrlSegment("id", bulbId.ToString()) });
+                new [] { new UrlSegment("id", bulbId.ToString()) });
         }
         public void SetBulbSwitchOff(int bulbId)
         {
             this.POST<Scenario>("bulbs/{id}/switch_off.json",
-                new UrlSegment[] { new UrlSegment("id", bulbId.ToString()) });
+                new [] { new UrlSegment("id", bulbId.ToString()) });
         }
         public void SetBulbTune(int bulbId, float brightness, float hue)
         {

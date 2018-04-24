@@ -1,31 +1,42 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Elton.Phantom.Models;
+using Newtonsoft.Json;
+using System.IO;
+using Elton.Phantom.Tests.Properties;
 
 namespace Elton.Phantom.Tests
 {
     [TestClass]
     public class UnitTest1
     {
+        PhantomConfiguration appConfig;
+        TokenConfig tokenConfig;
         PhantomApi api = null;
-        public PhantomApi GetApi()
+        [TestInitialize]
+        public void Initialize()
         {
-            if (api == null)
-                api = new PhantomApi(PhantomConfiguration.Default);
-            return api;
+            dynamic config = new
+            {
+                app = new PhantomConfiguration(),
+                token = new TokenConfig(),
+            };
+
+            var configFile = Path.Combine(Settings.Default.ConfigPath, "phantom.json");
+            var jsonString = File.ReadAllText(configFile);
+            config = JsonConvert.DeserializeAnonymousType(jsonString, config);
+
+            appConfig = config.app;
+            tokenConfig = config.token;
+
+            api = new PhantomApi(appConfig);
         }
 
         [TestMethod]
         public void TestMethod1()
         {
-            var api = GetApi();
-        }
-
-        public void TestAPI(string token)
-        {
-            var api = GetApi();
             bool isOK = api.Ping();
-            api.SetCredentials(token);
+            api.SetCredentials(tokenConfig.AccessToken);
 
             var user = api.GetUser();
             //api.RefreshToken();

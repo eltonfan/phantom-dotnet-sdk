@@ -18,15 +18,18 @@ namespace Elton.Phantom.Web
             }
         }
 
-        readonly PhantomClient client = null;
+        readonly PhantomConfiguration config;
+        readonly PhantomClient client;
         private MyClient()
         {
-            client = new PhantomClient();
+            this.config = new PhantomConfiguration(
+                SecretKeys.PhantomAlexa.AppId,
+                SecretKeys.PhantomAlexa.AppSecret,
+                SecretKeys.PhantomAlexa.RedirectUri);
+            this.client = new PhantomClient(config);
         }
 
-        public PhantomClient Client
-        {
-            get => client;
-        }
+        public PhantomConfiguration Configuration => config;
+        public PhantomClient Client => client;
     }
 }

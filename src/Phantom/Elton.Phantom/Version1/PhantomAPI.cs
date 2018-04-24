@@ -29,23 +29,7 @@ namespace Elton.Phantom.Version1
         readonly Dictionary<int, Bulb> dicBulbs = new Dictionary<int, Bulb>();
 
         public PhantomAPI(PhantomConfiguration config)
-            : base(config)
-        {
-            client.DefaultParameters.Add(new Parameter
-            {
-                Name = "Accept",
-                Type = ParameterType.HttpHeader,
-                Value = "application/vnd.huantengsmart-v1+json",
-            });//"application/json"
-        }
-
-        public bool Ping()
-        {
-            string result = this.GetJson<string>("ping.json");
-            if (string.IsNullOrEmpty(result))
-                return false;
-
-            return result.Contains("pong");
-        }
+            : base(config, "application/vnd.huantengsmart-v1+json")
+        { }
     }
 }

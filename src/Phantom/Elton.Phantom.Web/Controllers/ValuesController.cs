@@ -45,7 +45,7 @@ namespace Elton.Phantom.Web.Controllers
             else
             {
                 string authorizeCode = code;
-                var api = new PhantomApi(PhantomConfiguration.Default);
+                var api = new PhantomApi(MyClient.Default.Configuration);
                 var token = api.CreateToken(authorizeCode);
 
                 //settings.AccessToken = token.access_token;

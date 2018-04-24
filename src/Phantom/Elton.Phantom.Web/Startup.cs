@@ -12,7 +12,7 @@ namespace Elton.Phantom.Web
 {
     public class Startup
     {
-        readonly PhantomClient client = null;
+        readonly MyClient client = null;
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -22,7 +22,7 @@ namespace Elton.Phantom.Web
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
 
-            client = new PhantomClient();
+            client = MyClient.Default;
             //string newAccessToken, newRefreshToken;
             //client.Connect(settings.AccessToken, settings.RefreshToken, out newAccessToken, out newRefreshToken);
             //settings.AccessToken = newAccessToken;

@@ -25,23 +25,7 @@ namespace Elton.Phantom.Version2
     {
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(typeof(PhantomAPI));
         public PhantomAPI(PhantomConfiguration config)
-            : base(config)
-        {
-            client.DefaultParameters.Add(new Parameter
-            {
-                Name = "Accept",
-                Type = ParameterType.HttpHeader,
-                Value = "application/vnd.huantengsmart-v2+json",
-            });//"application/json"
-        }
-
-        public bool Ping()
-        {
-            string result = this.GetJson<string>("ping.json");
-            if (string.IsNullOrEmpty(result))
-                return false;
-
-            return result.Contains("pong");
-        }
+            : base(config, "application/vnd.huantengsmart-v2+json")
+        { }
     }
 }
