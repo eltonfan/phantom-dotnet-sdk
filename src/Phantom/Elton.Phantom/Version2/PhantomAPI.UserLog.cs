@@ -18,21 +18,11 @@ namespace Elton.Phantom.Version2
         /// <returns></returns>
         public List<UserLog> GetUserLog(string cursor, int count, out string nextCursor)
         {
-            List<UrlSegment> list = new List<UrlSegment>();
-            list.Add(new UrlSegment("count", count.ToString()));
+            var list = new Dictionary<string, string>();
+            list.Add("count", count.ToString());
 
             dynamic data = null;
-            if (string.IsNullOrEmpty(cursor))
-            {
-                data = GetJson("user_log.json?count={count}",
-                    list.ToArray());
-            }
-            else
-            {
-                list.Add(new UrlSegment("next_cursor", cursor));
-                data = GetJson("user_log.json?count={count}&next_cursor={next_cursor}",
-                    list.ToArray());
-            }
+            data = Get(2, $"user_log.json?count={count}&next_cursor={cursor}", list.ToArray());
 
             List<UserLog> result = new List<UserLog>();
             foreach(var item in data.data)

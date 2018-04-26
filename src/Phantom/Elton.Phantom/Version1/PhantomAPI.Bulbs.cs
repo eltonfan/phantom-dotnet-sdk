@@ -19,15 +19,15 @@ namespace Elton.Phantom.Version1
         /// <returns></returns>
         public Bulb[] GetBulbs(bool hasDetails = false)
         {
-            Bulb[] arrayBulbs = this.GetJson<Bulb[]>("bulbs.json");
+            Bulb[] arrayBulbs = this.Get<Bulb[]>(1, "bulbs");
             if (!hasDetails || arrayBulbs == null || arrayBulbs.Length < 1)
                 return arrayBulbs;
 
             List<Operation> list = new List<Operation>();
             foreach (Bulb item in arrayBulbs)
-                list.Add(new Operation("GET", string.Format("/api/bulbs/{0}.json", item.Id)));
+                list.Add(new Operation("GET", string.Format("/api/bulbs/{0}", item.Id)));
 
-            OperationResult[] results = this.Batch(list.ToArray());
+            OperationResult[] results = this.Batch(0, list.ToArray());
             List<Bulb> listDetails = new List<Bulb>();
             foreach (OperationResult item in results)
             {
@@ -41,23 +41,20 @@ namespace Elton.Phantom.Version1
         }
         public Bulb GetBulb(int id)
         {
-            return GetJson<Bulb>("bulbs/{id}.json", new UrlSegment("id", id.ToString()));
+            return Get<Bulb>(1, $"bulbs/{id}");
         }
 
         public void SetBulbSwitchOn(int bulbId)
         {
-            this.POST<Scenario>("bulbs/{id}/switch_on.json",
-                new [] { new UrlSegment("id", bulbId.ToString()) });
+            this.Post<Scenario>(1, $"bulbs/{bulbId}/switch_on");
         }
         public void SetBulbSwitchOff(int bulbId)
         {
-            this.POST<Scenario>("bulbs/{id}/switch_off.json",
-                new [] { new UrlSegment("id", bulbId.ToString()) });
+            this.Post<Scenario>(1, $"bulbs/{bulbId}/switch_off");
         }
         public void SetBulbTune(int bulbId, float brightness, float hue)
         {
-            this.POST<Scenario>("bulbs/{id}/tune.json",
-                new UrlSegment[] { new UrlSegment("id", bulbId.ToString()) },
+            this.Post<Scenario>(1, $"bulbs/{bulbId}/tune",
                 new Argument("brightness", brightness.ToString()),
                 new Argument("hue", hue.ToString()));
         }

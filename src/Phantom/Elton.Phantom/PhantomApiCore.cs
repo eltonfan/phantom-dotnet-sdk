@@ -29,170 +29,72 @@ namespace Elton.Phantom
         protected readonly RestClient client = null;
         protected readonly PhantomConfiguration config = null;
         string token = null;
+        readonly string accept;
         public PhantomApiCore(PhantomConfiguration config, string accept = "application/json")
         {
             Contract.Requires(config != null, "config can not be empty.");
             this.config = config;
 
-            client = new RestClient("https://huantengsmart.com/api/");
+            client = new RestClient(Consts.ApiUrl);
             client.DefaultParameters.Clear();
             client.UserAgent = config.UserAgent;
-            client.DefaultParameters.Add(new Parameter
-            {
-                Name = "Accept",
-                Type = ParameterType.HttpHeader,
-                Value = accept,
-            });
+            this.accept = accept;
+
+            //client.DefaultParameters.Add(new Parameter
+            //{
+            //    Name = "Accept",
+            //    Type = ParameterType.HttpHeader,
+            //    Value = accept,
+            //});
         }
 
         public bool Ping()
         {
-            string result = this.GetJson<string>("ping.json");
+            string result = this.Get<string>(2, "ping.json");
             if (string.IsNullOrEmpty(result))
                 return false;
 
             return result.Contains("pong");
         }
 
-
         public void SetCredentials(string token)
         {
             this.token = token;
         }
 
-        void AddHeaders(RestRequest request)
+        RestRequest CreateRequest(int apiVersion, Method method, string resource, object body = null, params Argument[] parameters)
         {
-            if (this.token != null)
+            var request = new RestRequest(resource, method);
+            request.AddOrUpdateHeader("Accept", $"application/vnd.huantengsmart-v{apiVersion}+json");
+            if (token != null)
                 request.AddHeader("Authorization", Authorization);
-
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
+
+            if (body != null)
+                request.AddBody(body);
+
+            if (parameters != null)
+            {
+                foreach (Argument item in parameters)
+                    request.AddParameter(item.Key, item.Value);
+            }
+
+            return request;
         }
 
-        protected string GetString(string url, params UrlSegment[] urlSegments)
+        protected string GetString(int apiVersion, string resource, params KeyValuePair<string, string>[] urlSegments)
         {
-            var request = new RestRequest(url, Method.GET);
-            //request.RequestFormat = DataFormat.Json;
+            var request = CreateRequest(apiVersion, Method.GET, resource);
+
             if (urlSegments != null)
             {
-                foreach (UrlSegment item in urlSegments)
+                foreach (var item in urlSegments)
                     request.AddUrlSegment(item.Key, item.Value);
             }
-            AddHeaders(request);
 
-            IRestResponse response = client.Execute(request).GetAwaiter().GetResult();
+            var response = client.Execute(request).GetAwaiter().GetResult();
             CheckError(response);
-
             return response.Content;
-        }
-
-        protected T GetJson<T>(string url, params UrlSegment[] urlSegments)
-        {
-            return JsonConvert.DeserializeObject<T>(GetString(url, urlSegments));
-        }
-
-        protected dynamic GetJson(string url, params UrlSegment[] urlSegments)
-        {
-            return JsonConvert.DeserializeObject(GetString(url, urlSegments));
-        }
-
-        protected bool Delete(string url, params UrlSegment[] urlSegments)
-        {
-            var request = new RestRequest(url, Method.DELETE);
-            //request.RequestFormat = DataFormat.Json;
-            if (urlSegments != null)
-            {
-                foreach (UrlSegment item in urlSegments)
-                    request.AddUrlSegment(item.Key, item.Value);
-            }
-            AddHeaders(request);
-
-            IRestResponse response = client.Execute(request).GetAwaiter().GetResult();
-            CheckError(response);
-
-            dynamic result = JsonConvert.DeserializeObject(response.Content);
-            return result.success;
-        }
-
-        protected T PostForm<T>(string authorization, string url, UrlSegment[] urlSegments, params Argument[] arguments)
-        {
-            var request = new RestRequest(url, Method.POST);
-            if (urlSegments != null)
-            {
-                foreach (UrlSegment item in urlSegments)
-                    request.AddUrlSegment(item.Key, item.Value);
-            }
-            if (!string.IsNullOrWhiteSpace(authorization))
-                request.AddHeader("Authorization", authorization);
-            //request.AddHeader("Content-Type", "application/json; charset=utf-8");
-            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-            if (arguments != null)
-            {
-                foreach (Argument item in arguments)
-                    request.AddParameter(item.Key, item.Value);
-            }
-
-            IRestResponse<T> response = client.Execute<T>(request).GetAwaiter().GetResult();
-            CheckError(response);
-            return response.Data;
-        }
-
-        protected T PostJson<T>(string authorization, string url, UrlSegment[] urlSegments, params Argument[] arguments)
-        {
-            var request = new RestRequest(url, Method.POST);
-            if (urlSegments != null)
-            {
-                foreach (UrlSegment item in urlSegments)
-                    request.AddUrlSegment(item.Key, item.Value);
-            }
-            if (!string.IsNullOrWhiteSpace(authorization))
-                request.AddHeader("Authorization", authorization);
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
-
-            if (arguments != null)
-            {
-                foreach (Argument item in arguments)
-                    request.AddParameter(item.Key, item.Value);
-            }
-
-            IRestResponse<T> response = client.Execute<T>(request).GetAwaiter().GetResult();
-            CheckError(response);
-            return response.Data;
-        }
-
-        protected T POST<T>(string url, UrlSegment[] urlSegments, object data)
-        {
-            var request = new RestRequest(url, Method.POST);
-            //request.RequestFormat = DataFormat.Json;
-            if (urlSegments != null)
-            {
-                foreach (UrlSegment item in urlSegments)
-                    request.AddUrlSegment(item.Key, item.Value);
-            }
-            AddHeaders(request);
-
-            request.AddBody(data);
-
-            IRestResponse response = client.Execute(request).GetAwaiter().GetResult();
-            CheckError(response);
-            return JsonConvert.DeserializeObject<T>(response.Content);
-        }
-        protected T PUT<T>(string url, UrlSegment[] urlSegments, object data)
-        {
-            var request = new RestRequest(url, Method.PUT);
-            //request.RequestFormat = DataFormat.Json;
-            if (urlSegments != null)
-            {
-                foreach (UrlSegment item in urlSegments)
-                    request.AddUrlSegment(item.Key, item.Value);
-            }
-            request.AddHeader("Authorization", Authorization);
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
-
-            request.AddBody(data);
-
-            IRestResponse response = client.Execute(request).GetAwaiter().GetResult();
-            CheckError(response);
-            return JsonConvert.DeserializeObject<T>(response.Content);
         }
 
         /// <summary>
@@ -201,7 +103,7 @@ namespace Elton.Phantom
         /// <param name="authorization"></param>
         /// <param name="ops"></param>
         /// <returns></returns>
-        protected OperationResult[] Batch(string authorization, params Operation[] ops)
+        protected OperationResult[] Batch(int apiVersion, params Operation[] ops)
         {
             var content = new JObject();
             content.Add("ops", JToken.FromObject(ops));
@@ -213,21 +115,18 @@ namespace Elton.Phantom
             //Accept = "application/vnd.huantengsmart-v1+json";
             //Authorization = authorization
             //ContentType = "application/json; charset=utf-8";
-            JObject result = this.POST<JObject>("../massapi", null, content);
+            JObject result = this.Post<JObject>(apiVersion, "../massapi", content);
             foreach (JToken item in result["results"] as JArray)
             {
                 results.Add(new OperationResult(item.Value<int>("status"), item["body"].ToString()));
             }
             return results.ToArray();
         }
-        protected OperationResult[] Batch(params Operation[] ops)
-        {
-            return Batch(Authorization, ops);
-        }
+
         static void CheckError(IRestResponse response)
         {
-            //if (response.ErrorException != null)
-            //    throw response.ErrorException;
+            if (response.IsSuccess)
+                return;
 
             switch (response.StatusCode)
             {
@@ -235,10 +134,10 @@ namespace Elton.Phantom
                 case HttpStatusCode.Created:
                     break;
                 case HttpStatusCode.Unauthorized:
-                    throw new PhantomUnauthorizedException();
+                    throw new PhantomUnauthorizedException(response.StatusDescription);
                 default://其他错误
                     string message = "";
-                    PhantomExceptionStatus status = PhantomExceptionStatus.Unknown;
+                    var status = PhantomExceptionStatus.Unknown;
                     if (!TryParseErrorMessage(response.Content, out status, out message))
                     {
                         message = response.Content;
@@ -247,50 +146,6 @@ namespace Elton.Phantom
                     throw new PhantomException(message, status);
             }
         }
-        /*
-         * 
-        static void CheckError(IRestResponse response)
-        {
-            if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created)
-                return;
-            if(response.StatusCode == HttpStatusCode.Unauthorized)
-                throw new PhantomUnauthorizedException();
-
-            //其他错误
-            var status = PhantomExceptionStatus.Unknown;
-            string message = null;
-            try
-            {
-                JObject obj = JsonConvert.DeserializeObject(response.Content) as JObject;
-                if (obj == null)
-                {
-                    message = response.Content;
-                    return;
-                }
-                string error = obj.Value<string>("error");
-                if (string.IsNullOrEmpty(error))
-                {
-                    message = response.Content;
-                    return;
-                }
-
-                //进一步解析错误信息
-                string[] parts = (error ?? "").Split(new char[] { ':' });
-                if (parts == null || parts.Length < 2 || !Enum.TryParse<PhantomExceptionStatus>(parts[0], out status))
-                {
-                    message = error;
-                    status = PhantomExceptionStatus.Unknown;
-                }
-                else
-                {
-                    message = parts[1];
-                }
-            }
-            finally
-            {
-                throw new PhantomException(message, status);
-            }
-        }*/
 
         static bool TryParseErrorMessage(string content, out PhantomExceptionStatus status, out string message)
         {
@@ -320,17 +175,50 @@ namespace Elton.Phantom
             }
         }
 
-
-        protected T POST<T>(string url, UrlSegment[] urlSegments, params Argument[] arguments)
-        {
-            if (string.IsNullOrEmpty(this.token))
-                throw new PhantomException("尚未换取令牌。");
-
-            return this.PostForm<T>(Authorization, url, urlSegments, arguments);
-        }
-
         protected string Authorization => "bearer " + token;
         public PhantomConfiguration Configuration => config;
         public string Token => token;
+
+
+        protected T Get<T>(int apiVersion, string url, params KeyValuePair<string, string>[] urlSegments)
+        {
+            return JsonConvert.DeserializeObject<T>(GetString(apiVersion, url));
+        }
+
+        protected dynamic Get(int apiVersion, string url, params KeyValuePair<string, string>[] urlSegments)
+        {
+            return JsonConvert.DeserializeObject(GetString(apiVersion, url));
+        }
+
+        protected T Post<T>(int apiVersion, string url, object body = null, params Argument[] parameters)
+        {
+            var request = CreateRequest(apiVersion, Method.POST, url, body, parameters);
+
+            IRestResponse response = client.Execute(request).GetAwaiter().GetResult();
+            CheckError(response);
+            return JsonConvert.DeserializeObject<T>(response.Content);
+        }
+
+        protected T Put<T>(int apiVersion, string url, object data)
+        {
+            var request = CreateRequest(apiVersion, Method.PUT, url);
+
+            request.AddBody(data);
+
+            IRestResponse response = client.Execute(request).GetAwaiter().GetResult();
+            CheckError(response);
+            return JsonConvert.DeserializeObject<T>(response.Content);
+        }
+
+        protected bool Delete(int apiVersion, string url)
+        {
+            var request = CreateRequest(apiVersion, Method.DELETE, url);
+
+            IRestResponse response = client.Execute(request).GetAwaiter().GetResult();
+            CheckError(response);
+
+            dynamic result = JsonConvert.DeserializeObject(response.Content);
+            return result.success;
+        }
     }
 }

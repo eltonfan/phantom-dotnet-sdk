@@ -19,15 +19,15 @@ namespace Elton.Phantom.Version1
         /// <returns></returns>
         public Scenario[] GetScenarios(int zoneId, bool hasDetails = false)
         {
-            Scenario[] arrayScenarios = this.GetJson<Scenario[]>("scenarios?zone_id=" + zoneId);
+            Scenario[] arrayScenarios = this.Get<Scenario[]>(0, $"scenarios?zone_id={zoneId}");
             if (!hasDetails || arrayScenarios == null || arrayScenarios.Length < 1)
                 return arrayScenarios;
 
             List<Operation> list = new List<Operation>();
             foreach (Scenario item in arrayScenarios)
-                list.Add(new Operation("GET", string.Format("/api/scenarios/{0}.json", item.Id)));
+                list.Add(new Operation("GET", $"/api/scenarios/{item.Id}"));
 
-            OperationResult[] results = this.Batch(list.ToArray());
+            OperationResult[] results = this.Batch(1, list.ToArray());
             List<Scenario> listDetails = new List<Scenario>();
             foreach (OperationResult item in results)
             {
@@ -41,20 +41,19 @@ namespace Elton.Phantom.Version1
         }
         public Scenario GetScenario(int scenarioId)
         {
-            return GetJson<Scenario>("scenarios/{id}.json", new UrlSegment("id", scenarioId.ToString()));
+            return Get<Scenario>(1, $"scenarios/{scenarioId}.json");
         }
         public void SetScenarioAllOn()
         {
-            this.POST<Scenario>("scenarios/all_on.json", null, new Argument("origin", 1));
+            this.Post<Scenario>(1, "scenarios/all_on.json", new Argument("origin", 1));
         }
         public void SetScenarioAllOff()
         {
-            this.POST<Scenario>("scenarios/all_off.json", null, new Argument("origin", 1));
+            this.Post<Scenario>(1, "scenarios/all_off.json", new Argument("origin", 1));
         }
         public void SetScenario(int scenarioId)
         {
-            this.POST<Scenario>("scenarios/{id}/apply",
-                new UrlSegment[] { new UrlSegment("id", scenarioId.ToString()) });
+            this.Post<Scenario>(1, $"scenarios/{scenarioId}/apply");
         }
 
 
@@ -73,7 +72,7 @@ namespace Elton.Phantom.Version1
                 }
             };
 
-            return this.POST<Scenario>("scenarios.json", null, data);
+            return this.Post<Scenario>(1, "scenarios.json", data);
         }
         public Scenario UpdateScenario(int scenarioId, string name, params object[] contentItems)
         {
@@ -83,12 +82,11 @@ namespace Elton.Phantom.Version1
                 scenario_content_items_attributes = contentItems,
             };
 
-            return this.PUT<Scenario>("scenarios/{id}.json", new UrlSegment[]{ new UrlSegment("id", scenarioId.ToString()) },
-                data);
+            return this.Put<Scenario>(1, $"scenarios/{scenarioId}", data);
         }
         public bool DeleteScenario(int scenarioId)
         {
-            return Delete("scenarios/{id}", new UrlSegment("id", scenarioId.ToString()));
+            return Delete(1, $"scenarios/{scenarioId}");
         }
     }
 }

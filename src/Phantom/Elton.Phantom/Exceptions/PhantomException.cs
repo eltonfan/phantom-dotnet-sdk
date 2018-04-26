@@ -74,8 +74,8 @@ namespace Elton.Phantom
 
     public class PhantomUnauthorizedException : PhantomException
     {
-        public PhantomUnauthorizedException()
-            : base()
+        public PhantomUnauthorizedException(string message)
+            : base(message)
         { }
     }
 

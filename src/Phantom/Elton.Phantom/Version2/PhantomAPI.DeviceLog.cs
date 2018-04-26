@@ -18,15 +18,14 @@ namespace Elton.Phantom.Version2
         /// <returns></returns>
         public List<DeviceLog> GetDeviceLog(string device_type, int? device_id, string cursor, int count, out string nextCursor)
         {
-            List<UrlSegment> list = new List<UrlSegment>();
-            list.Add(new UrlSegment("device_type", device_type));
+            var list = new Dictionary<string, string>();
+            list.Add("device_type", device_type);
             if(device_id != null)
-                list.Add(new UrlSegment("device_id", device_id.Value.ToString()));
+                list.Add("device_id", device_id.Value.ToString());
             if (!string.IsNullOrEmpty(cursor))
-                list.Add(new UrlSegment("next_cursor", cursor));
-            list.Add(new UrlSegment("count", count.ToString()));
-            dynamic data = GetJson("device_log?device_type={device_type}&count={count}",
-                list.ToArray());
+                list.Add("next_cursor", cursor);
+            list.Add("count", count.ToString());
+            dynamic data = Get(2, $"device_log?device_type={device_type}&count={count}", list.ToArray());
 
             List<DeviceLog> result = new List<DeviceLog>();
             foreach(var item in data.data)
