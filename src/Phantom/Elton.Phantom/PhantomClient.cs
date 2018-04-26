@@ -1,20 +1,28 @@
-﻿// Coded by chuangen http://chuangen.name.
+﻿#region License
+
+//   Copyright 2014 Elton FAN
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License. 
+
+#endregion
 
 using Elton.Phantom.Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Elton.Phantom
 {
-    public partial class PhantomClient
+    public class PhantomClient : PhantomApi
     {
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(typeof(PhantomClient));
 
@@ -27,275 +35,107 @@ namespace Elton.Phantom
         /// </summary>
         const int SCENARIO_ID_AllOn = 0xFFFF;
 
-        readonly Dictionary<int, Bulb> dicBulbs = new Dictionary<int, Bulb>();
-        readonly Dictionary<int, Scenario> dicScenarios = new Dictionary<int, Scenario>();
-
-        User currentUser = null;
-        //Image image = null;
-        string token = null;
-
-        readonly PhantomConfiguration config;
-        readonly PhantomApi api;
-        readonly System.Threading.Timer timerRefresh;
         public PhantomClient(PhantomConfiguration config)
+            : base(config)
         {
-            this.config = config;
-            this.api = new PhantomApi(config);
-
-            this.timerRefresh = new System.Threading.Timer(RefreshTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
         }
 
-        volatile int refreshCount = 0;
-        void RefreshTimerCallback(object state)
+        public void SetScenario(Scenario scenario)
         {
-            try
-            {
-                RefreshScenarios();
-                //if (refreshCount % 5 == 4)
-                //    RefreshBulbs(true);
-                //else
-                //    RefreshBulbs(false);
-
-                if (refreshCount <= 0)//仅第一次快速刷新
-                    RefreshBulbs(false);
-                else
-                    RefreshBulbs(true);
-            }
-            catch(Exception ex)
-            { }
-            finally
-            {
-                refreshCount++;
-
-                if (this.Connected)
-                {
-                    timerRefresh.Change(config.RequestInterval, Timeout.Infinite);
-                }
-            }
-        }
-
-        public void Connect(string accessToken)
-        {
-            api.Ping();
-
-            this.token = accessToken;
-            this.api.SetCredentials(token);
-            this.currentUser = api.GetUser();
-            if (this.currentUser.Name == null)
-                throw new Exception();
-
-            timerRefresh.Change(0, Timeout.Infinite);
-            this.Connected = true;
-        }
-
-        public void Connect(string accessToken, string refreshToken, out string newAccessToken, out string newRefreshToken)
-        {
-            newAccessToken = null;
-            newRefreshToken = null;
-
-            api.Ping();
-
-            this.token = accessToken;
-            this.api.SetCredentials(token);
-            this.currentUser = api.GetUser();
-            if (this.currentUser.Name == null)
-                throw new Exception();
-
-            if (string.IsNullOrEmpty(refreshToken))
-            {
-                newAccessToken = accessToken;
-                newRefreshToken = refreshToken;
-            }
+            if (scenario.Id == SCENARIO_ID_AllOff)//实际上是全关
+                SetScenarioAllOff();
+            else if (scenario.Id == SCENARIO_ID_AllOn)
+                SetScenarioAllOn();
             else
-            {//尝试刷新令牌
-                var newToken = api.RefreshToken(refreshToken);
-                newAccessToken = newToken.AccessToken;
-                newRefreshToken = newToken.RefreshToken;
-
-                this.token = newAccessToken;
-                this.api.SetCredentials(token);
-                this.currentUser = api.GetUser();
-                if (this.currentUser.Name == null)
-                    throw new Exception();
-            }
-            
-            timerRefresh.Change(0, Timeout.Infinite);
-            this.Connected = true;
-        }
-        public void Disconnect()
-        {
-            this.Connected = false;
-            timerRefresh.Change(Timeout.Infinite, Timeout.Infinite);
+                SetScenarioInternal(scenario.Id);
         }
 
-        public bool Connected { get; private set; }
-
-        public void RefreshScenarios(bool hasDetails = false)
+        public void SetScenario(int scenarioId)
         {
-            List<Scenario> listRemoved = new List<Scenario>();
-            List<Scenario> listNew = new List<Scenario>();
-            List<Scenario> listChanged = new List<Scenario>();
+            if (scenarioId == SCENARIO_ID_AllOff)//实际上是全关
+                SetScenarioAllOff();
+            else if (scenarioId == SCENARIO_ID_AllOn)
+                SetScenarioAllOn();
+            else
+                SetScenarioInternal(scenarioId);
+        }
 
-            List<Scenario> listCurrent = new List<Scenario>();
-            listCurrent.Add(new Scenario
-            {
-                Id = SCENARIO_ID_AllOff,
-                Name = "全关",
-                DateCreated = DateTime.MinValue,
-                DateUpdated = DateTime.MinValue,
-                ContentItems = new ScenarioContentItem[0],
-            });
-            listCurrent.Add(new Scenario
-            {
-                Id = SCENARIO_ID_AllOn,
-                Name = "全开",
-                DateCreated = DateTime.MinValue,
-                DateUpdated = DateTime.MinValue,
-                ContentItems = new ScenarioContentItem[0],
-            });
-            Scenario[] response = api.GetScenarios(0, hasDetails);
-            if(response != null)
-                listCurrent.AddRange(response);
+        public void SetBulb(BulbDetails bulb, bool isOn)
+        {
+            if (isOn)
+                SetBulbSwitchOn(bulb.Id);
+            else
+                SetBulbSwitchOff(bulb.Id);
+        }
 
-            foreach(KeyValuePair<int, Scenario> pair in this.dicScenarios)
-            {
-                bool removed = true;
-                foreach(Scenario item in listCurrent)
+        public void SetBulb(BulbDetails bulb, float brightness, float hue)
+        {
+            SetBulbTune(bulb.Id, brightness, hue);
+        }
+
+        public void SetBulb(int bulbId, bool isOn)
+        {
+            if (isOn)
+                SetBulbSwitchOn(bulbId);
+            else
+                SetBulbSwitchOff(bulbId);
+        }
+
+        public void UpdateScenarioMode(int id, string name, byte mode)
+        {
+            var result = UpdateScenario(id, name,
+                new[]
                 {
-                    if(item.Id == pair.Key)
-                    {//仍然存在
-                        removed = false;
-                        break;
-                    }
-                }
-                if (removed)
-                    listRemoved.Add(pair.Value);
-            }
-            foreach (Scenario item in listRemoved)
-                this.dicScenarios.Remove(item.Id);
+                    new
+                    {
+                        generic_module_id = 741,
+                        info = string.Format("[{{\"type\":\"mode\",\"index\":0,\"value\":{0}}}]", mode),
+                    },
+                });
+        }
+        public void UpdateScenarioData(int id, string name, int data)
+        {
+            var old = GetScenario(id);
 
-            foreach(Scenario item in listCurrent)
+            var list = new List<object>();
+            bool hasData = false;
+            foreach (var item in old.ContentItems)
             {
-                if(dicScenarios.ContainsKey(item.Id))
-                {//本来就存在
-                    if (dicScenarios[item.Id].Equals(item))
-                        continue;
-                    dicScenarios[item.Id].CopyFrom(item);
-                    listChanged.Add(dicScenarios[item.Id]);
+                if (item.generic_module_id != 741 || hasData)
+                {//不正确，或者已经存在记录，则删除
+                    list.Add(
+                            new
+                            {
+                                id = item.id,
+                                _destroy = true,
+                            }
+                        );
                 }
                 else
                 {
-                    dicScenarios.Add(item.Id, item);
-                    listNew.Add(item);
+                    hasData = true;
+                    list.Add(
+                            new
+                            {
+                                id = item.id,
+                                generic_module_id = 741,
+                                info = string.Format("[{{\"type\":\"data\",\"index\":0,\"value\":{0}}}]", data),
+                            }
+                        );
                 }
             }
-
-            if (this.NewScenario != null)
-            {
-                foreach (Scenario item in listNew)
-                    this.NewScenario(this, new ScenarioEventArgs(item));
-            }
-            if (this.ScenarioRemoved != null)
-            {
-                foreach (Scenario item in listRemoved)
-                    this.ScenarioRemoved(this, new ScenarioEventArgs(item));
-            }
-            if (this.ScenarioStateChanged != null)
-            {
-                foreach (Scenario item in listChanged)
-                    this.ScenarioStateChanged(this, new ScenarioEventArgs(item));
-            }
-        }
-
-        public void RefreshBulbs(bool hasDetails = false)
-        {
-            List<Bulb> listRemoved = new List<Bulb>();
-            List<Bulb> listNew = new List<Bulb>();
-            List<Bulb> listChanged = new List<Bulb>();
-
-            Bulb[] listCurrent = api.GetBulbs(hasDetails);
-            foreach (KeyValuePair<int, Bulb> pair in this.dicBulbs)
-            {
-                bool removed = true;
-                foreach (Bulb item in listCurrent)
-                {
-                    if (item.Id == pair.Key)
-                    {//仍然存在
-                        removed = false;
-                        break;
-                    }
-                }
-                if (removed)
-                    listRemoved.Add(pair.Value);
-            }
-            foreach (Bulb item in listRemoved)
-                this.dicBulbs.Remove(item.Id);
-
-            foreach (Bulb item in listCurrent)
-            {
-                if (dicBulbs.ContainsKey(item.Id))
-                {//本来就存在
-                    if(hasDetails)
+            if (!hasData)
+            {//添加记录
+                list.Add(
+                    new
                     {
-                        if (dicBulbs[item.Id].Equals(item))
-                            continue;
-                        dicBulbs[item.Id].CopyFrom(item);
-                        listChanged.Add(dicBulbs[item.Id]);
-                    }
-                    else
-                    {
-                        if (dicBulbs[item.Id].Id == item.Id && dicBulbs[item.Id].TurnedOn == item.TurnedOn && dicBulbs[item.Id].OwnDevice == item.OwnDevice && dicBulbs[item.Id].Name == item.Name)
-                            continue;
-                        dicBulbs[item.Id].TurnedOn = item.TurnedOn;
-                        dicBulbs[item.Id].OwnDevice = item.OwnDevice;
-                        dicBulbs[item.Id].Name = item.Name;
-                        listChanged.Add(dicBulbs[item.Id]);
-                    }
-                }
-                else
-                {
-                    item.SetClient(this);
-                    dicBulbs.Add(item.Id, item);
-                    listNew.Add(item);
-                }
+                        generic_module_id = 741,
+                        info = string.Format("[{{\"type\":\"data\",\"index\":0,\"value\":{0}}}]", data),
+                    });
             }
 
-            if (this.NewBulb != null)
-            {
-                foreach (Bulb item in listNew)
-                    this.NewBulb(this, new BulbEventArgs(item));
-            }
-            if (this.BulbRemoved != null)
-            {
-                foreach (Bulb item in listRemoved)
-                    this.BulbRemoved(this, new BulbEventArgs(item));
-            }
-            if (this.BulbStateChanged != null)
-            {
-                foreach (Bulb item in listChanged)
-                    this.BulbStateChanged(this, new BulbEventArgs(item));
-            }
-        }
 
-        public User UserInfo
-        {
-            get { return this.currentUser; }
+            Scenario result = UpdateScenario(id, name, list.ToArray());
         }
-        //public Image UserImage
-        //{
-        //    get { return this.image; }
-        //}
-
-        public ICollection<Bulb> Bulbs
-        {
-            get { return dicBulbs.Values; }
-        }
-
-        public ICollection<Scenario> Scenarios
-        {
-            get { return dicScenarios.Values; }
-        }
-
-        public PhantomApi Api => api;
     }
 }

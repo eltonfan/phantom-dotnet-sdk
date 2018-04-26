@@ -1,0 +1,20 @@
+﻿{
+  "results": [
+    {
+      "body": "{\"device_identifier\":\"N7295\",\"id\":7295,\"turned_on\":false,\"own_device?\":true,\"name\":\"室外.筒灯\",\"house_id\":4536,\"connectivity\":\"在线\",\"accumulated_usage_time\":106006,\"brightness\":1.0,\"hue\":0.5,\"channel\":null,\"wall_switch_id\":null,\"alias_bulb_group_id\":null,\"position\":0,\"auto_hue\":false,\"script_end_time\":null}",
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "315"
+      },
+      "status": 200
+    },
+    {
+      "body": "{\"device_identifier\":\"N15177\",\"id\":15177,\"turned_on\":false,\"own_device?\":true,\"name\":\"客厅.电视筒灯A\",\"house_id\":4536,\"connectivity\":\"在线\",\"accumulated_usage_time\":26122,\"brightness\":0.7,\"hue\":0.5,\"channel\":null,\"wall_switch_id\":null,\"alias_bulb_group_id\":null,\"position\":1,\"auto_hue\":false,\"script_end_time\":null}",
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "323"
+      },
+      "status": 200
+    }
+  ]
+}

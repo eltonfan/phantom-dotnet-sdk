@@ -16,7 +16,7 @@ namespace Elton.Phantom.Web.Controllers
         public IEnumerable<string> Get()
         {
             var client = MyClient.Default.Client;
-            if (client.Connected)
+            if (client.TryPing())
                 return new string[] { "Connected" };
 
 
@@ -45,13 +45,13 @@ namespace Elton.Phantom.Web.Controllers
             else
             {
                 string authorizeCode = code;
-                var api = new PhantomApi(MyClient.Default.Configuration);
+                var api = new PhantomClient(MyClient.Default.Configuration);
                 var token = api.CreateToken(authorizeCode);
 
                 //settings.AccessToken = token.AccessToken;
                 //settings.RefreshToken = token.RefreshToken;
                 //settings.Save();
-                client.Connect(token.AccessToken);
+                client.SetCredentials(token.AccessToken);
                 return new string[] { "Finished", token.AccessToken, };
             }
 

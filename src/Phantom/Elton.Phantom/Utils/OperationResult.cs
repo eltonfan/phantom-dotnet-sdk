@@ -1,27 +1,22 @@
-﻿// Coded by chuangen http://chuangen.name.
-
+﻿
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Elton.Phantom.Version1
+namespace Elton.Phantom
 {
+    /// <summary>
+    /// OperationResult
+    /// </summary>
     internal class OperationResult
     {
-        [JsonProperty("status")]
-        public int Status { get; set; }
-        [JsonProperty("body")]
-        public string Body { get; set; }
-
-        public OperationResult()
-        { }
-        public OperationResult(int status, string body)
-        {
-            this.Status = status;
-            this.Body = body;
-        }
+        /// <summary>
+        /// 操作成功与否
+        /// </summary>
+        [JsonProperty("success")]
+        public bool Success { get; set; }
+        /// <summary>
+        /// 若操作失败，返回失败原因
+        /// </summary>
+        [JsonProperty("reason")]
+        public string Reason { get; set; }
     }
 }

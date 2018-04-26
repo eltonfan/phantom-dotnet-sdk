@@ -1,6 +1,5 @@
 ﻿// Coded by chuangen http://chuangen.name.
 
-using Elton.Phantom.Version1;
 using Elton.Phantom.Models;
 using Elton.Phantom.Win.Controls;
 using System;
@@ -24,7 +23,7 @@ namespace Elton.Phantom.Win
 
         Properties.Settings settings = Properties.Settings.Default;
         readonly PhantomConfiguration appConfig;
-        readonly PhantomClient client;
+        readonly PhantomClientEx client;
         readonly Button[] scenarioButtons = null;
         readonly BulbView[] bulbViews = null;
         public MainForm()
@@ -33,7 +32,7 @@ namespace Elton.Phantom.Win
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
 
             appConfig = settings.LoadConfig();
-            client = new PhantomClient(appConfig);
+            client = new PhantomClientEx(appConfig);
 
             client.NewScenario += client_NewScenario;
             client.ScenarioRemoved += client_ScenarioRemoved;
@@ -159,7 +158,7 @@ namespace Elton.Phantom.Win
                 item.Bulb = null;
 
             int index = 0;
-            foreach (Bulb item in client.Bulbs)
+            foreach (BulbDetails item in client.Bulbs)
             {
                 if (index >= bulbViews.Length)
                     break;

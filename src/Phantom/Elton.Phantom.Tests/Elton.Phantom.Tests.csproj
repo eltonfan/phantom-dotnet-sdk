@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="examples\Models\BatchResults.json" />
     <None Include="packages.config" />
     <Content Include="examples\Notifications\BulbsChanged.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -1,4 +1,20 @@
-﻿// Coded by chuangen http://chuangen.name.
+﻿#region License
+
+//   Copyright 2014 Elton FAN
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License. 
+
+#endregion
 
 using Elton.Phantom.Models;
 using Newtonsoft.Json;
@@ -8,9 +24,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Elton.Phantom.Version1
+namespace Elton.Phantom
 {
-    partial class PhantomAPI
+    partial class PhantomApi
     {
         /// <summary>
         /// 
@@ -27,9 +43,9 @@ namespace Elton.Phantom.Version1
             foreach (Scenario item in arrayScenarios)
                 list.Add(new Operation("GET", $"/api/scenarios/{item.Id}"));
 
-            OperationResult[] results = this.Batch(1, list.ToArray());
+            var result = this.Batch(1, list.ToArray());
             List<Scenario> listDetails = new List<Scenario>();
-            foreach (OperationResult item in results)
+            foreach (var item in result.Results)
             {
                 if (item.Status == 200)
                 {
@@ -51,7 +67,7 @@ namespace Elton.Phantom.Version1
         {
             this.Post<Scenario>(1, "scenarios/all_off.json", new Argument("origin", 1));
         }
-        public void SetScenario(int scenarioId)
+        protected void SetScenarioInternal(int scenarioId)
         {
             this.Post<Scenario>(1, $"scenarios/{scenarioId}/apply");
         }

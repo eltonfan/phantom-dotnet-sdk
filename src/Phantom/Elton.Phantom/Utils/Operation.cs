@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Elton.Phantom.Version1
+namespace Elton.Phantom
 {
     internal class Operation
     {

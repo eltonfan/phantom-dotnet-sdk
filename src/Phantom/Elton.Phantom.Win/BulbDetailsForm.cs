@@ -15,9 +15,9 @@ namespace Elton.Phantom.Win
 {
     public partial class BulbDetailsForm : Form
     {
-        readonly PhantomClient client = null;
-        readonly Bulb bulb = null;
-        public BulbDetailsForm(PhantomClient client, Bulb bulb)
+        readonly PhantomClientEx client = null;
+        readonly BulbDetails bulb = null;
+        public BulbDetailsForm(PhantomClientEx client, BulbDetails bulb)
         {
             if (bulb == null)
                 throw new ArgumentNullException("bulb", "bulb不能为空。");
@@ -43,9 +43,9 @@ namespace Elton.Phantom.Win
         void labelBulb_Click(object sender, EventArgs e)
         {
             if (this.bulb.TurnedOn)
-                this.bulb.TurnOff();
+                client.Api.SetBulb(bulb, false);
             else
-                this.bulb.TurnOn();
+                client.Api.SetBulb(bulb, true);
         }
 
         void trackBar_ValueChanged(object sender, EventArgs e)

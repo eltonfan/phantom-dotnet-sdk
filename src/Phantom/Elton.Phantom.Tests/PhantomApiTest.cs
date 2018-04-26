@@ -4,6 +4,7 @@ using Elton.Phantom.Models;
 using Newtonsoft.Json;
 using System.IO;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Elton.Phantom.Tests
 {
@@ -13,7 +14,7 @@ namespace Elton.Phantom.Tests
         Properties.Settings settings = null;
         PhantomConfiguration appConfig;
         TokenConfig tokenConfig;
-        PhantomApi api = null;
+        PhantomClient phantom = null;
         [TestInitialize]
         public void Initialize()
         {
@@ -22,20 +23,21 @@ namespace Elton.Phantom.Tests
             appConfig = settings.ReadConfig<PhantomConfiguration>("phantom");
             tokenConfig = settings.ReadConfig<TokenConfig>("phantom.token");
 
-            api = new PhantomApi(appConfig);
+            phantom = new PhantomClient(appConfig);
+            phantom.SetCredentials(tokenConfig.AccessToken);
         }
 
         [TestMethod]
         public void TestPing()
         {
-            Assert.IsTrue(api.Ping(), "Failed to ping.");
+            phantom.Ping(1);
+            phantom.Ping(2);
         }
 
         [TestMethod]
         public void TestRefreshToken()
         {
-            api.SetCredentials(tokenConfig.AccessToken);
-            var token = api.RefreshToken(tokenConfig.RefreshToken);
+            var token = phantom.RefreshToken(tokenConfig.RefreshToken);
 
             tokenConfig.CopyFrom(token);
 
@@ -45,16 +47,25 @@ namespace Elton.Phantom.Tests
         [TestMethod]
         public void TestGetUser()
         {
-            api.SetCredentials(tokenConfig.AccessToken);
-            var user = api.GetUser();
+            var user = phantom.GetUser();
             Assert.IsNotNull(user, "Failed to get user.");
         }
 
         [TestMethod]
         public void TestGetBulbs()
         {
-            //Bulb[] listBulbs = api.GetBulbs();
-            //Bulb bulb = api.GetBulb(listBulbs[0].Id);
+            var listBulbs = phantom.GetBulbs();
+
+            var badDevice = listBulbs.First(p => p.Connectivity != "在线");
+            phantom.SetBulb(badDevice.Id, false);
+
+            var detailsList = phantom.GetBulbs(true);
+            var bulb = phantom.GetBulb(listBulbs.First().Id);
+            var isOn = bulb.TurnedOn;
+            phantom.SetBulb(bulb, true);
+            phantom.SetBulb(bulb, false);
+            phantom.SetBulb(bulb, isOn);
+
             //api.SetBulbSwitchOff(listBulbs[0].Id);
             //api.SetBulbSwitchOn(listBulbs[0].Id);
             //api.SetBulbTune(listBulbs[0].Id, 0.5F, 0.5F);
@@ -73,8 +84,6 @@ namespace Elton.Phantom.Tests
         {
             Assert.IsTrue(false, "请慎重，将开关所有设备");
             //请慎重，将开关所有设备
-            api.SetCredentials(tokenConfig.AccessToken);
-
             //api.SetScenarioAllOn();
             //Task.Delay(5000).Wait();
             //api.SetScenarioAllOff();

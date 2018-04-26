@@ -19,9 +19,9 @@ namespace Elton.Phantom.Win
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         Properties.Settings settings = Properties.Settings.Default;
-        readonly PhantomClient client = null;
+        readonly PhantomClientEx client = null;
         readonly string urlString = null;
-        public LoginForm(PhantomClient client, string urlString)
+        public LoginForm(PhantomClientEx client, string urlString)
         {
             this.client = client;
             this.urlString = urlString;

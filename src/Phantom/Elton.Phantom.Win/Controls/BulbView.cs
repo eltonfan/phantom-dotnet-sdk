@@ -25,8 +25,8 @@ namespace Elton.Phantom.Win.Controls
             btnMore.Click += btnMore_Click;
         }
 
-        Bulb bulb = null;
-        public Bulb Bulb
+        BulbDetails bulb = null;
+        public BulbDetails Bulb
         {
             get { return this.bulb; }
             set
@@ -39,8 +39,8 @@ namespace Elton.Phantom.Win.Controls
             }
         }
 
-        PhantomClient client = null;
-        public void SetClient(PhantomClient client)
+        PhantomClientEx client = null;
+        public void SetClient(PhantomClientEx client)
         {
             this.client = client;
             this.client.BulbStateChanged += client_BulbStateChanged;
@@ -101,9 +101,9 @@ namespace Elton.Phantom.Win.Controls
                 return;
 
             if (this.bulb.TurnedOn)
-                this.bulb.TurnOff();
+                client.Api.SetBulb(bulb, false);
             else
-                this.bulb.TurnOn();
+                client.Api.SetBulb(bulb, true);
         }
     }
 }
