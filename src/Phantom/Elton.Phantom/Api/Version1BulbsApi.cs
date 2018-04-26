@@ -18,6 +18,7 @@
 
 using Elton.Phantom.Models;
 using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,8 @@ namespace Elton.Phantom
 {
     partial class PhantomApi
     {
+        readonly Dictionary<int, BulbDetails> dicBulbs = new Dictionary<int, BulbDetails>();
+
         public Bulb[] GetBulbs()
         {
             return this.Get<Bulb[]>(1, "bulbs");
@@ -72,12 +75,7 @@ namespace Elton.Phantom
         }
         public void SetBulbSwitchOff(int bulbId)
         {
-            var result = this.Post<ControlResult>(1, $"bulbs/{bulbId}/switch_off");
-            if(result?.Success == true)
-            {
-
-            }
-
+            this.Post(1, $"bulbs/{bulbId}/switch_off");
         }
         public void SetBulbTune(int bulbId, float brightness, float hue)
         {

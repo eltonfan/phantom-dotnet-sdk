@@ -32,48 +32,39 @@ namespace Elton.Phantom
         /// </summary>
         /// <param name="device_type"></param>
         /// <returns></returns>
-        public List<DeviceLog> GetDeviceLog(string device_type, int? device_id, string cursor, int count, out string nextCursor)
+        public List<UserLog> GetUserLog(string cursor, int count, out string nextCursor)
         {
             var list = new Dictionary<string, string>();
-            list.Add("device_type", device_type);
-            if(device_id != null)
-                list.Add("device_id", device_id.Value.ToString());
-            if (!string.IsNullOrEmpty(cursor))
-                list.Add("next_cursor", cursor);
             list.Add("count", count.ToString());
-            dynamic data = Get(2, $"device_log?device_type={device_type}&count={count}", list.ToArray());
 
-            List<DeviceLog> result = new List<DeviceLog>();
+            var data = Get<dynamic>(2, $"user_log.json?count={count}&next_cursor={cursor}", list.ToArray());
+
+            List<UserLog> result = new List<UserLog>();
             foreach(var item in data.data)
             {
-                result.Add(new DeviceLog
-                {
+                result.Add(new UserLog {
                     Message = item.message,
-                    Timestamp = new DateTime(1970, 1, 1).AddMilliseconds((long)item.timestamp).ToLocalTime(),
-                    IconUrl = item.icon,
+                    Timestamp = item.timestamp,
                 });
             }
 
             nextCursor = data.next_cursor;
-
             return result;
         }
-        /*
-        {
+/*
+{
   "data": [
     {
       "message": "---",
-      "timestamp": 1465918848000,
-      "icon": "https://dn-huantengsmartpublic-four.qbox.me/assets/icons/door-sensor-close-9b589a99eddb1676840d90b668f3e844.png"
+      "timestamp": 1477455511715
     },
     {
       "message": "---",
-      "timestamp": 1465903308000,
-      "icon": "https://dn-huantengsmartpublic-four.qbox.me/assets/icons/door-sensor-open-4e426504425454af8ba5e59395515757.png"
-    }
+      "timestamp": 1477455511000
+    },
   ],
-  "next_cursor": "1465903031000-4860929"
+  "next_cursor": "1477442148000-12857765"
 }
-         */
+*/
     }
 }

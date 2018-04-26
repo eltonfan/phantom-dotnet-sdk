@@ -20,10 +20,10 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using RestSharp.Portable;
-using RestSharp.Portable.HttpClient;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Net;
+using RestSharp;
 
 namespace Elton.Phantom
 {
@@ -38,8 +38,9 @@ namespace Elton.Phantom
     {
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(typeof(PhantomApi));
 
-        protected readonly RestClient client = null;
-        protected readonly PhantomConfiguration config = null;
+        protected readonly RestClient client;
+        protected readonly PhantomConfiguration config;
+        protected readonly SerializationTool converter;
         string token = null;
         public PhantomApi(PhantomConfiguration config)
         {
@@ -49,6 +50,8 @@ namespace Elton.Phantom
             client = new RestClient(Consts.ApiUrl);
             client.DefaultParameters.Clear();
             client.UserAgent = config.UserAgent;
+
+            converter = new SerializationTool(this.config);
         }
 
         public void SetCredentials(string token)
@@ -56,13 +59,23 @@ namespace Elton.Phantom
             this.token = token;
         }
 
-        RestRequest CreateRequest(int apiVersion, Method method, string resource, object body = null, params Argument[] parameters)
+        /// <summary>
+        /// Creates and sets up a RestRequest prior to a call.
+        /// </summary>
+        /// <param name="apiVersion"></param>
+        /// <param name="method"></param>
+        /// <param name="resource"></param>
+        /// <param name="body"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        RestRequest PrepareRequest(int apiVersion, Method method, string resource, object body = null,
+            Argument[] parameters = null, KeyValuePair<string, string>[] urlSegments = null)
         {
             if (apiVersion < 1 || apiVersion > 2)
                 throw new NotSupportedException("Only v1 & v2 api is supported.");
 
             var request = new RestRequest(resource, method);
-            request.AddOrUpdateHeader("Accept", $"application/vnd.huantengsmart-v{apiVersion}+json");//"application/json"
+            request.AddOrUpdateParameter("Accept", $"application/vnd.huantengsmart-v{apiVersion}+json", ParameterType.HttpHeader);//"application/json"
             if (token != null)
                 request.AddHeader("Authorization", Authorization);
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
@@ -75,23 +88,42 @@ namespace Elton.Phantom
                 foreach (Argument item in parameters)
                     request.AddParameter(item.Key, item.Value);
             }
-
-            return request;
-        }
-
-        protected string GetString(int apiVersion, string resource, params KeyValuePair<string, string>[] urlSegments)
-        {
-            var request = CreateRequest(apiVersion, Method.GET, resource);
-
             if (urlSegments != null)
             {
                 foreach (var item in urlSegments)
                     request.AddUrlSegment(item.Key, item.Value);
             }
 
-            var response = client.Execute(request).GetAwaiter().GetResult();
+            return request;
+        }
+        ApiResponse<T> Execute<T>(int apiVersion, Method method, string resource, object body = null,
+            Argument[] parameters = null, KeyValuePair<string, string>[] urlSegments = null,
+            ExceptionFactory check = null)
+        {
+            var request = PrepareRequest(apiVersion, method, resource, body, parameters, urlSegments);
+            var response = client.Execute(request);
             CheckError(response);
-            return response.Content;
+
+            int statusCode = (int)response.StatusCode;
+
+            if (check != null)
+            {
+                var exception = check(resource, response);
+                if (exception != null)
+                    throw exception;
+            }
+
+            return new ApiResponse<T>(statusCode,
+                response.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+                (T)converter.Deserialize(response, typeof(T)));
+        }
+
+        void CheckControlResult(string resource, OperationResult result)
+        {
+            if (result == null)
+                throw new ApiException();
+            if (!result.Success)
+                throw new PhantomException(result.Reason);
         }
 
         /// <summary>
@@ -112,7 +144,7 @@ namespace Elton.Phantom
 
         static void CheckError(IRestResponse response)
         {
-            if (response.IsSuccess)
+            if (response.IsSuccessful)
                 return;
 
             switch (response.StatusCode)
@@ -167,45 +199,40 @@ namespace Elton.Phantom
         public string Token => token;
 
 
-        protected T Get<T>(int apiVersion, string url, params KeyValuePair<string, string>[] urlSegments)
+        protected T Get<T>(int apiVersion, string url, KeyValuePair<string, string>[] urlSegments = null, ExceptionFactory check = null)
         {
-            var jsonString = GetString(apiVersion, url);
-            return JsonConvert.DeserializeObject<T>(jsonString);
-        }
-
-        protected dynamic Get(int apiVersion, string url, params KeyValuePair<string, string>[] urlSegments)
-        {
-            return JsonConvert.DeserializeObject(GetString(apiVersion, url));
+            return Execute<T>(apiVersion, Method.GET, url,
+                urlSegments: urlSegments,
+                check: check).Data;
         }
 
         internal T Post<T>(int apiVersion, string url, object body = null, params Argument[] parameters)
         {
-            var request = CreateRequest(apiVersion, Method.POST, url, body, parameters);
-
-            IRestResponse response = client.Execute(request).GetAwaiter().GetResult();
-            CheckError(response);
-            return JsonConvert.DeserializeObject<T>(response.Content);
+            return Execute<T>(apiVersion, Method.POST, url,
+                body: body,
+                parameters: parameters).Data;
         }
 
-        protected T Put<T>(int apiVersion, string url, object data)
+        internal void Post(int apiVersion, string url, object body = null, params Argument[] parameters)
         {
-            var request = CreateRequest(apiVersion, Method.PUT, url);
+            var result = Execute<OperationResult>(apiVersion, Method.POST, url,
+                body: body,
+                parameters: parameters).Data;
 
-            request.AddBody(data);
-
-            IRestResponse response = client.Execute(request).GetAwaiter().GetResult();
-            CheckError(response);
-            return JsonConvert.DeserializeObject<T>(response.Content);
+            CheckControlResult(url, result);
         }
 
-        protected bool Delete(int apiVersion, string url)
+        protected T Put<T>(int apiVersion, string url, object data, ExceptionFactory check = null)
         {
-            var request = CreateRequest(apiVersion, Method.DELETE, url);
+            return Execute<T>(apiVersion, Method.PUT, url,
+                body: data,
+                check: check).Data;
+        }
 
-            IRestResponse response = client.Execute(request).GetAwaiter().GetResult();
-            CheckError(response);
-
-            dynamic result = JsonConvert.DeserializeObject(response.Content);
+        protected bool Delete(int apiVersion, string url, ExceptionFactory check = null)
+        {
+            var result = Execute<dynamic>(apiVersion, Method.DELETE, url,
+                check: check).Data;
             return result.success;
         }
     }

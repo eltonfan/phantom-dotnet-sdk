@@ -19,6 +19,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,6 +56,77 @@ namespace Elton.Phantom
             this.ApplicationId = appId;
             this.ApplicationSecret = appSecret;
             this.RedirectUri = redirectUri;
+        }
+
+        private string _tempFolderPath = Path.GetTempPath();
+
+        /// <summary>
+        /// Gets or sets the temporary folder path to store the files downloaded from the server.
+        /// </summary>
+        /// <value>Folder path.</value>
+        public virtual string TempFolderPath
+        {
+            get { return _tempFolderPath; }
+
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    // Possible breaking change since swagger-codegen 2.2.1, enforce a valid temporary path on set.
+                    _tempFolderPath = Path.GetTempPath();
+                    return;
+                }
+
+                // create the directory if it does not exist
+                if (!Directory.Exists(value))
+                {
+                    Directory.CreateDirectory(value);
+                }
+
+                // check if the path contains directory separator at the end
+                if (value[value.Length - 1] == Path.DirectorySeparatorChar)
+                {
+                    _tempFolderPath = value;
+                }
+                else
+                {
+                    _tempFolderPath = value + Path.DirectorySeparatorChar;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Identifier for ISO 8601 DateTime Format
+        /// </summary>
+        /// <remarks>See https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx#Anchor_8 for more information.</remarks>
+        // ReSharper disable once InconsistentNaming
+        public const string ISO8601_DATETIME_FORMAT = "o";
+
+        private string _dateTimeFormat = ISO8601_DATETIME_FORMAT;
+        /// <summary>
+        /// Gets or sets the the date time format used when serializing in the ApiClient
+        /// By default, it's set to ISO 8601 - "o", for others see:
+        /// https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx
+        /// and https://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx
+        /// No validation is done to ensure that the string you're providing is valid
+        /// </summary>
+        /// <value>The DateTimeFormat string</value>
+        public virtual string DateTimeFormat
+        {
+            get { return _dateTimeFormat; }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    // Never allow a blank or null string, go back to the default
+                    _dateTimeFormat = ISO8601_DATETIME_FORMAT;
+                    return;
+                }
+
+                // Caution, no validation when you choose date time format other than ISO 8601
+                // Take a look at the above links
+                _dateTimeFormat = value;
+            }
         }
     }
 
