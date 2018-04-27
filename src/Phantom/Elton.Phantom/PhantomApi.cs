@@ -361,19 +361,18 @@ namespace Elton.Phantom
             return response.Data;
         }
 
-        protected bool Delete(int apiVersion, string url, ExceptionFactory check = null)
+        protected T Delete<T>(int apiVersion, string url, ExceptionFactory check = null)
         {
-            var result = CallApi<dynamic>(apiVersion, url, Method.DELETE,
+            var result = CallApi<T>(apiVersion, url, Method.DELETE,
                 check: check).Data;
-            return result.success;
+            return result;
         }
 
-        protected async Task<bool> DeleteAsync(int apiVersion, string url, ExceptionFactory check = null)
+        protected async Task<T> DeleteAsync<T>(int apiVersion, string url, ExceptionFactory check = null)
         {
             var response = await CallApiAsync<dynamic>(apiVersion, url, Method.DELETE,
                 check: check);
-            var result = response.Data;
-            return result.success;
+            return response.Data;
         }
     }
 }

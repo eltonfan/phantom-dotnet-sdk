@@ -44,6 +44,14 @@ namespace Elton.Phantom
         {
         }
 
+        void CheckControlResult(OperationResult result, [System.Runtime.CompilerServices.CallerMemberName] string callerName = null)
+        {
+            if (result == null)
+                throw new ApiException();
+            if (!result.Success)
+                throw new PhantomException(result.Reason);
+        }
+
         public void Ping(int apiVersion = 2)
         {
             switch(apiVersion)
@@ -69,35 +77,50 @@ namespace Elton.Phantom
             }
         }
 
-        void CheckControlResult(OperationResult result, [System.Runtime.CompilerServices.CallerMemberName] string callerName = null)
+        public Scenario AddScenario(string name)
         {
-            if (result == null)
-                throw new ApiException();
-            if (!result.Success)
-                throw new PhantomException(result.Reason);
+            var data = new
+            {
+                name = name,
+                scenario_content_items_attributes = new[]
+                {
+                    new
+                    {
+                        generic_module_id = 741,
+                         info = "[{\"type\":\"mode\",\"index\":0,\"value\":6}]",
+                    },
+                }
+            };
+
+            return this.Post<Scenario>(1, "scenarios.json", data);
+        }
+        public Scenario UpdateScenario(int scenarioId, string name, params object[] contentItems)
+        {
+            var data = new
+            {
+                name = name,
+                scenario_content_items_attributes = contentItems,
+            };
+
+            return this.Put<Scenario>(1, $"scenarios/{scenarioId}", data);
         }
 
         public void SetScenario(Scenario scenario)
         {
-            if (scenario?.Id == null)
-                throw new ArgumentNullException("scenario", "scenario?.Id can not be null.");
-
-            if (scenario.Id == SCENARIO_ID_AllOff)//实际上是全关
-                SetScenarioAllOff();
-            else if (scenario.Id == SCENARIO_ID_AllOn)
-                SetScenarioAllOn();
-            else
-                SetScenarioInternal(scenario.Id.Value);
+            SetScenario(scenario?.Id);
         }
 
-        public void SetScenario(int scenarioId)
+        public void SetScenario(int? scenarioId)
         {
+            if (scenarioId == null)
+                throw new ArgumentNullException("scenarioId", "scenarioId can not be null.");
+
             if (scenarioId == SCENARIO_ID_AllOff)//实际上是全关
-                SetScenarioAllOff();
+                PostScenarioAllOff();
             else if (scenarioId == SCENARIO_ID_AllOn)
-                SetScenarioAllOn();
+                PostScenarioAllOn();
             else
-                SetScenarioInternal(scenarioId);
+                PostScenarioApply(scenarioId);
         }
 
         public void SetBulb(int? bulbId, bool turnOn)
