@@ -309,7 +309,7 @@ namespace Elton.Phantom
         public PhantomConfiguration Configuration => config;
         public string Token => token;
 
-        protected T Get<T>(int apiVersion, string url, KeyValuePair<string, string>[] queryParams = null, KeyValuePair<string, object>[] pathParams = null, ExceptionFactory check = null)
+        protected T Get<T>(int apiVersion, string url, IEnumerable<KeyValuePair<string, string>> queryParams = null, IEnumerable<KeyValuePair<string, object>> pathParams = null, ExceptionFactory check = null)
         {
             return CallApi<T>(apiVersion, url, Method.GET,
                 queryParams: queryParams,
@@ -317,7 +317,7 @@ namespace Elton.Phantom
                 check: check).Data;
         }
 
-        protected async Task<T> GetAsync<T>(int apiVersion, string url, KeyValuePair<string, string>[] queryParams = null, KeyValuePair<string, object>[] pathParams = null, ExceptionFactory check = null)
+        protected async Task<T> GetAsync<T>(int apiVersion, string url, IEnumerable<KeyValuePair<string, string>> queryParams = null, IEnumerable<KeyValuePair<string, object>> pathParams = null, ExceptionFactory check = null)
         {
             var response = await CallApiAsync<T>(apiVersion, url, Method.GET,
                 queryParams: queryParams,
@@ -327,14 +327,14 @@ namespace Elton.Phantom
             return response.Data;
         }
 
-        internal T Post<T>(int apiVersion, string url, object postBody = null, params KeyValuePair<String, object>[] formParams)
+        internal T Post<T>(int apiVersion, string url, object postBody = null, IEnumerable<KeyValuePair<String, object>> formParams = null)
         {
             return CallApi<T>(apiVersion, url, Method.POST, 
                 postBody: postBody,
                 formParams: formParams).Data;
         }
 
-        internal async Task<T> PostAsync<T>(int apiVersion, string url, object postBody = null, params KeyValuePair<String, object>[] formParams)
+        internal async Task<T> PostAsync<T>(int apiVersion, string url, object postBody = null, IEnumerable<KeyValuePair<String, object>> formParams = null)
         {
             var response = await CallApiAsync<T>(apiVersion, url, Method.POST,
                 postBody: postBody,
@@ -343,17 +343,19 @@ namespace Elton.Phantom
             return response.Data;
         }
 
-        protected T Put<T>(int apiVersion, string url, object postBody, ExceptionFactory check = null)
+        protected T Put<T>(int apiVersion, string url, object postBody = null, IEnumerable<KeyValuePair<String, object>> formParams = null, ExceptionFactory check = null)
         {
             return CallApi<T>(apiVersion, url, Method.PUT,
                 postBody: postBody,
+                formParams: formParams,
                 check: check).Data;
         }
 
-        protected async Task<T> PutAsync<T>(int apiVersion, string url, object postBody, ExceptionFactory check = null)
+        protected async Task<T> PutAsync<T>(int apiVersion, string url, object postBody = null, IEnumerable<KeyValuePair<String, object>> formParams = null, ExceptionFactory check = null)
         {
             var response = await CallApiAsync<T>(apiVersion, url, Method.PUT,
                 postBody: postBody,
+                formParams: formParams,
                 check: check);
 
             return response.Data;

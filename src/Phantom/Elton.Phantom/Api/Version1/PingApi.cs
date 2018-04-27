@@ -23,6 +23,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using RestSharp;
 using Elton.Phantom.Models.Version1;
+using Elton.Phantom.Api.Version1;
 
 namespace Elton.Phantom.Api.Version1
 {
@@ -31,7 +32,15 @@ namespace Elton.Phantom.Api.Version1
     /// </summary>
     public interface IPingApi
     {
-        #region Synchronous Operations
+        void GetPing(bool? authenticateUser = null, int? id = null);
+        Task GetPingAsync(bool? authenticateUser = null, int? id = null);
+    }
+}
+
+namespace Elton.Phantom
+{
+    partial class PhantomApi : IPingApi
+    {
         /// <summary>
         /// 乒乓测试，用于测试能否服务器成功处理最简单的请求
         /// </summary>
@@ -42,21 +51,20 @@ namespace Elton.Phantom.Api.Version1
         /// <param name="authenticateUser">是否要求用户身份认证 (optional)</param>
         /// <param name="id">区域ID (optional)</param>
         /// <returns></returns>
-        void GetPing (bool? authenticateUser = null, int? id = null);
+        public void GetPing(bool? authenticateUser = null, int? id = null)
+        {
+            var queryParams = new Dictionary<string, string>();
+            if (authenticateUser != null)
+                queryParams.Add("authenticate_user", authenticateUser?.ToString()); // query parameter
+            if (id != null)
+                queryParams.Add("id", id?.ToString()); // query parameter
 
-        /// <summary>
-        /// 乒乓测试，用于测试能否服务器成功处理最简单的请求
-        /// </summary>
-        /// <remarks>
-        /// 乒乓测试，用于测试能否服务器成功处理最简单的请求
-        /// </remarks>
-        /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="authenticateUser">是否要求用户身份认证 (optional)</param>
-        /// <param name="id">区域ID (optional)</param>
-        /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> GetPingWithHttpInfo (bool? authenticateUser = null, int? id = null);
-        #endregion Synchronous Operations
-        #region Asynchronous Operations
+            var result = Get<string>(1, "/ping",
+                queryParams: queryParams);
+
+            CheckPingResult(1, result);
+        }
+
         /// <summary>
         /// 乒乓测试，用于测试能否服务器成功处理最简单的请求
         /// </summary>
@@ -67,55 +75,29 @@ namespace Elton.Phantom.Api.Version1
         /// <param name="authenticateUser">是否要求用户身份认证 (optional)</param>
         /// <param name="id">区域ID (optional)</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task GetPingAsync (bool? authenticateUser = null, int? id = null);
-
-        /// <summary>
-        /// 乒乓测试，用于测试能否服务器成功处理最简单的请求
-        /// </summary>
-        /// <remarks>
-        /// 乒乓测试，用于测试能否服务器成功处理最简单的请求
-        /// </remarks>
-        /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="authenticateUser">是否要求用户身份认证 (optional)</param>
-        /// <param name="id">区域ID (optional)</param>
-        /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> GetPingAsyncWithHttpInfo (bool? authenticateUser = null, int? id = null);
-        #endregion Asynchronous Operations
-    }
-}
-
-namespace Elton.Phantom
-{
-    partial class PhantomApi : Api.Version1.IPingApi
-    {
-        public void GetPing(bool? authenticateUser = null, int? id = null)
+        public async Task GetPingAsync(bool? authenticateUser = null, int? id = null)
         {
-            var apiVersion = 1;
+            var queryParams = new Dictionary<string, string>();
+            if (authenticateUser != null)
+                queryParams.Add("authenticate_user", authenticateUser?.ToString()); // query parameter
+            if (id != null)
+                queryParams.Add("id", id?.ToString()); // query parameter
 
-            string result = this.Get<string>(apiVersion, "ping.json")?.Trim('"');
+            var result = await GetAsync<string>(1, "/ping",
+                queryParams: queryParams);
+
+            CheckPingResult(1, result);
+        }
+
+        protected void CheckPingResult(int apiVersion, string result)
+        {
+            result = result?.Trim('"');
             if (apiVersion == 1 && result == "pong")
                 return;
-            if (apiVersion == 2 && result == "pong v2")
+            if (result == $"pong v{apiVersion}")
                 return;
 
-            throw new Exception($"Ping-v{apiVersion} ERROR, response: {result}.");
-
-            //Get<string>(1, "/ping", )
-        }
-
-        public Task GetPingAsync(bool? authenticateUser = null, int? id = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ApiResponse<object>> GetPingAsyncWithHttpInfo(bool? authenticateUser = null, int? id = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ApiResponse<object> GetPingWithHttpInfo(bool? authenticateUser = null, int? id = null)
-        {
-            throw new NotImplementedException();
+            throw new ApiException(500, $"Ping-v{apiVersion} ERROR, response: {result}.");
         }
     }
 }

@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PingApiTests.cs" />
     <Compile Include="PhantomContext.cs" />
     <Compile Include="NotificationTest.cs" />
     <Compile Include="BulbsApiTest.cs" />

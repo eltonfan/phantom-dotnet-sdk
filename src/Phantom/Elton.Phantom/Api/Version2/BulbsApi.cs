@@ -22,7 +22,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Elton.Phantom.Models.Version2;
 using RestSharp;
-using Elton.Phantom.Models.Version2;
+using System.Threading.Tasks;
+using Elton.Phantom.Api.Version2;
 
 namespace Elton.Phantom.Api.Version2
 {
@@ -31,7 +32,15 @@ namespace Elton.Phantom.Api.Version2
     /// </summary>
     public interface IBulbsApi
     {
-        #region Synchronous Operations
+        Bulb GetBulbs(bool? includeShared = null);
+        Task<Bulb> GetBulbsAsync(bool? includeShared = null);
+    }
+}
+
+namespace Elton.Phantom
+{
+    partial class PhantomApi : IBulbsApi
+    {
         /// <summary>
         /// 获取了所有灯泡
         /// </summary>
@@ -41,20 +50,15 @@ namespace Elton.Phantom.Api.Version2
         /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="includeShared">返回被分享的设备 (optional)</param>
         /// <returns>Bulb</returns>
-        Bulb GetBulbs (bool? includeShared = null);
+        Bulb IBulbsApi.GetBulbs(bool? includeShared = null)
+        {
+            var queryParams = new Dictionary<string, string>();
+            if (includeShared != null)
+                queryParams.Add("include_shared", includeShared.ToString()); // query parameter
 
-        /// <summary>
-        /// 获取了所有灯泡
-        /// </summary>
-        /// <remarks>
-        /// 获取了所有灯泡
-        /// </remarks>
-        /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="includeShared">返回被分享的设备 (optional)</param>
-        /// <returns>ApiResponse of Bulb</returns>
-        ApiResponse<Bulb> GetBulbsWithHttpInfo (bool? includeShared = null);
-        #endregion Synchronous Operations
-        #region Asynchronous Operations
+            return Get<Bulb>(2, $"/bulbs", queryParams: queryParams);
+        }
+
         /// <summary>
         /// 获取了所有灯泡
         /// </summary>
@@ -64,25 +68,13 @@ namespace Elton.Phantom.Api.Version2
         /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="includeShared">返回被分享的设备 (optional)</param>
         /// <returns>Task of Bulb</returns>
-        System.Threading.Tasks.Task<Bulb> GetBulbsAsync (bool? includeShared = null);
+        async Task<Bulb> IBulbsApi.GetBulbsAsync(bool? includeShared = null)
+        {
+            var queryParams = new Dictionary<string, string>();
+            if (includeShared != null)
+                queryParams.Add("include_shared", includeShared.ToString()); // query parameter
 
-        /// <summary>
-        /// 获取了所有灯泡
-        /// </summary>
-        /// <remarks>
-        /// 获取了所有灯泡
-        /// </remarks>
-        /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="includeShared">返回被分享的设备 (optional)</param>
-        /// <returns>Task of ApiResponse (Bulb)</returns>
-        System.Threading.Tasks.Task<ApiResponse<Bulb>> GetBulbsAsyncWithHttpInfo (bool? includeShared = null);
-        #endregion Asynchronous Operations
-    }
-}
-
-namespace Elton.Phantom
-{
-    partial class PhantomApi //: Api.Version1.IBulbsApi
-    {
+            return await GetAsync<Bulb>(2, $"/bulbs", queryParams: queryParams);
+        }
     }
 }

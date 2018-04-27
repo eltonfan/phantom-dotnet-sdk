@@ -22,6 +22,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using RestSharp;
 using Elton.Phantom.Models.Version2;
+using System.Threading.Tasks;
+using Elton.Phantom.Api.Version2;
 
 namespace Elton.Phantom.Api.Version2
 {
@@ -30,7 +32,15 @@ namespace Elton.Phantom.Api.Version2
     /// </summary>
     public interface IPingApi
     {
-        #region Synchronous Operations
+        void GetPing(bool? authenticateUser = null);
+        Task GetPingAsync(bool? authenticateUser = null);
+    }
+}
+
+namespace Elton.Phantom
+{
+    partial class PhantomApi : Api.Version2.IPingApi
+    {
         /// <summary>
         /// 乒乓测试，用于测试能否服务器成功处理最简单的请求 v2
         /// </summary>
@@ -40,20 +50,17 @@ namespace Elton.Phantom.Api.Version2
         /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="authenticateUser">是否要求用户身份认证 (optional)</param>
         /// <returns></returns>
-        void GetPing (bool? authenticateUser = null);
+        void IPingApi.GetPing(bool? authenticateUser = null)
+        {
+            var queryParams = new Dictionary<string, string>();
+            if (authenticateUser != null)
+                queryParams.Add("authenticate_user", authenticateUser?.ToString()); // query parameter
 
-        /// <summary>
-        /// 乒乓测试，用于测试能否服务器成功处理最简单的请求 v2
-        /// </summary>
-        /// <remarks>
-        /// 乒乓测试，用于测试能否服务器成功处理最简单的请求 v2
-        /// </remarks>
-        /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="authenticateUser">是否要求用户身份认证 (optional)</param>
-        /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> GetPingWithHttpInfo (bool? authenticateUser = null);
-        #endregion Synchronous Operations
-        #region Asynchronous Operations
+            var result = Get<string>(2, "/ping",
+                queryParams: queryParams);
+
+            CheckPingResult(2, result);
+        }
         /// <summary>
         /// 乒乓测试，用于测试能否服务器成功处理最简单的请求 v2
         /// </summary>
@@ -63,25 +70,16 @@ namespace Elton.Phantom.Api.Version2
         /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="authenticateUser">是否要求用户身份认证 (optional)</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task GetPingAsync (bool? authenticateUser = null);
+        async Task IPingApi.GetPingAsync(bool? authenticateUser = null)
+        {
+            var queryParams = new Dictionary<string, string>();
+            if (authenticateUser != null)
+                queryParams.Add("authenticate_user", authenticateUser?.ToString()); // query parameter
 
-        /// <summary>
-        /// 乒乓测试，用于测试能否服务器成功处理最简单的请求 v2
-        /// </summary>
-        /// <remarks>
-        /// 乒乓测试，用于测试能否服务器成功处理最简单的请求 v2
-        /// </remarks>
-        /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="authenticateUser">是否要求用户身份认证 (optional)</param>
-        /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> GetPingAsyncWithHttpInfo (bool? authenticateUser = null);
-        #endregion Asynchronous Operations
-    }
-}
+            var result = await GetAsync<string>(2, "/ping",
+                queryParams: queryParams);
 
-namespace Elton.Phantom
-{
-    partial class PhantomApi //: Api.Version1.IBulbsApi
-    {
+            CheckPingResult(2, result);
+        }
     }
 }

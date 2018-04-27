@@ -44,6 +44,30 @@ namespace Elton.Phantom
         {
         }
 
+        public void Ping(int apiVersion = 2)
+        {
+            switch(apiVersion)
+            {
+                case 1: (this as Api.Version1.IPingApi).GetPing(); break;
+                case 2: (this as Api.Version2.IPingApi).GetPing(); break;
+            }
+        }
+
+        public bool TryPing(int apiVersion = 2)
+        {
+            try
+            {
+                Ping(apiVersion);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.Error("Failed to Ping.", ex);
+
+                return false;
+            }
+        }
 
         void CheckControlResult(OperationResult result, [System.Runtime.CompilerServices.CallerMemberName] string callerName = null)
         {
@@ -90,15 +114,15 @@ namespace Elton.Phantom
             CheckControlResult(result);
         }
 
+        public void SetBulb(Bulb bulb, bool turnOn)
+        {
+            SetBulb(bulb?.Id, turnOn);
+        }
+
         public void SetBulb(int? bulbId, float brightness, float hue)
         {
             var result = PostBulbTune(bulbId, brightness, hue);
             CheckControlResult(result);
-        }
-
-        public void SetBulb(Bulb bulb, bool turnOn)
-        {
-            SetBulb(bulb?.Id, turnOn);
         }
 
         public void SetBulb(Bulb bulb, float brightness, float hue)

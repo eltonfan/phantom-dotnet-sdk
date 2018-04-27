@@ -35,22 +35,30 @@ namespace Elton.Phantom
         public Token CreateToken(string authorizationCode)
         {
             return this.Post<Token>(2, "../oauth2/token",
-                new KeyValuePair<string, object>("client_id", config.ApplicationId),
-                new KeyValuePair<string, object>("client_secret", config.ApplicationSecret),
-                new KeyValuePair<string, object>("redirect_uri", config.RedirectUri),
-                new KeyValuePair<string, object>("grant_type", "authorization_code"),
-                new KeyValuePair<string, object>("code", authorizationCode));
+                formParams: new[] {
+                    new KeyValuePair<string, object>("client_id", config.ApplicationId),
+                    new KeyValuePair<string, object>("client_secret", config.ApplicationSecret),
+                    new KeyValuePair<string, object>("redirect_uri", config.RedirectUri),
+                    new KeyValuePair<string, object>("grant_type", "authorization_code"),
+                    new KeyValuePair<string, object>("code", authorizationCode)
+                });
         }
+
         public Token RefreshToken(string refreshToken)
         {
             return this.Post<Token>(2, "../oauth2/token",
-                new KeyValuePair<string, object>("grant_type", "refresh_token"),
-                new KeyValuePair<string, object>("refresh_token", refreshToken));
+                formParams: new[] {
+                    new KeyValuePair<string, object>("grant_type", "refresh_token"),
+                    new KeyValuePair<string, object>("refresh_token", refreshToken)
+                });
         }
+
         public void RevokeToken(string access_token)
         {
             this.Post<Token>(2, "../oauth2/revoke",
-                new KeyValuePair<string, object>("token", access_token));
+                formParams: new[] {
+                    new KeyValuePair<string, object>("token", access_token),
+                });
         }
     }
 }

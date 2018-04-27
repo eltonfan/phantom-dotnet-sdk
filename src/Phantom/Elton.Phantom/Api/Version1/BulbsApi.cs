@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Elton.Phantom.Api.Version1;
 using Elton.Phantom.Models.Version1;
 using Newtonsoft.Json;
 using RestSharp;
@@ -32,15 +33,38 @@ namespace Elton.Phantom.Api.Version1
     /// </summary>
     public interface IBulbsApi
     {
+        Bulb[] GetBulbs();
+        Task<Bulb[]> GetBulbsAsync();
+
+        object GetBulbAdvance(int? id);
+        Task<object> GetBulbAdvanceAsync(int? id);
+
+        object GetBulbsAdvanceIdChart(int? id, string date = null);
+        Task<object> GetBulbsAdvanceIdChartAsync(int? id, string date = null);
+
+        object GetBulbsAdvanceIdLogs(int? id, string startDate, string endDate = null);
+        Task<object> GetBulbsAdvanceIdLogsAsync(int? id, string startDate, string endDate = null);
+
+        Bulb GetBulb(int? id);
+        Task<Bulb> GetBulbAsync(int? id);
+
+        OperationResult PostBulbAutoHue(int? id, bool? autoHue);
+        Task<OperationResult> PostBulbAutoHueAsync(int? id, bool? autoHue);
+
+        OperationResult PostBulbSwitchOff(int? id);
+        Task<OperationResult> PostBulbSwitchOffAsync(int? id);
+
+        OperationResult PostBulbSwitchOn(int? id);
+        Task<OperationResult> PostBulbSwitchOnAsync(int? id);
+
+        OperationResult PostBulbTune(int? id, float? brightness = null, float? hue = null);
+        Task<OperationResult> PostBulbTuneAsync(int? id, float? brightness = null, float? hue = null);
     }
 }
 
 namespace Elton.Phantom
 {
-    using Bulb = Models.Version1.Bulb;
-    using Scenario = Models.Version1.Scenario;
-
-    partial class PhantomApi : Api.Version1.IBulbsApi
+    partial class PhantomApi : IBulbsApi
     {
         /// <summary>
         /// 获取了所有灯泡
@@ -52,7 +76,7 @@ namespace Elton.Phantom
         /// <returns>Bulb</returns>
         public Bulb[] GetBulbs()
         {
-            return this.Get<Bulb[]>(1, "/bulbs");
+            return Get<Bulb[]>(1, "/bulbs");
         }
         /// <summary>
         /// 获取了所有灯泡
@@ -64,7 +88,7 @@ namespace Elton.Phantom
         /// <returns>Task of Bulb</returns>
         public async Task<Bulb[]> GetBulbsAsync()
         {
-            return await this.GetAsync<Bulb[]>(1, "/bulbs");
+            return await GetAsync<Bulb[]>(1, "/bulbs");
         }
 
         /// <summary>
@@ -119,11 +143,11 @@ namespace Elton.Phantom
             if (id == null)
                 throw new ApiException(400, "Missing required parameter 'id' when calling BulbsApi->GetBulbsAdvanceIdChart");
 
-            return Get<object>(1, $"/bulbs/advance/{id}/chart",
-                queryParams: new[]
-                {
-                     new KeyValuePair<string, string>("date", date),// query parameter
-                });
+            var queryParams = new Dictionary<string, string>();
+            if (date != null)
+                queryParams.Add("date", date);// query parameter
+
+            return Get<object>(1, $"/bulbs/advance/{id}/chart", queryParams: queryParams);
         }
 
         /// <summary>
@@ -142,11 +166,11 @@ namespace Elton.Phantom
             if (id == null)
                 throw new ApiException(400, "Missing required parameter 'id' when calling BulbsApi->GetBulbsAdvanceIdChart");
 
-            return await GetAsync<object>(1, $"/bulbs/advance/{id}/chart",
-                queryParams: new[]
-                {
-                     new KeyValuePair<string, string>("date", date),// query parameter
-                });
+            var queryParams = new Dictionary<string, string>();
+            if (date != null)
+                queryParams.Add("date", date);// query parameter
+
+            return await GetAsync<object>(1, $"/bulbs/advance/{id}/chart", queryParams: queryParams);
         }
 
         /// <summary>
@@ -169,12 +193,12 @@ namespace Elton.Phantom
             if (startDate == null)
                 throw new ApiException(400, "Missing required parameter 'startDate' when calling BulbsApi->GetBulbsAdvanceIdLogs");
 
-            return Get<object>(1, $"/bulbs/advance/{id}/logs",
-                queryParams: new []
-                {
-                     new KeyValuePair<string, string>("start_date", startDate),// query parameter
-                     new KeyValuePair<string, string>("end_date", endDate),// query parameter
-                });
+            var queryParams = new Dictionary<string, string>();
+            queryParams.Add("start_date", startDate);// query parameter
+            if (endDate != null)
+                queryParams.Add("end_date", endDate);// query parameter
+
+            return Get<object>(1, $"/bulbs/advance/{id}/logs", queryParams: queryParams);
         }
 
         /// <summary>
@@ -197,12 +221,12 @@ namespace Elton.Phantom
             if (startDate == null)
                 throw new ApiException(400, "Missing required parameter 'startDate' when calling BulbsApi->GetBulbsAdvanceIdLogs");
 
-            return await GetAsync<object>(1, $"/bulbs/advance/{id}/logs",
-                queryParams: new[]
-                {
-                     new KeyValuePair<string, string>("start_date", startDate),// query parameter
-                     new KeyValuePair<string, string>("end_date", endDate),// query parameter
-                });
+            var queryParams = new Dictionary<string, string>();
+            queryParams.Add("start_date", startDate);// query parameter
+            if (endDate != null)
+                queryParams.Add("end_date", endDate);// query parameter
+
+            return await GetAsync<object>(1, $"/bulbs/advance/{id}/logs", queryParams: queryParams);
         }
 
         /// <summary>
@@ -261,7 +285,9 @@ namespace Elton.Phantom
                 throw new ApiException(400, "Missing required parameter 'autoHue' when calling BulbsApi->PostBulbsIdAutoHue");
 
             return Post<OperationResult>(1, $"/bulbs/{id}/auto_hue",
-                new KeyValuePair<string, object>("auto_hue", autoHue));
+                formParams: new[] {
+                    new KeyValuePair<string, object>("auto_hue", autoHue),// form parameter
+                });
         }
 
         /// <summary>
@@ -284,8 +310,7 @@ namespace Elton.Phantom
                 throw new ApiException(400, "Missing required parameter 'autoHue' when calling BulbsApi->PostBulbsIdAutoHue");
 
             return await PostAsync<OperationResult>(1, $"/bulbs/{id}/auto_hue",
-                formParams: new[]
-                {
+                formParams: new[] {
                     new KeyValuePair<string, object>("auto_hue", autoHue),// form parameter
                 });
         }
@@ -380,11 +405,13 @@ namespace Elton.Phantom
             if (id == null)
                 throw new ApiException(400, "Missing required parameter 'id' when calling BulbsApi->PostBulbsIdTune");
 
-            return Post<OperationResult>(1, $"/bulbs/{id}/tune",
-                formParams: new[] {
-                    new KeyValuePair<string, object>("brightness", brightness), // form parameter
-                    new KeyValuePair<string, object>("hue", hue), // form parameter
-                });
+            var formParams = new Dictionary<string, object>();
+            if (brightness != null)
+                formParams.Add("brightness", brightness); // form parameter
+            if (hue != null)
+                formParams.Add("hue", hue); // form parameter
+
+            return Post<OperationResult>(1, $"/bulbs/{id}/tune", formParams: formParams);
         }
 
         /// <summary>
@@ -404,11 +431,13 @@ namespace Elton.Phantom
             if (id == null)
                 throw new ApiException(400, "Missing required parameter 'id' when calling BulbsApi->PostBulbsIdTune");
 
-            return await PostAsync<OperationResult>(1, $"/bulbs/{id}/tune",
-                formParams: new[] {
-                    new KeyValuePair<string, object>("brightness", brightness), // form parameter
-                    new KeyValuePair<string, object>("hue", hue), // form parameter
-                });
+            var formParams = new Dictionary<string, object>();
+            if (brightness != null)
+                formParams.Add("brightness", brightness); // form parameter
+            if (hue != null)
+                formParams.Add("hue", hue); // form parameter
+
+            return await PostAsync<OperationResult>(1, $"/bulbs/{id}/tune", formParams: formParams);
         }
 
         /// <summary>
