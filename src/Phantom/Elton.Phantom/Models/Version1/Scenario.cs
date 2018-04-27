@@ -55,7 +55,7 @@ namespace Elton.Phantom.Models.Version1
         /// <param name="UpdatedAt">记录的更新日期.</param>
         /// <param name="ScenarioContentItems">情景内容 (required).</param>
         /// <param name="AlarmIds">定时情景id.</param>
-        public Scenario(int? Id = default, string Name = default, int? HouseId = default, int? HouseName = default, int? ZoneId = default, int? AreaId = default, int? Icon = default, bool? Hidden = default, int? ZoneName = default, int? SciSize = default, DateTime? CreatedAt = default, DateTime? UpdatedAt = default, List<ScenarioContentItem> ScenarioContentItems = default, List<int> AlarmIds = default)
+        public Scenario(int? Id = default, string Name = default, int? HouseId = default, string HouseName = default, int? ZoneId = default, int? AreaId = default, int? Icon = default, bool? Hidden = default, string ZoneName = default, int? SciSize = default, DateTime? CreatedAt = default, DateTime? UpdatedAt = default, List<ScenarioContentItem> ScenarioContentItems = default, List<int> AlarmIds = default)
         {
             // to ensure "Id" is required (not null)
             this.Id = Id ?? throw new InvalidDataException("Id is a required property for Scenario and cannot be null");
@@ -109,7 +109,7 @@ namespace Elton.Phantom.Models.Version1
         /// </summary>
         /// <value>房间名字</value>
         [DataMember(Name="house_name", EmitDefaultValue=false)]
-        public int? HouseName { get; set; }
+        public string HouseName { get; set; }
 
         /// <summary>
         /// 区域ID
@@ -144,7 +144,7 @@ namespace Elton.Phantom.Models.Version1
         /// </summary>
         /// <value>区域名字</value>
         [DataMember(Name="zone_name", EmitDefaultValue=false)]
-        public int? ZoneName { get; set; }
+        public string ZoneName { get; set; }
 
         /// <summary>
         /// SCI个数
@@ -377,5 +377,19 @@ namespace Elton.Phantom.Models.Version1
             this.UpdatedAt = UpdatedAt;
             this.AlarmIds = AlarmIds;
         }
+
+        // 文档错误：
+        // house_name int? --> string
+        // zone_name int? --> string
+
+        public class ScenarioAverage
+        {
+            [DataMember(Name = "hue", EmitDefaultValue = false)]
+            public float Hue { get; set; }
+            [DataMember(Name = "brightness", EmitDefaultValue = false)]
+            public float Brightness { get; set; }
+        }
+        [DataMember(Name = "average", EmitDefaultValue = false)]
+        public ScenarioAverage Average { get; set; }
     }
 }
