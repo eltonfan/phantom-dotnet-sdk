@@ -6,7 +6,7 @@ namespace Elton.Phantom
     /// <summary>
     /// OperationResult
     /// </summary>
-    internal class OperationResult
+    public class OperationResult
     {
         /// <summary>
         /// 操作成功与否
