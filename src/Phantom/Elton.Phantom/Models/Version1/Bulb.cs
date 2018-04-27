@@ -56,7 +56,7 @@ namespace Elton.Phantom.Models.Version1
         /// <param name="Position">排序用的序号.</param>
         /// <param name="AutoHue">是否启用自动色温.</param>
         /// <param name="ScriptEndTime">脚本停止时间.</param>
-        public Bulb(string DeviceIdentifier = default(string), int? Id = default(int?), int? TurnedOn = default(int?), bool? OwnDevice = default(bool?), string Name = default(string), int? HouseId = default(int?), string Connectivity = default(string), int? AccumulatedUsageTime = default(int?), float? Brightness = default(float?), float? Hue = default(float?), int? Channel = default(int?), int? WallSwitchId = default(int?), int? AliasBulbGroupId = default(int?), int? Position = default(int?), bool? AutoHue = default(bool?), DateTime? ScriptEndTime = default(DateTime?))
+        public Bulb(string DeviceIdentifier = default, int? Id = default, bool? TurnedOn = default, bool? OwnDevice = default, string Name = default, int? HouseId = default, string Connectivity = default, int? AccumulatedUsageTime = default, float? Brightness = default, float? Hue = default, int? Channel = default, int? WallSwitchId = default, int? AliasBulbGroupId = default, int? Position = default, bool? AutoHue = default, DateTime? ScriptEndTime = default)
         {
             // to ensure "DeviceIdentifier" is required (not null)
             this.DeviceIdentifier = DeviceIdentifier ?? throw new InvalidDataException("DeviceIdentifier is a required property for Bulb and cannot be null");
@@ -94,21 +94,21 @@ namespace Elton.Phantom.Models.Version1
         /// </summary>
         /// <value>ID</value>
         [DataMember(Name="id", EmitDefaultValue=false)]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// 是否已开机
         /// </summary>
         /// <value>是否已开机</value>
         [DataMember(Name="turned_on", EmitDefaultValue=false)]
-        public int? TurnedOn { get; set; }
+        public bool TurnedOn { get; set; }
 
         /// <summary>
         /// 是不是自己的设备
         /// </summary>
         /// <value>是不是自己的设备</value>
         [DataMember(Name="own_device?", EmitDefaultValue=false)]
-        public bool? OwnDevice { get; set; }
+        public bool OwnDevice { get; set; }
 
         /// <summary>
         /// 设备的名字
@@ -389,6 +389,10 @@ namespace Elton.Phantom.Models.Version1
             yield break;
         }
 
+        // 文档错误的地方：
+        // turned_on int --> bool
+        //
+
         //public override string ToString()
         //{
         //    return string.Format("{0} {1} (亮度{2}, 色温{3}) {4}",
@@ -396,19 +400,7 @@ namespace Elton.Phantom.Models.Version1
         //}
 
         [JsonIgnore]
-        public bool ActualTurnedOn => TurnedOn != 0;
-
-        [JsonIgnore]
-        public float ActualBrightness
-        {
-            get
-            {
-                if (TurnedOn == null || TurnedOn == 0)
-                    return 0.0F;
-
-                return Brightness ?? 0.0F;
-            }
-        }
+        public float ActualBrightness => TurnedOn ? Brightness ?? 0.0F : 0.0F;
 
         public void CopyFrom(Bulb target)
         {

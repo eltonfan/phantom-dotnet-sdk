@@ -1,6 +1,6 @@
 ﻿#region License
 
-//   Copyright 2014 Elton FAN
+//   Copyright 2014 Elton FAN (eltonfan@live.cn, http://elton.io)
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -34,10 +34,10 @@ namespace Elton.Phantom
         /// <returns></returns>
         public List<UserLog> GetUserLog(string cursor, int count, out string nextCursor)
         {
-            var list = new Dictionary<string, string>();
-            list.Add("count", count.ToString());
+            var dic = new Dictionary<string, object>();
+            dic.Add("count", count.ToString());
 
-            var data = Get<dynamic>(2, $"user_log.json?count={count}&next_cursor={cursor}", list.ToArray());
+            var data = Get<dynamic>(2, $"user_log.json?count={count}&next_cursor={cursor}", dic.ToArray());
 
             List<UserLog> result = new List<UserLog>();
             foreach(var item in data.data)

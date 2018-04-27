@@ -82,7 +82,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PhantomContext.cs" />
     <Compile Include="NotificationTest.cs" />
+    <Compile Include="BuibsApiTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -94,7 +96,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="examples\Models\BatchResults.json" />
+    <Content Include="examples\Models\BatchResults.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="examples\Models\Bulbs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <Content Include="examples\Notifications\BulbsChanged.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

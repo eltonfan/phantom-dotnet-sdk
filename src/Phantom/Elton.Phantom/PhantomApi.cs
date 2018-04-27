@@ -24,6 +24,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Net;
 using RestSharp;
+using System.Threading.Tasks;
 
 namespace Elton.Phantom
 {
@@ -49,6 +50,7 @@ namespace Elton.Phantom
 
             client = new RestClient(Consts.ApiUrl);
             client.DefaultParameters.Clear();
+            client.Timeout = config.Timeout;
             client.UserAgent = config.UserAgent;
 
             converter = new SerializationTool(this.config);
@@ -64,61 +66,172 @@ namespace Elton.Phantom
         /// </summary>
         /// <param name="apiVersion"></param>
         /// <param name="method"></param>
-        /// <param name="resource"></param>
-        /// <param name="body"></param>
-        /// <param name="parameters"></param>
+        /// <param name="path"></param>
+        /// <param name="postBody"></param>
+        /// <param name="formParams"></param>
         /// <returns></returns>
-        RestRequest PrepareRequest(int apiVersion, Method method, string resource, object body = null,
-            Argument[] parameters = null, KeyValuePair<string, string>[] urlSegments = null)
+        RestRequest PrepareRequest(int apiVersion, string path, Method method,
+            IEnumerable<KeyValuePair<string, string>> queryParams = null,
+            object postBody = null, string contentType = null,
+            IEnumerable<KeyValuePair<string, string>> headerParams = null,
+            IEnumerable<KeyValuePair<string, object>> formParams = null,
+            IEnumerable<KeyValuePair<string, FileParameter>> fileParams = null,
+            IEnumerable<KeyValuePair<string, object>> pathParams = default)
         {
             if (apiVersion < 1 || apiVersion > 2)
                 throw new NotSupportedException("Only v1 & v2 api is supported.");
 
-            var request = new RestRequest(resource, method);
+            var request = new RestRequest(path, method);
             request.AddOrUpdateParameter("Accept", $"application/vnd.huantengsmart-v{apiVersion}+json", ParameterType.HttpHeader);//"application/json"
             if (token != null)
                 request.AddHeader("Authorization", Authorization);
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
 
-            if (body != null)
-                request.AddBody(body);
-
-            if (parameters != null)
-            {
-                foreach (Argument item in parameters)
-                    request.AddParameter(item.Key, item.Value);
+            if (pathParams != null)
+            {// add path parameter, if any
+                foreach (var pair in pathParams)
+                    request.AddParameter(pair.Key, pair.Value, ParameterType.UrlSegment);//AddUrlSegment
             }
-            if (urlSegments != null)
-            {
-                foreach (var item in urlSegments)
-                    request.AddUrlSegment(item.Key, item.Value);
+            
+            if (headerParams != null)
+            {// add header parameter, if any
+                foreach (var pair in headerParams)
+                    request.AddHeader(pair.Key, pair.Value);
+            }
+
+            if (headerParams != null)
+            {// add query parameter, if any
+                foreach (var pair in queryParams)
+                    request.AddQueryParameter(pair.Key, pair.Value);
+            }
+
+            if (formParams != null)
+            {// add form parameter, if any
+                foreach (var pair in formParams)
+                    request.AddParameter(pair.Key, pair.Value);
+            }
+
+            if (fileParams != null)
+            {// add file parameter, if any
+                foreach (var pair in fileParams)
+                {
+                    var param = pair.Value;
+                    request.AddFile(param.Name, param.Writer, param.FileName, param.ContentLength, param.ContentType);
+                }
+            }
+
+            if (postBody != null)
+            { // http body (model or byte[]) parameter
+                request.AddParameter(contentType, postBody, ParameterType.RequestBody);//AddBody
             }
 
             return request;
         }
-        ApiResponse<T> Execute<T>(int apiVersion, Method method, string resource, object body = null,
-            Argument[] parameters = null, KeyValuePair<string, string>[] urlSegments = null,
+
+        /// <summary>
+        /// Allows for extending request processing for <see cref="ApiClient"/> generated code.
+        /// </summary>
+        /// <param name="request">The RestSharp request object</param>
+        partial void InterceptRequest(IRestRequest request);
+
+        /// <summary>
+        /// Allows for extending response processing for <see cref="ApiClient"/> generated code.
+        /// </summary>
+        /// <param name="request">The RestSharp request object</param>
+        /// <param name="response">The RestSharp response object</param>
+        partial void InterceptResponse(IRestRequest request, IRestResponse response);
+        
+        /// <summary>
+        /// Makes the HTTP request (Sync).
+        /// </summary>
+        /// <param name="path">URL path.</param>
+        /// <param name="method">HTTP method.</param>
+        /// <param name="queryParams">Query parameters.</param>
+        /// <param name="postBody">HTTP body (POST request).</param>
+        /// <param name="headerParams">Header parameters.</param>
+        /// <param name="formParams">Form parameters.</param>
+        /// <param name="fileParams">File parameters.</param>
+        /// <param name="pathParams">Path parameters.</param>
+        /// <param name="contentType">Content Type of the request</param>
+        /// <returns>Object</returns>
+        public ApiResponse<T> CallApi<T>(int apiVersion, string path, Method method,
+            IEnumerable<KeyValuePair<string, string>> queryParams = null,
+            object postBody = null, string contentType = null,
+            IEnumerable<KeyValuePair<string, string>> headerParams = null,
+            IEnumerable<KeyValuePair<string, object>> formParams = null,
+            IEnumerable<KeyValuePair<string, FileParameter>> fileParams = null,
+            IEnumerable<KeyValuePair<string, object>> pathParams = null,
             ExceptionFactory check = null)
         {
-            var request = PrepareRequest(apiVersion, method, resource, body, parameters, urlSegments);
+            var request = PrepareRequest(apiVersion, path, method,
+                queryParams: queryParams,
+                postBody: postBody, contentType: contentType,
+                headerParams: headerParams,
+                formParams: formParams,
+                fileParams: fileParams,
+                pathParams: pathParams);
+
+            InterceptRequest(request);
             var response = client.Execute(request);
-            CheckError(response);
+            InterceptResponse(request, response);
 
-            int statusCode = (int)response.StatusCode;
+            var error = CheckError(response);
+            if (error == null && check != null)
+                error = check(path, response);
+            if (error != null)
+                throw error;
 
-            if (check != null)
-            {
-                var exception = check(resource, response);
-                if (exception != null)
-                    throw exception;
-            }
-
-            return new ApiResponse<T>(statusCode,
+            return new ApiResponse<T>((int)response.StatusCode,
                 response.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
                 (T)converter.Deserialize(response, typeof(T)));
         }
 
-        void CheckControlResult(string resource, OperationResult result)
+        /// <summary>
+        /// Makes the asynchronous HTTP request.
+        /// </summary>
+        /// <param name="path">URL path.</param>
+        /// <param name="method">HTTP method.</param>
+        /// <param name="queryParams">Query parameters.</param>
+        /// <param name="postBody">HTTP body (POST request).</param>
+        /// <param name="headerParams">Header parameters.</param>
+        /// <param name="formParams">Form parameters.</param>
+        /// <param name="fileParams">File parameters.</param>
+        /// <param name="pathParams">Path parameters.</param>
+        /// <param name="contentType">Content type.</param>
+        /// <returns>The Task instance.</returns>
+        public async Task<ApiResponse<T>> CallApiAsync<T>(int apiVersion, string path, Method method,
+            IEnumerable<KeyValuePair<string, string>> queryParams = null,
+            object postBody = null, string contentType = null,
+            IEnumerable<KeyValuePair<string, string>> headerParams = null,
+            IEnumerable<KeyValuePair<string, object>> formParams = null,
+            IEnumerable<KeyValuePair<string, FileParameter>> fileParams = null,
+            IEnumerable<KeyValuePair<string, object>> pathParams = null,
+            ExceptionFactory check = null)
+        {
+            var request = PrepareRequest(apiVersion, path, method,
+                queryParams: queryParams,
+                postBody: postBody, contentType: contentType,
+                headerParams: headerParams,
+                formParams: formParams,
+                fileParams: fileParams,
+                pathParams: pathParams);
+
+            InterceptRequest(request);
+            var response = await client.ExecuteTaskAsync(request);
+            InterceptResponse(request, response);
+
+            var error = CheckError(response);
+            if (error == null && check != null)
+                error = check(path, response);
+            if (error != null)
+                throw error;
+
+            return new ApiResponse<T>((int)response.StatusCode,
+                response.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+                (T)converter.Deserialize(response, typeof(T)));
+        }
+
+        void CheckControlResult(OperationResult result, [System.Runtime.CompilerServices.CallerMemberName] string callerName = null)
         {
             if (result == null)
                 throw new ApiException();
@@ -142,18 +255,20 @@ namespace Elton.Phantom
             return this.Post<BatchResults>(apiVersion, "../massapi", content);
         }
 
-        static void CheckError(IRestResponse response)
+        static Exception CheckError(IRestResponse response)
         {
             if (response.IsSuccessful)
-                return;
+                return null;
 
+            Exception error = null;
             switch (response.StatusCode)
             {
                 case HttpStatusCode.OK:
                 case HttpStatusCode.Created:
                     break;
                 case HttpStatusCode.Unauthorized:
-                    throw new PhantomUnauthorizedException(response.StatusDescription);
+                    error = new PhantomUnauthorizedException(response.StatusDescription);
+                    break;
                 default://其他错误
                     string message = "";
                     var status = PhantomExceptionStatus.Unknown;
@@ -162,8 +277,11 @@ namespace Elton.Phantom
                         message = response.Content;
                         status = PhantomExceptionStatus.Unknown;
                     }
-                    throw new PhantomException(message, status);
+                    error = new PhantomException(message, status);
+                    break;
             }
+
+            return error;
         }
 
         static bool TryParseErrorMessage(string content, out PhantomExceptionStatus status, out string message)
@@ -198,41 +316,66 @@ namespace Elton.Phantom
         public PhantomConfiguration Configuration => config;
         public string Token => token;
 
-
-        protected T Get<T>(int apiVersion, string url, KeyValuePair<string, string>[] urlSegments = null, ExceptionFactory check = null)
+        protected T Get<T>(int apiVersion, string url, KeyValuePair<string, object>[] pathParams = null, ExceptionFactory check = null)
         {
-            return Execute<T>(apiVersion, Method.GET, url,
-                urlSegments: urlSegments,
+            return CallApi<T>(apiVersion, url, Method.GET,
+                pathParams: pathParams,
                 check: check).Data;
         }
 
-        internal T Post<T>(int apiVersion, string url, object body = null, params Argument[] parameters)
+        protected async Task<T> GetAsync<T>(int apiVersion, string url, KeyValuePair<string, object>[] pathParams = null, ExceptionFactory check = null)
         {
-            return Execute<T>(apiVersion, Method.POST, url,
-                body: body,
-                parameters: parameters).Data;
+            var response = await CallApiAsync<T>(apiVersion, url, Method.GET,
+                pathParams: pathParams,
+                check: check);
+
+            return response.Data;
         }
 
-        internal void Post(int apiVersion, string url, object body = null, params Argument[] parameters)
+        internal T Post<T>(int apiVersion, string url, object postBody = null, params KeyValuePair<String, object>[] formParams)
         {
-            var result = Execute<OperationResult>(apiVersion, Method.POST, url,
-                body: body,
-                parameters: parameters).Data;
-
-            CheckControlResult(url, result);
+            return CallApi<T>(apiVersion, url, Method.POST, 
+                postBody: postBody,
+                formParams: formParams).Data;
         }
 
-        protected T Put<T>(int apiVersion, string url, object data, ExceptionFactory check = null)
+        internal async Task<T> PostAsync<T>(int apiVersion, string url, object postBody = null, params KeyValuePair<String, object>[] formParams)
         {
-            return Execute<T>(apiVersion, Method.PUT, url,
-                body: data,
+            var response = await CallApiAsync<T>(apiVersion, url, Method.POST,
+                postBody: postBody,
+                formParams: formParams);
+
+            return response.Data;
+        }
+
+        protected T Put<T>(int apiVersion, string url, object postBody, ExceptionFactory check = null)
+        {
+            return CallApi<T>(apiVersion, url, Method.PUT,
+                postBody: postBody,
                 check: check).Data;
+        }
+
+        protected async Task<T> PutAsync<T>(int apiVersion, string url, object postBody, ExceptionFactory check = null)
+        {
+            var response = await CallApiAsync<T>(apiVersion, url, Method.PUT,
+                postBody: postBody,
+                check: check);
+
+            return response.Data;
         }
 
         protected bool Delete(int apiVersion, string url, ExceptionFactory check = null)
         {
-            var result = Execute<dynamic>(apiVersion, Method.DELETE, url,
+            var result = CallApi<dynamic>(apiVersion, url, Method.DELETE,
                 check: check).Data;
+            return result.success;
+        }
+
+        protected async Task<bool> DeleteAsync(int apiVersion, string url, ExceptionFactory check = null)
+        {
+            var response = await CallApiAsync<dynamic>(apiVersion, url, Method.DELETE,
+                check: check);
+            var result = response.Data;
             return result.success;
         }
     }

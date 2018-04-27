@@ -1,6 +1,6 @@
 #region License
 
-//   Copyright 2014 Elton FAN (eltonfan@live.cn, http://elton.io) (eltonfan@live.cn, http://elton.io)
+//   Copyright 2014 Elton FAN (eltonfan@live.cn, http://elton.io)
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.

@@ -78,13 +78,15 @@ namespace Elton.Phantom
         }
         public void SetBulbSwitchOff(int bulbId)
         {
-            this.Post(1, $"bulbs/{bulbId}/switch_off");
+            var result = Post<OperationResult>(1, $"bulbs/{bulbId}/switch_off");
+
+            CheckControlResult(result);
         }
         public void SetBulbTune(int bulbId, float brightness, float hue)
         {
             this.Post<Scenario>(1, $"bulbs/{bulbId}/tune",
-                new Argument("brightness", brightness.ToString()),
-                new Argument("hue", hue.ToString()));
+                new KeyValuePair<string, object>("brightness", brightness),
+                new KeyValuePair<string, object>("hue", hue));
         }
     }
 }

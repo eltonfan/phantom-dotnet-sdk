@@ -39,6 +39,13 @@ namespace Elton.Phantom
         public string ApplicationSecret { get; set; }
         [JsonProperty("redirectUri")]
         public string RedirectUri { get; set; }
+
+        /// <summary>
+        /// Gets the HTTP connection timeout (in milliseconds). Default to 100000 milliseconds.
+        /// </summary>
+        /// <value>HTTP connection timeout.</value>
+        [JsonProperty("timeout")]
+        public int Timeout { get; set; } = 100000;
         /// <summary>
         /// 客户端的 User-Agent。
         /// </summary>

@@ -83,7 +83,7 @@ namespace Elton.Phantom.Win.Controls
 
                 this.Enabled = (bulb.Connectivity == "在线");
                 labelTitle.Text = string.Format("{0}({1:0}%)", bulb.Name, bulb.Brightness * 100);
-                labelBulb.Image = bulb.TurnedOn != 0 ? Properties.Resources.bulb_on_48 : Properties.Resources.bulb_off_48;
+                labelBulb.Image = bulb.TurnedOn ? Properties.Resources.bulb_on_48 : Properties.Resources.bulb_off_48;
             }
         }
 
@@ -102,7 +102,7 @@ namespace Elton.Phantom.Win.Controls
             if (this.bulb == null)
                 return;
 
-            if (this.bulb.TurnedOn != 0)
+            if (this.bulb.TurnedOn)
                 client.Api.SetBulb(bulb, false);
             else
                 client.Api.SetBulb(bulb, true);

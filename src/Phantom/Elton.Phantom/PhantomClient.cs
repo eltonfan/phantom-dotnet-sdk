@@ -1,6 +1,6 @@
 ﻿#region License
 
-//   Copyright 2014 Elton FAN
+//   Copyright 2014 Elton FAN (eltonfan@live.cn, http://elton.io)
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -71,16 +71,16 @@ namespace Elton.Phantom
             if (bulb?.Id == null)
                 throw new ArgumentNullException("bulb", "bulb?.Id can not be null.");
             if (isOn)
-                SetBulbSwitchOn(bulb.Id.Value);
+                SetBulbSwitchOn(bulb.Id);
             else
-                SetBulbSwitchOff(bulb.Id.Value);
+                SetBulbSwitchOff(bulb.Id);
         }
 
         public void SetBulb(Bulb bulb, float brightness, float hue)
         {
             if (bulb?.Id == null)
                 throw new ArgumentNullException("bulb", "bulb?.Id can not be null.");
-            SetBulbTune(bulb.Id.Value, brightness, hue);
+            SetBulbTune(bulb.Id, brightness, hue);
         }
 
         public void SetBulb(int bulbId, bool isOn)

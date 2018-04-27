@@ -1,0 +1,19 @@
+[
+  {
+    "device_identifier": "N1",
+    "id": 1,
+    "turned_on": true,
+    "own_device?": true,
+    "name": "台灯",
+    "house_id": 2,
+    "brightness": 1.0,
+    "hue": 0.5,
+    "channel": null,
+    "wall_switch_id": null,
+    "alias_bulb_group_id": null,
+    "position": 0,
+    "auto_hue": false,
+    "connectivity": "在线",
+    "script_end_time": null
+  }
+]

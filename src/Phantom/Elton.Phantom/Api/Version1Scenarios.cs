@@ -63,11 +63,11 @@ namespace Elton.Phantom
         }
         public void SetScenarioAllOn()
         {
-            this.Post<Scenario>(1, "scenarios/all_on.json", new Argument("origin", 1));
+            this.Post<Scenario>(1, "scenarios/all_on.json", new KeyValuePair<String, object>("origin", 1));
         }
         public void SetScenarioAllOff()
         {
-            this.Post<Scenario>(1, "scenarios/all_off.json", new Argument("origin", 1));
+            this.Post<Scenario>(1, "scenarios/all_off.json", new KeyValuePair<String, object>("origin", 1));
         }
         protected void SetScenarioInternal(int scenarioId)
         {

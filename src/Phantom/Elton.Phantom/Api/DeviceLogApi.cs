@@ -34,14 +34,14 @@ namespace Elton.Phantom
         /// <returns></returns>
         public List<DeviceLog> GetDeviceLog(string device_type, int? device_id, string cursor, int count, out string nextCursor)
         {
-            var list = new Dictionary<string, string>();
-            list.Add("device_type", device_type);
+            var dic = new Dictionary<string, object>();
+            dic.Add("device_type", device_type);
             if(device_id != null)
-                list.Add("device_id", device_id.Value.ToString());
+                dic.Add("device_id", device_id.Value.ToString());
             if (!string.IsNullOrEmpty(cursor))
-                list.Add("next_cursor", cursor);
-            list.Add("count", count.ToString());
-            var data = Get<dynamic>(2, $"device_log?device_type={device_type}&count={count}", list.ToArray());
+                dic.Add("next_cursor", cursor);
+            dic.Add("count", count.ToString());
+            var data = Get<dynamic>(2, $"device_log?device_type={device_type}&count={count}", dic.ToArray());
 
             List<DeviceLog> result = new List<DeviceLog>();
             foreach(var item in data.data)

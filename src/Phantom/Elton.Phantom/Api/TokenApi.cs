@@ -1,6 +1,6 @@
 ﻿#region License
 
-//   Copyright 2014 Elton FAN
+//   Copyright 2014 Elton FAN (eltonfan@live.cn, http://elton.io)
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -35,22 +35,22 @@ namespace Elton.Phantom
         public Token CreateToken(string authorizationCode)
         {
             return this.Post<Token>(2, "../oauth2/token",
-                new Argument("client_id", config.ApplicationId),
-                new Argument("client_secret", config.ApplicationSecret),
-                new Argument("redirect_uri", config.RedirectUri),
-                new Argument("grant_type", "authorization_code"),
-                new Argument("code", authorizationCode));
+                new KeyValuePair<string, object>("client_id", config.ApplicationId),
+                new KeyValuePair<string, object>("client_secret", config.ApplicationSecret),
+                new KeyValuePair<string, object>("redirect_uri", config.RedirectUri),
+                new KeyValuePair<string, object>("grant_type", "authorization_code"),
+                new KeyValuePair<string, object>("code", authorizationCode));
         }
         public Token RefreshToken(string refreshToken)
         {
             return this.Post<Token>(2, "../oauth2/token",
-                new Argument("grant_type", "refresh_token"),
-                new Argument("refresh_token", refreshToken));
+                new KeyValuePair<string, object>("grant_type", "refresh_token"),
+                new KeyValuePair<string, object>("refresh_token", refreshToken));
         }
         public void RevokeToken(string access_token)
         {
             this.Post<Token>(2, "../oauth2/revoke",
-                new Argument("token", access_token));
+                new KeyValuePair<string, object>("token", access_token));
         }
     }
 }
