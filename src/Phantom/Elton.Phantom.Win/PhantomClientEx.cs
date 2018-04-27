@@ -17,6 +17,7 @@
 #endregion
 
 using Elton.Phantom.Models;
+using Elton.Phantom.Models.Version1;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -43,8 +44,8 @@ namespace Elton.Phantom
         /// </summary>
         const int SCENARIO_ID_AllOn = 0xFFFF;
 
-        readonly Dictionary<int, BulbDetails> dicBulbs = new Dictionary<int, BulbDetails>();
-        readonly Dictionary<int, Scenario> dicScenarios = new Dictionary<int, Scenario>();
+        readonly Dictionary<int?, Bulb> dicBulbs = new Dictionary<int?, Bulb>();
+        readonly Dictionary<int?, Scenario> dicScenarios = new Dictionary<int?, Scenario>();
 
         User currentUser = null;
         //Image image = null;
@@ -157,23 +158,23 @@ namespace Elton.Phantom
             {
                 Id = SCENARIO_ID_AllOff,
                 Name = "全关",
-                DateCreated = DateTime.MinValue,
-                DateUpdated = DateTime.MinValue,
-                ContentItems = new ScenarioContentItem[0],
+                CreatedAt = DateTime.MinValue,
+                UpdatedAt = DateTime.MinValue,
+                ScenarioContentItems = new List<ScenarioContentItem>(),
             });
             listCurrent.Add(new Scenario
             {
                 Id = SCENARIO_ID_AllOn,
                 Name = "全开",
-                DateCreated = DateTime.MinValue,
-                DateUpdated = DateTime.MinValue,
-                ContentItems = new ScenarioContentItem[0],
+                CreatedAt = DateTime.MinValue,
+                UpdatedAt = DateTime.MinValue,
+                ScenarioContentItems = new List<ScenarioContentItem>(),
             });
             Scenario[] response = api.GetScenarios(0, hasDetails);
             if(response != null)
                 listCurrent.AddRange(response);
 
-            foreach(KeyValuePair<int, Scenario> pair in this.dicScenarios)
+            foreach(var pair in this.dicScenarios)
             {
                 bool removed = true;
                 foreach(Scenario item in listCurrent)
@@ -190,7 +191,7 @@ namespace Elton.Phantom
             foreach (Scenario item in listRemoved)
                 this.dicScenarios.Remove(item.Id);
 
-            foreach(Scenario item in listCurrent)
+            foreach(var item in listCurrent)
             {
                 if(dicScenarios.ContainsKey(item.Id))
                 {//本来就存在
@@ -225,15 +226,15 @@ namespace Elton.Phantom
 
         public void RefreshBulbs(bool hasDetails = false)
         {
-            List<BulbDetails> listRemoved = new List<BulbDetails>();
-            List<BulbDetails> listNew = new List<BulbDetails>();
-            List<BulbDetails> listChanged = new List<BulbDetails>();
+            var listRemoved = new List<Bulb>();
+            var listNew = new List<Bulb>();
+            var listChanged = new List<Bulb>();
 
-            BulbDetails[] listCurrent = api.GetBulbs(hasDetails);
-            foreach (KeyValuePair<int, BulbDetails> pair in this.dicBulbs)
+            var listCurrent = api.GetBulbs(hasDetails);
+            foreach (var pair in this.dicBulbs)
             {
                 bool removed = true;
-                foreach (BulbDetails item in listCurrent)
+                foreach (var item in listCurrent)
                 {
                     if (item.Id == pair.Key)
                     {//仍然存在
@@ -244,10 +245,10 @@ namespace Elton.Phantom
                 if (removed)
                     listRemoved.Add(pair.Value);
             }
-            foreach (BulbDetails item in listRemoved)
+            foreach (var item in listRemoved)
                 this.dicBulbs.Remove(item.Id);
 
-            foreach (BulbDetails item in listCurrent)
+            foreach (var item in listCurrent)
             {
                 if (dicBulbs.ContainsKey(item.Id))
                 {//本来就存在
@@ -278,17 +279,17 @@ namespace Elton.Phantom
 
             if (this.NewBulb != null)
             {
-                foreach (BulbDetails item in listNew)
+                foreach (var item in listNew)
                     this.NewBulb(this, new BulbEventArgs(item));
             }
             if (this.BulbRemoved != null)
             {
-                foreach (BulbDetails item in listRemoved)
+                foreach (var item in listRemoved)
                     this.BulbRemoved(this, new BulbEventArgs(item));
             }
             if (this.BulbStateChanged != null)
             {
-                foreach (BulbDetails item in listChanged)
+                foreach (var item in listChanged)
                     this.BulbStateChanged(this, new BulbEventArgs(item));
             }
         }
@@ -302,7 +303,7 @@ namespace Elton.Phantom
         //    get { return this.image; }
         //}
 
-        public ICollection<BulbDetails> Bulbs
+        public ICollection<Bulb> Bulbs
         {
             get { return dicBulbs.Values; }
         }

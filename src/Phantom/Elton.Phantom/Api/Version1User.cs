@@ -1,6 +1,6 @@
 ﻿#region License
 
-//   Copyright 2014 Elton FAN
+//   Copyright 2014 Elton FAN (eltonfan@live.cn, http://elton.io)
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 #endregion
 
 using Elton.Phantom.Models;
+using Elton.Phantom.Models.Version1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,5 @@ namespace Elton.Phantom
         {
             return Get<User>(1, "user.json");
         }
-
     }
 }

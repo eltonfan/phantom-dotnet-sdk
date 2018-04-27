@@ -1,6 +1,6 @@
 ﻿#region License
 
-//   Copyright 2014 Elton FAN
+//   Copyright 2014 Elton FAN (eltonfan@live.cn, http://elton.io)
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 #endregion
 
+using Elton.Phantom.Models.Version1;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -139,25 +140,25 @@ namespace Elton.Phantom
         [JsonProperty("scope")]
         public string Scopes { get; set; }
         [JsonProperty("expiresIn")]
-        public int ExpiresIn { get; set; }
+        public int? ExpiresIn { get; set; }
         [JsonProperty("createdAt")]
-        public int CreatedAt { get; set; }
+        public int? CreatedAt { get; set; }
 
         [JsonIgnore]
         public DateTime DateExpired
         {
-            get => DateCreated.AddSeconds(ExpiresIn);
+            get => DateCreated.AddSeconds((int)ExpiresIn);
             set => ExpiresIn = (int)value.Subtract(DateCreated).TotalSeconds;
         }
 
         [JsonIgnore]
         public DateTime DateCreated
         {
-            get => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(CreatedAt);
+            get => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds((int)CreatedAt);
             set => CreatedAt = (int)value.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
         }
 
-        public void CopyFrom(Models.TokenV2 token)
+        public void CopyFrom(Token token)
         {
             this.AccessToken = token.AccessToken;
             this.RefreshToken = token.RefreshToken;

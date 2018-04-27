@@ -22,6 +22,9 @@ using System.Collections.Generic;
 
 namespace Elton.Phantom
 {
+    using Bulb = Models.Version1.Bulb;
+    using Scenario = Models.Version1.Scenario;
+
     public class PhantomClient : PhantomApi
     {
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(typeof(PhantomClient));
@@ -42,12 +45,15 @@ namespace Elton.Phantom
 
         public void SetScenario(Scenario scenario)
         {
+            if (scenario?.Id == null)
+                throw new ArgumentNullException("scenario", "scenario?.Id can not be null.");
+
             if (scenario.Id == SCENARIO_ID_AllOff)//实际上是全关
                 SetScenarioAllOff();
             else if (scenario.Id == SCENARIO_ID_AllOn)
                 SetScenarioAllOn();
             else
-                SetScenarioInternal(scenario.Id);
+                SetScenarioInternal(scenario.Id.Value);
         }
 
         public void SetScenario(int scenarioId)
@@ -60,17 +66,21 @@ namespace Elton.Phantom
                 SetScenarioInternal(scenarioId);
         }
 
-        public void SetBulb(BulbDetails bulb, bool isOn)
+        public void SetBulb(Bulb bulb, bool isOn)
         {
+            if (bulb?.Id == null)
+                throw new ArgumentNullException("bulb", "bulb?.Id can not be null.");
             if (isOn)
-                SetBulbSwitchOn(bulb.Id);
+                SetBulbSwitchOn(bulb.Id.Value);
             else
-                SetBulbSwitchOff(bulb.Id);
+                SetBulbSwitchOff(bulb.Id.Value);
         }
 
-        public void SetBulb(BulbDetails bulb, float brightness, float hue)
+        public void SetBulb(Bulb bulb, float brightness, float hue)
         {
-            SetBulbTune(bulb.Id, brightness, hue);
+            if (bulb?.Id == null)
+                throw new ArgumentNullException("bulb", "bulb?.Id can not be null.");
+            SetBulbTune(bulb.Id.Value, brightness, hue);
         }
 
         public void SetBulb(int bulbId, bool isOn)
@@ -99,14 +109,14 @@ namespace Elton.Phantom
 
             var list = new List<object>();
             bool hasData = false;
-            foreach (var item in old.ContentItems)
+            foreach (var item in old.ScenarioContentItems)
             {
-                if (item.generic_module_id != 741 || hasData)
+                if (item.GenericModuleId != 741 || hasData)
                 {//不正确，或者已经存在记录，则删除
                     list.Add(
                             new
                             {
-                                id = item.id,
+                                id = item.Id,
                                 _destroy = true,
                             }
                         );
@@ -117,7 +127,7 @@ namespace Elton.Phantom
                     list.Add(
                             new
                             {
-                                id = item.id,
+                                id = item.Id,
                                 generic_module_id = 741,
                                 info = string.Format("[{{\"type\":\"data\",\"index\":0,\"value\":{0}}}]", data),
                             }

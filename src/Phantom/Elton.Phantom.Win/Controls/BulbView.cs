@@ -13,6 +13,8 @@ using Elton.Phantom.Models;
 
 namespace Elton.Phantom.Win.Controls
 {
+    using Bulb = Models.Version1.Bulb;
+
     public partial class BulbView : UserControl
     {
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -25,8 +27,8 @@ namespace Elton.Phantom.Win.Controls
             btnMore.Click += btnMore_Click;
         }
 
-        BulbDetails bulb = null;
-        public BulbDetails Bulb
+        Bulb bulb = null;
+        public Bulb Bulb
         {
             get { return this.bulb; }
             set
@@ -81,7 +83,7 @@ namespace Elton.Phantom.Win.Controls
 
                 this.Enabled = (bulb.Connectivity == "在线");
                 labelTitle.Text = string.Format("{0}({1:0}%)", bulb.Name, bulb.Brightness * 100);
-                labelBulb.Image = bulb.TurnedOn ? Properties.Resources.bulb_on_48 : Properties.Resources.bulb_off_48;
+                labelBulb.Image = bulb.TurnedOn != 0 ? Properties.Resources.bulb_on_48 : Properties.Resources.bulb_off_48;
             }
         }
 
@@ -100,7 +102,7 @@ namespace Elton.Phantom.Win.Controls
             if (this.bulb == null)
                 return;
 
-            if (this.bulb.TurnedOn)
+            if (this.bulb.TurnedOn != 0)
                 client.Api.SetBulb(bulb, false);
             else
                 client.Api.SetBulb(bulb, true);

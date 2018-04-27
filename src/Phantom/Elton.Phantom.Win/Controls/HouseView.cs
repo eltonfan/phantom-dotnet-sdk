@@ -75,12 +75,12 @@ namespace Elton.Phantom.Win.Controls
             brightnessTop = 0.0F;
             if (this.client != null)
             {
-                foreach (BulbDetails item in this.client.Bulbs)
+                foreach (var item in this.client.Bulbs)
                 {
                     if (item.Name == this.TopBulbName)
-                        this.brightnessTop = item.TurnedOn ? item.Brightness : 0.0F;
+                        this.brightnessTop = item.ActualBrightness;
                     else if (item.Name == this.BottomBulbName)
-                        this.brightnessBottom = item.TurnedOn ? item.Brightness : 0.0F;
+                        this.brightnessBottom = item.ActualBrightness;
                     else
                     {
                         continue;

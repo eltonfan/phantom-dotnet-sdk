@@ -24,7 +24,7 @@ namespace Elton.Phantom
     {
         public void Ping(int apiVersion = 2)
         {
-            string result = this.Get<string>(apiVersion, "ping.json");
+            string result = this.Get<string>(apiVersion, "ping.json")?.Trim('"');
             if (apiVersion == 1 && result == "pong")
                 return;
             if (apiVersion == 2 && result == "pong v2")

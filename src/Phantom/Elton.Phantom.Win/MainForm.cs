@@ -17,6 +17,8 @@ using Newtonsoft.Json;
 
 namespace Elton.Phantom.Win
 {
+    using Scenario = Models.Version1.Scenario;
+
     public partial class MainForm : Form
     {
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -158,7 +160,7 @@ namespace Elton.Phantom.Win
                 item.Bulb = null;
 
             int index = 0;
-            foreach (BulbDetails item in client.Bulbs)
+            foreach (var item in client.Bulbs)
             {
                 if (index >= bulbViews.Length)
                     break;

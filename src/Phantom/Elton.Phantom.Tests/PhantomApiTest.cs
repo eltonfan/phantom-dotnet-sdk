@@ -57,14 +57,14 @@ namespace Elton.Phantom.Tests
             var listBulbs = phantom.GetBulbs();
 
             var badDevice = listBulbs.First(p => p.Connectivity != "在线");
-            phantom.SetBulb(badDevice.Id, false);
+            phantom.SetBulb(badDevice.Id.Value, false);
 
             var detailsList = phantom.GetBulbs(true);
-            var bulb = phantom.GetBulb(listBulbs.First().Id);
+            var bulb = phantom.GetBulb(listBulbs.First().Id.Value);
             var isOn = bulb.TurnedOn;
             phantom.SetBulb(bulb, true);
             phantom.SetBulb(bulb, false);
-            phantom.SetBulb(bulb, isOn);
+            phantom.SetBulb(bulb, isOn != 0);
 
             //api.SetBulbSwitchOff(listBulbs[0].Id);
             //api.SetBulbSwitchOn(listBulbs[0].Id);

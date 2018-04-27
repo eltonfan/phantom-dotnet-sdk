@@ -1,6 +1,6 @@
 ﻿#region License
 
-//   Copyright 2014 Elton FAN
+//   Copyright 2014 Elton FAN (eltonfan@live.cn, http://elton.io)
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -27,9 +27,12 @@ using System.Threading.Tasks;
 
 namespace Elton.Phantom
 {
+    using Bulb = Models.Version1.Bulb;
+    using Scenario = Models.Version1.Scenario;
+
     partial class PhantomApi
     {
-        readonly Dictionary<int, BulbDetails> dicBulbs = new Dictionary<int, BulbDetails>();
+        readonly Dictionary<int, Bulb> dicBulbs = new Dictionary<int, Bulb>();
 
         public Bulb[] GetBulbs()
         {
@@ -41,32 +44,32 @@ namespace Elton.Phantom
         /// </summary>
         /// <param name="hasDetails">如果为true，则同时获取详细信息。</param>
         /// <returns></returns>
-        public BulbDetails[] GetBulbs(bool hasDetails = false)
+        public Bulb[] GetBulbs(bool hasDetails = false)
         {
-            BulbDetails[] arrayBulbs = this.Get<BulbDetails[]>(1, "bulbs");
+            Bulb[] arrayBulbs = this.Get<Bulb[]>(1, "bulbs");
             if (!hasDetails || arrayBulbs == null || arrayBulbs.Length < 1)
                 return arrayBulbs;
 
             List<Operation> list = new List<Operation>();
-            foreach (BulbDetails item in arrayBulbs)
+            foreach (var item in arrayBulbs)
                 list.Add(new Operation("GET", string.Format("/api/bulbs/{0}", item.Id)));
 
             var result = this.Batch(1, list.ToArray());
-            var listDetails = new List<BulbDetails>();
+            var listDetails = new List<Bulb>();
             foreach (var item in result.Results)
             {
                 if (item.Status == 200)
                 {
-                    BulbDetails bulb = JsonConvert.DeserializeObject<BulbDetails>(item.Body);
+                    var bulb = JsonConvert.DeserializeObject<Bulb>(item.Body);
                     listDetails.Add(bulb);
                 }
             }
             return listDetails.ToArray();
         }
 
-        public BulbDetails GetBulb(int id)
+        public Bulb GetBulb(int id)
         {
-            return Get<BulbDetails>(1, $"bulbs/{id}");
+            return Get<Bulb>(1, $"bulbs/{id}");
         }
 
         public void SetBulbSwitchOn(int bulbId)

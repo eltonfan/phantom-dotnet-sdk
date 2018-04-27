@@ -13,11 +13,13 @@ using System.Windows.Forms;
 
 namespace Elton.Phantom.Win
 {
+    using Bulb = Models.Version1.Bulb;
+
     public partial class BulbDetailsForm : Form
     {
         readonly PhantomClientEx client = null;
-        readonly BulbDetails bulb = null;
-        public BulbDetailsForm(PhantomClientEx client, BulbDetails bulb)
+        readonly Bulb bulb = null;
+        public BulbDetailsForm(PhantomClientEx client, Bulb bulb)
         {
             if (bulb == null)
                 throw new ArgumentNullException("bulb", "bulb不能为空。");
@@ -42,7 +44,7 @@ namespace Elton.Phantom.Win
 
         void labelBulb_Click(object sender, EventArgs e)
         {
-            if (this.bulb.TurnedOn)
+            if (this.bulb.TurnedOn != 0)
                 client.Api.SetBulb(bulb, false);
             else
                 client.Api.SetBulb(bulb, true);
@@ -78,7 +80,7 @@ namespace Elton.Phantom.Win
         void RefreshUI()
         {
             this.Text = string.Format("{0} ({1})", bulb.Name, bulb.Connectivity);
-            labelBulb.Image = bulb.TurnedOn ? Properties.Resources.bulb_on_48 : Properties.Resources.bulb_off_48;
+            labelBulb.Image = bulb.TurnedOn != 0 ? Properties.Resources.bulb_on_48 : Properties.Resources.bulb_off_48;
 
             isMyself = true;
             trackBarHue.Value = (int)(bulb.Hue * 100.0);

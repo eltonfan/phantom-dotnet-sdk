@@ -25,6 +25,9 @@ using System.Threading.Tasks;
 
 namespace Elton.Phantom
 {
+    using Bulb = Models.Version1.Bulb;
+    using Scenario = Models.Version1.Scenario;
+
     partial class PhantomClientEx
     {
         /// <summary>
@@ -56,12 +59,13 @@ namespace Elton.Phantom
 
     public class BulbEventArgs : EventArgs
     {
-        public BulbDetails Bulb { get; private set; }
-        public BulbEventArgs(BulbDetails bulb)
+        public Bulb Bulb { get; private set; }
+        public BulbEventArgs(Bulb bulb)
         {
             this.Bulb = bulb;
         }
     }
+
     public class ScenarioEventArgs : EventArgs
     {
         public Scenario Scenario { get; private set; }
