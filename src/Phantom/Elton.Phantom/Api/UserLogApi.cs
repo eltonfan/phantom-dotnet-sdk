@@ -37,7 +37,8 @@ namespace Elton.Phantom
             var dic = new Dictionary<string, object>();
             dic.Add("count", count.ToString());
 
-            var data = Get<dynamic>(2, $"user_log.json?count={count}&next_cursor={cursor}", dic.ToArray());
+            var data = Get<dynamic>(2, $"user_log.json?count={count}&next_cursor={cursor}",
+                pathParams: dic.ToArray());
 
             List<UserLog> result = new List<UserLog>();
             foreach(var item in data.data)

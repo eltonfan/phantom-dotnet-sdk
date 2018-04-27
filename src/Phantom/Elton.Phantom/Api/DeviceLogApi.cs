@@ -41,7 +41,8 @@ namespace Elton.Phantom
             if (!string.IsNullOrEmpty(cursor))
                 dic.Add("next_cursor", cursor);
             dic.Add("count", count.ToString());
-            var data = Get<dynamic>(2, $"device_log?device_type={device_type}&count={count}", dic.ToArray());
+            var data = Get<dynamic>(2, $"device_log?device_type={device_type}&count={count}",
+                pathParams: dic.ToArray());
 
             List<DeviceLog> result = new List<DeviceLog>();
             foreach(var item in data.data)

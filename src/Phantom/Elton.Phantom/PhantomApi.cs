@@ -25,6 +25,7 @@ using System.Linq;
 using System.Net;
 using RestSharp;
 using System.Threading.Tasks;
+using Elton.Phantom.Models.Version1;
 
 namespace Elton.Phantom
 {
@@ -231,14 +232,6 @@ namespace Elton.Phantom
                 (T)converter.Deserialize(response, typeof(T)));
         }
 
-        void CheckControlResult(OperationResult result, [System.Runtime.CompilerServices.CallerMemberName] string callerName = null)
-        {
-            if (result == null)
-                throw new ApiException();
-            if (!result.Success)
-                throw new PhantomException(result.Reason);
-        }
-
         /// <summary>
         /// 批命令请求。
         /// </summary>
@@ -316,16 +309,18 @@ namespace Elton.Phantom
         public PhantomConfiguration Configuration => config;
         public string Token => token;
 
-        protected T Get<T>(int apiVersion, string url, KeyValuePair<string, object>[] pathParams = null, ExceptionFactory check = null)
+        protected T Get<T>(int apiVersion, string url, KeyValuePair<string, string>[] queryParams = null, KeyValuePair<string, object>[] pathParams = null, ExceptionFactory check = null)
         {
             return CallApi<T>(apiVersion, url, Method.GET,
+                queryParams: queryParams,
                 pathParams: pathParams,
                 check: check).Data;
         }
 
-        protected async Task<T> GetAsync<T>(int apiVersion, string url, KeyValuePair<string, object>[] pathParams = null, ExceptionFactory check = null)
+        protected async Task<T> GetAsync<T>(int apiVersion, string url, KeyValuePair<string, string>[] queryParams = null, KeyValuePair<string, object>[] pathParams = null, ExceptionFactory check = null)
         {
             var response = await CallApiAsync<T>(apiVersion, url, Method.GET,
+                queryParams: queryParams,
                 pathParams: pathParams,
                 check: check);
 

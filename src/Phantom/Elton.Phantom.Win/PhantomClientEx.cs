@@ -230,7 +230,7 @@ namespace Elton.Phantom
             var listNew = new List<Bulb>();
             var listChanged = new List<Bulb>();
 
-            var listCurrent = api.GetBulbs(hasDetails);
+            Bulb[] listCurrent = hasDetails ? api.GetBulbDetails() : api.GetBulbs();
             foreach (var pair in this.dicBulbs)
             {
                 bool removed = true;

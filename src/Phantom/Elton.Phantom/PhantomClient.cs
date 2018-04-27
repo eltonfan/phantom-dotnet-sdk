@@ -17,6 +17,7 @@
 #endregion
 
 using Elton.Phantom.Models;
+using Elton.Phantom.Models.Version1;
 using System;
 using System.Collections.Generic;
 
@@ -43,6 +44,15 @@ namespace Elton.Phantom
         {
         }
 
+
+        void CheckControlResult(OperationResult result, [System.Runtime.CompilerServices.CallerMemberName] string callerName = null)
+        {
+            if (result == null)
+                throw new ApiException();
+            if (!result.Success)
+                throw new PhantomException(result.Reason);
+        }
+
         public void SetScenario(Scenario scenario)
         {
             if (scenario?.Id == null)
@@ -66,29 +76,34 @@ namespace Elton.Phantom
                 SetScenarioInternal(scenarioId);
         }
 
-        public void SetBulb(Bulb bulb, bool isOn)
+        public void SetBulb(int? bulbId, bool turnOn)
         {
-            if (bulb?.Id == null)
-                throw new ArgumentNullException("bulb", "bulb?.Id can not be null.");
-            if (isOn)
-                SetBulbSwitchOn(bulb.Id);
+            if (bulbId == null)
+                throw new ArgumentNullException("bulbId", "bulbId can not be null.");
+
+            OperationResult result = null;
+            if (turnOn)
+                result = PostBulbSwitchOn(bulbId);
             else
-                SetBulbSwitchOff(bulb.Id);
+                result = PostBulbSwitchOff(bulbId);
+
+            CheckControlResult(result);
+        }
+
+        public void SetBulb(int? bulbId, float brightness, float hue)
+        {
+            var result = PostBulbTune(bulbId, brightness, hue);
+            CheckControlResult(result);
+        }
+
+        public void SetBulb(Bulb bulb, bool turnOn)
+        {
+            SetBulb(bulb?.Id, turnOn);
         }
 
         public void SetBulb(Bulb bulb, float brightness, float hue)
         {
-            if (bulb?.Id == null)
-                throw new ArgumentNullException("bulb", "bulb?.Id can not be null.");
-            SetBulbTune(bulb.Id, brightness, hue);
-        }
-
-        public void SetBulb(int bulbId, bool isOn)
-        {
-            if (isOn)
-                SetBulbSwitchOn(bulbId);
-            else
-                SetBulbSwitchOff(bulbId);
+            SetBulb(bulb?.Id, brightness, hue);
         }
 
         public void UpdateScenarioMode(int id, string name, byte mode)
@@ -103,6 +118,7 @@ namespace Elton.Phantom
                     },
                 });
         }
+
         public void UpdateScenarioData(int id, string name, int data)
         {
             var old = GetScenario(id);
