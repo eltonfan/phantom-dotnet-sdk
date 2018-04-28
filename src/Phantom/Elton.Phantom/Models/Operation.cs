@@ -15,7 +15,6 @@ namespace Elton.Phantom
         public string Method { get; set; }
         [JsonProperty("url")]
         public string Url { get; set; }
-
         [JsonProperty("params")]
         public object Parameters { get; set; }
 
