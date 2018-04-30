@@ -22,6 +22,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using RestSharp;
 using Elton.Phantom.Models.Version2;
+using Elton.OAuth2;
 
 namespace Elton.Phantom.Api.Version2
 {

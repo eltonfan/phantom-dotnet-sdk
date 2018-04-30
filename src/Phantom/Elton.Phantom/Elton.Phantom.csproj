@@ -22,6 +22,11 @@
 
   <ItemGroup>
     <Folder Include="Events\" />
+    <Folder Include="Utils\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\OAuth2\src\OAuth2\Elton.OAuth2\Elton.OAuth2.csproj" />
   </ItemGroup>
   
 </Project>

@@ -29,7 +29,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,7 +38,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
@@ -82,18 +82,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ref\OneDrive.cs" />
     <Compile Include="ScenariosApiTests.cs" />
     <Compile Include="PingApiTests.cs" />
     <Compile Include="PhantomContext.cs" />
     <Compile Include="NotificationTest.cs" />
     <Compile Include="BulbsApiTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Settings.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Include="PhantomApiTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -150,12 +145,12 @@
     <Content Include="examples\Notifications\WallSwitchPressed.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\OAuth2\src\OAuth2\Elton.OAuth2\Elton.OAuth2.csproj">
+      <Project>{3cceb1a7-40ad-4a0a-b39e-2ecd11d9393e}</Project>
+      <Name>Elton.OAuth2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Elton.Phantom\Elton.Phantom.csproj">
       <Project>{30fe14ef-e3d2-4714-9d28-6e80e2052792}</Project>
       <Name>Elton.Phantom</Name>

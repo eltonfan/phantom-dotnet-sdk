@@ -32,9 +32,9 @@ namespace Elton.Phantom
 {
     partial class PhantomApi
     {
-        public Token CreateToken(string authorizationCode)
+        public override Elton.OAuth2.IToken CreateToken(string authorizationCode)
         {
-            return this.Post<Token>(2, "../oauth2/token",
+            return this.Post<Token>(2, config.AccessTokenUrl,
                 formParams: new[] {
                     new KeyValuePair<string, object>("client_id", config.ApplicationId),
                     new KeyValuePair<string, object>("client_secret", config.ApplicationSecret),
@@ -44,18 +44,18 @@ namespace Elton.Phantom
                 });
         }
 
-        public Token RefreshToken(string refreshToken)
+        public override Elton.OAuth2.IToken RefreshToken(string refreshToken)
         {
-            return this.Post<Token>(2, "../oauth2/token",
+            return this.Post<Token>(2, config.RefreshTokenUrl,
                 formParams: new[] {
                     new KeyValuePair<string, object>("grant_type", "refresh_token"),
                     new KeyValuePair<string, object>("refresh_token", refreshToken)
                 });
         }
 
-        public void RevokeToken(string access_token)
+        public Token RevokeToken(string access_token)
         {
-            this.Post<Token>(2, "../oauth2/revoke",
+            return this.Post<Token>(2, config.RevokeTokenUrl,
                 formParams: new[] {
                     new KeyValuePair<string, object>("token", access_token),
                 });

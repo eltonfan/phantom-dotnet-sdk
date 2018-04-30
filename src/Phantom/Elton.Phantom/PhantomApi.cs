@@ -26,6 +26,7 @@ using System.Net;
 using RestSharp;
 using System.Threading.Tasks;
 using Elton.Phantom.Models.Version1;
+using Elton.OAuth2;
 
 namespace Elton.Phantom
 {
@@ -36,99 +37,15 @@ namespace Elton.Phantom
     /// https://huantengsmart.com/doc/api_v1
     /// https://huantengsmart.com/doc/api_v2
     /// </remarks>
-    public partial class PhantomApi
+    public partial class PhantomApi : Elton.OAuth2.ApiClient
     {
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(typeof(PhantomApi));
 
-        protected readonly RestClient client;
-        protected readonly PhantomConfiguration config;
-        protected readonly SerializationTool converter;
         string token = null;
         public PhantomApi(PhantomConfiguration config)
-        {
-            Contract.Requires(config != null, "config can not be empty.");
-            this.config = config;
-
-            client = new RestClient(Consts.ApiUrl);
-            client.DefaultParameters.Clear();
-            client.Timeout = config.Timeout;
-            client.UserAgent = config.UserAgent;
-
-            converter = new SerializationTool(this.config);
-        }
-
-        public void SetCredentials(string token)
-        {
-            this.token = token;
-        }
-
-        /// <summary>
-        /// Creates and sets up a RestRequest prior to a call.
-        /// </summary>
-        /// <param name="apiVersion"></param>
-        /// <param name="method"></param>
-        /// <param name="path"></param>
-        /// <param name="postBody"></param>
-        /// <param name="formParams"></param>
-        /// <returns></returns>
-        RestRequest PrepareRequest(int apiVersion, string path, Method method,
-            IEnumerable<KeyValuePair<string, string>> queryParams = null,
-            object postBody = null, string contentType = null,
-            IEnumerable<KeyValuePair<string, string>> headerParams = null,
-            IEnumerable<KeyValuePair<string, object>> formParams = null,
-            IEnumerable<KeyValuePair<string, FileParameter>> fileParams = null,
-            IEnumerable<KeyValuePair<string, object>> pathParams = default)
-        {
-            if (apiVersion < 1 || apiVersion > 2)
-                throw new NotSupportedException("Only v1 & v2 api is supported.");
-
-            var request = new RestRequest(path, method);
-            request.AddOrUpdateParameter("Accept", $"application/vnd.huantengsmart-v{apiVersion}+json", ParameterType.HttpHeader);//"application/json"
-            if (token != null)
-                request.AddHeader("Authorization", Authorization);
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
-
-            if (pathParams != null)
-            {// add path parameter, if any
-                foreach (var pair in pathParams)
-                    request.AddParameter(pair.Key, pair.Value, ParameterType.UrlSegment);//AddUrlSegment
-            }
-            
-            if (headerParams != null)
-            {// add header parameter, if any
-                foreach (var pair in headerParams)
-                    request.AddHeader(pair.Key, pair.Value);
-            }
-
-            if (headerParams != null)
-            {// add query parameter, if any
-                foreach (var pair in queryParams)
-                    request.AddQueryParameter(pair.Key, pair.Value);
-            }
-
-            if (formParams != null)
-            {// add form parameter, if any
-                foreach (var pair in formParams)
-                    request.AddParameter(pair.Key, pair.Value);
-            }
-
-            if (fileParams != null)
-            {// add file parameter, if any
-                foreach (var pair in fileParams)
-                {
-                    var param = pair.Value;
-                    request.AddFile(param.Name, param.Writer, param.FileName, param.ContentLength, param.ContentType);
-                }
-            }
-
-            if (postBody != null)
-            { // http body (model or byte[]) parameter
-                request.AddParameter(contentType, postBody, ParameterType.RequestBody);//AddBody
-            }
-
-            return request;
-        }
-
+            : base(config)
+        { }
+        
         /// <summary>
         /// Allows for extending request processing for <see cref="ApiClient"/> generated code.
         /// </summary>
@@ -164,13 +81,17 @@ namespace Elton.Phantom
             IEnumerable<KeyValuePair<string, object>> pathParams = null,
             ExceptionFactory check = null)
         {
-            var request = PrepareRequest(apiVersion, path, method,
+            if (apiVersion < 1 || apiVersion > 2)
+                throw new NotSupportedException("Only v1 & v2 api is supported.");
+
+            var request = PrepareRequest(path, method,
                 queryParams: queryParams,
                 postBody: postBody, contentType: contentType,
                 headerParams: headerParams,
                 formParams: formParams,
                 fileParams: fileParams,
-                pathParams: pathParams);
+                pathParams: pathParams,
+                accept: $"application/vnd.huantengsmart-v{apiVersion}+json");//"application/json"
 
             InterceptRequest(request);
             var response = client.Execute(request);
@@ -209,13 +130,17 @@ namespace Elton.Phantom
             IEnumerable<KeyValuePair<string, object>> pathParams = null,
             ExceptionFactory check = null)
         {
-            var request = PrepareRequest(apiVersion, path, method,
+            if (apiVersion < 1 || apiVersion > 2)
+                throw new NotSupportedException("Only v1 & v2 api is supported.");
+
+            var request = PrepareRequest(path, method,
                 queryParams: queryParams,
                 postBody: postBody, contentType: contentType,
                 headerParams: headerParams,
                 formParams: formParams,
                 fileParams: fileParams,
-                pathParams: pathParams);
+                pathParams: pathParams,
+                accept: $"application/vnd.huantengsmart-v{apiVersion}+json");//"application/json"
 
             InterceptRequest(request);
             var response = await client.ExecuteTaskAsync(request);
@@ -248,7 +173,7 @@ namespace Elton.Phantom
             return this.Post<BatchResults>(apiVersion, "../massapi", content);
         }
 
-        static Exception CheckError(IRestResponse response)
+        protected override Exception CheckError(IRestResponse response)
         {
             if (response.IsSuccessful)
                 return null;
@@ -304,10 +229,6 @@ namespace Elton.Phantom
                 return true;
             }
         }
-
-        protected string Authorization => "bearer " + token;
-        public PhantomConfiguration Configuration => config;
-        public string Token => token;
 
         protected T Get<T>(int apiVersion, string url, IEnumerable<KeyValuePair<string, string>> queryParams = null, IEnumerable<KeyValuePair<string, object>> pathParams = null, ExceptionFactory check = null)
         {

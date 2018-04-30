@@ -19,6 +19,7 @@
 using Elton.Phantom.Models.Version1;
 using System;
 using System.Collections.Generic;
+using Elton.OAuth2;
 
 namespace Elton.Phantom.Api.Version1
 {

@@ -24,6 +24,8 @@ using RestSharp;
 using Elton.Phantom.Models.Version1;
 using System.Threading.Tasks;
 using Elton.Phantom.Api.Version1;
+using Elton.OAuth2;
+using Token = Elton.Phantom.Token;
 
 namespace Elton.Phantom.Api.Version1
 {

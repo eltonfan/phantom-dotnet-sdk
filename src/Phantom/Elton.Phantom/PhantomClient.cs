@@ -16,6 +16,7 @@
 
 #endregion
 
+using Elton.OAuth2;
 using Elton.Phantom.Models;
 using Elton.Phantom.Models.Version1;
 using System;

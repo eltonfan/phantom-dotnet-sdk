@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>app.ico</ApplicationIcon>
@@ -121,6 +123,7 @@
       <Link>Properties\SecretKeys.cs</Link>
     </Compile>
     <Compile Include="Properties\Settings.cs" />
+    <Compile Include="Ref\OneDrive.cs" />
     <EmbeddedResource Include="BulbDetailsForm.resx">
       <DependentUpon>BulbDetailsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -188,6 +191,10 @@
     <None Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\OAuth2\src\OAuth2\Elton.OAuth2\Elton.OAuth2.csproj">
+      <Project>{3cceb1a7-40ad-4a0a-b39e-2ecd11d9393e}</Project>
+      <Name>Elton.OAuth2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Elton.Phantom\Elton.Phantom.csproj">
       <Project>{30fe14ef-e3d2-4714-9d28-6e80e2052792}</Project>
       <Name>Elton.Phantom</Name>
