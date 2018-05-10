@@ -24,7 +24,7 @@ using RestSharp;
 using Elton.Phantom.Models.Version1;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Elton.OAuth2;
+using Elton.Phantom.Rest;
 
 namespace Elton.Phantom.Api.Version1
 {

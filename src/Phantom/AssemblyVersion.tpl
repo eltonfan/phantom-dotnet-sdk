@@ -7,11 +7,11 @@
 #endif
 
 [assembly: AssemblyCompany("Elton FAN")]
-[assembly: AssemblyProduct("Phantom.NET")]
-[assembly: AssemblyCopyright("\u00A9 2014 Elton FAN. http://elton.io/")]
-[assembly: AssemblyTrademark("Elton FAN")]
+[assembly: AssemblyProduct("Phantom DotNet SDK")]
+[assembly: AssemblyCopyright("\u00A9 2014 Elton FAN (eltonfan@live.cn, http://elton.io)")]
+[assembly: AssemblyTrademark("ELTON")]
 
-[assembly: AssemblyVersion("1.0.0.$REV$")]
-[assembly: AssemblyFileVersion("1.0.0.$REV$")]
-[assembly: AssemblyInformationalVersion("v1.0.0 Alpha")]
-[assembly: AssemblyDefaultAlias("$HASH$ $DATE$")]
+[assembly: AssemblyVersion("$VERSION$.0")]
+[assembly: AssemblyFileVersion("$VERSION$.$REV$")]
+[assembly: AssemblyInformationalVersion("v$VERSION$ Beta")]
+[assembly: AssemblyDefaultAlias("$HASH$ $TIMESTAMP$")]

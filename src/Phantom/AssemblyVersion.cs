@@ -7,11 +7,11 @@ using System.Reflection;
 #endif
 
 [assembly: AssemblyCompany("Elton FAN")]
-[assembly: AssemblyProduct("Phantom.NET")]
-[assembly: AssemblyCopyright("\u00A9 2014 Elton FAN. http://elton.io/")]
-[assembly: AssemblyTrademark("Elton FAN")]
+[assembly: AssemblyProduct("Phantom DotNet SDK")]
+[assembly: AssemblyCopyright("\u00A9 2014 Elton FAN (eltonfan@live.cn, http://elton.io)")]
+[assembly: AssemblyTrademark("ELTON")]
 
-[assembly: AssemblyVersion("1.0.0.42")]
-[assembly: AssemblyFileVersion("1.0.0.42")]
-[assembly: AssemblyInformationalVersion("v1.0.0 Alpha")]
-[assembly: AssemblyDefaultAlias("f0f091b37b7ffc465b47353c02e255bd55af7ffd 2017-05-06")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.78")]
+[assembly: AssemblyInformationalVersion("v1.0.0 Beta")]
+[assembly: AssemblyDefaultAlias("5ebeea4c0b09d352b4661f27edd3cde3b0f63a66 2018-04-30T11:07:20+08:00")]

@@ -24,12 +24,12 @@ namespace Elton.Phantom.Tests
 
         readonly Elton.Utils.OneDrive onedrive = new Elton.Utils.OneDrive(@"ApplicationData\ConnectedHome\config");
         readonly PhantomConfiguration appConfig;
-        readonly Elton.OAuth2.Token tokenConfig;
+        readonly Elton.Phantom.Rest.Token tokenConfig;
         readonly PhantomClient phantom;
         private PhantomContext()
         {
             appConfig = onedrive.ReadConfig<PhantomConfiguration>("phantom");
-            tokenConfig = onedrive.ReadConfig<Elton.OAuth2.Token>("phantom.token");
+            tokenConfig = onedrive.ReadConfig<Elton.Phantom.Rest.Token>("phantom.token");
 
             phantom = new PhantomClient(appConfig);
             phantom.SetCredentials(tokenConfig.AccessToken);
@@ -51,6 +51,6 @@ namespace Elton.Phantom.Tests
 
         public static PhantomClient Phantom => Default.phantom;
         public static PhantomConfiguration Config => Default.appConfig;
-        public static Elton.OAuth2.Token Token => Default.tokenConfig;
+        public static Elton.Phantom.Rest.Token Token => Default.tokenConfig;
     }
 }

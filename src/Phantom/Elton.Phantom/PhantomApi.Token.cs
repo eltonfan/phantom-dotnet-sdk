@@ -32,7 +32,7 @@ namespace Elton.Phantom
 {
     partial class PhantomApi
     {
-        public override Elton.OAuth2.IToken CreateToken(string authorizationCode)
+        public override Elton.Phantom.Rest.IToken CreateToken(string authorizationCode)
         {
             return this.Post<Token>(2, config.AccessTokenUrl,
                 formParams: new[] {
@@ -44,7 +44,7 @@ namespace Elton.Phantom
                 });
         }
 
-        public override Elton.OAuth2.IToken RefreshToken(string refreshToken)
+        public override Elton.Phantom.Rest.IToken RefreshToken(string refreshToken)
         {
             return this.Post<Token>(2, config.RefreshTokenUrl,
                 formParams: new[] {

@@ -2,6 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <PackageProjectUrl>https://github.com/eltonfan/phantom-dotnet-sdk</PackageProjectUrl>
+    <Authors>Elton FAN</Authors>
+    <Product>Phantom DotNet SDK</Product>
+    <Description>.NET Standard SDK for Phantom's REST and Streaming APIs. Monitoring and control Nova, Pixel-Classic and Sushi using C#.  https://nest.com</Description>
+    <Copyright>© 2014 Elton FAN (eltonfan@live.cn, http://elton.io)</Copyright>
+    <PackageLicenseUrl>https://github.com/eltonfan/phantom-dotnet-sdk/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/eltonfan/phantom-dotnet-sdk</RepositoryUrl>
+    <PackageTags>phantom-sdk phantom-dotnet-sdk huanteng huantengsmart rest dotnet-standard xamarin portable smart-home connected-home</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -13,6 +23,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Utils\**" />
+    <EmbeddedResource Remove="Utils\**" />
+    <None Remove="Utils\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\AssemblyVersion.cs">
+      <Link>Properties\AssemblyVersion.cs</Link>
+    </Compile>
+  </ItemGroup>
+  
+  <ItemGroup>
     <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="RestSharp" Version="106.2.2" />
@@ -22,11 +44,6 @@
 
   <ItemGroup>
     <Folder Include="Events\" />
-    <Folder Include="Utils\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\OAuth2\src\OAuth2\Elton.OAuth2\Elton.OAuth2.csproj" />
   </ItemGroup>
   
 </Project>

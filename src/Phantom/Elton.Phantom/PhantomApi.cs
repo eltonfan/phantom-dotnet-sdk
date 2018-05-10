@@ -26,7 +26,7 @@ using System.Net;
 using RestSharp;
 using System.Threading.Tasks;
 using Elton.Phantom.Models.Version1;
-using Elton.OAuth2;
+using Elton.Phantom.Rest;
 
 namespace Elton.Phantom
 {
@@ -37,7 +37,7 @@ namespace Elton.Phantom
     /// https://huantengsmart.com/doc/api_v1
     /// https://huantengsmart.com/doc/api_v2
     /// </remarks>
-    public partial class PhantomApi : Elton.OAuth2.ApiClient
+    public partial class PhantomApi : Elton.Phantom.Rest.ApiClient
     {
         static readonly Common.Logging.ILog log = Common.Logging.LogManager.GetLogger(typeof(PhantomApi));
 

@@ -1,5 +1,4 @@
-智能家居（Smarthome）
+Phantom DotNet SDK
 =========
 
-本项目专注于智能家居DIY。
-首先实现对幻腾智能（Phantom）的智能灯泡控制，基于协议：https://huantengsmart.com/doc/api_v1 。
+.NET Standard，轻松访问幻腾智能（Phantom）API，可控制 Nova智能灯泡、Pixel-Classic/Pro墙壁开关、场景控制。兼容 [v1](https://huantengsmart.com/doc/api_v1) / [v2](https://huantengsmart.com/doc/api_v2) 版本协议。

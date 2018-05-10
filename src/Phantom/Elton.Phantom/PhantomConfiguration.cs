@@ -33,7 +33,7 @@ namespace Elton.Phantom
     /// 从 https://huantengsmart.com/oauth2/applications 获取 Application 信息。
     /// </summary>
     [DataContract]
-    public class PhantomConfiguration : Elton.OAuth2.ApiConfiguration
+    public class PhantomConfiguration : Elton.Phantom.Rest.ApiConfiguration
     {
         [JsonConstructor]
         protected PhantomConfiguration() { }

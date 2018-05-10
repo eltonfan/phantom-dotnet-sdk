@@ -35,7 +35,7 @@ namespace Elton.Phantom
     /// 实际多出两个字段：created_at / scope
     /// </remarks>
     [DataContract]
-    public partial class Token : Elton.OAuth2.Token, Elton.OAuth2.IToken, IEquatable<Token>, IValidatableObject
+    public partial class Token : Elton.Phantom.Rest.Token, Elton.Phantom.Rest.IToken, IEquatable<Token>, IValidatableObject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Token" /> class.
@@ -147,7 +147,7 @@ namespace Elton.Phantom
             }
         }
 
-        public override void CopyFrom(Elton.OAuth2.IToken target)
+        public override void CopyFrom(Elton.Phantom.Rest.IToken target)
         {
             base.CopyFrom(target);
 
