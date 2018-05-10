@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Elton.Phantom")]
-[assembly: AssemblyDescription(".NET Standard SDK for Nest's REST and Streaming APIs. Monitoring and control Pixel-Classic, Nova and Sushi using C#.  https://huantengsmart.com")]
+[assembly: AssemblyDescription(".NET Standard SDK for Phantom's REST API. Monitoring and control Pixel-Classic, Nova and Sushi using C#.  https://huantengsmart.com")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
